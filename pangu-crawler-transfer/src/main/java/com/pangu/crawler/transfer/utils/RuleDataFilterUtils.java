@@ -155,87 +155,13 @@ public class RuleDataFilterUtils {
                         continue;
                     }
                 }
-                if (rule.replaceAll("\\s*", "").startsWith("starttransfertype")) {
-                    cdl= new CountDownLatch(6);
-                    rulemap = new HashMap<String,Object>();
-                    tempmap = new HashMap<String,Object>();
-                    listRules= new ArrayList<String>();
-                    transfertype=rule.substring(rule.indexOf("=")+1);
-                    if(transfertype.indexOf("//")!=-1){
-                        transfertype = transfertype.substring(0,transfertype.indexOf("//"));
-                    }
-                    ruletag= transfertype;
-                    continue;
-                }else if(rule.replaceAll("\\s*", "").startsWith("endtransfertype")){
-                    //结束一组规则生成组信息
-                    if(ruletag.startsWith("nomallogical")){
-                        rulemap.put("type","nomallogical");
-                        rulemap.put("data",listRules);
-                        queuerule.offer(rulemap);
-                    }else if(ruletag.startsWith("booleanlogical")){
-                        rulemap.put("type","booleanlogical");
-                        rulemap.put("data",listRules);
-                        queuerule.offer(rulemap);
-                    }else if(ruletag.startsWith("dynamicmatchrowlogical")){
-                        if(cdl.getCount()!=0){
-                            errorgroup.append(ruletag+"转换文件组信息有误!组信息不全;");
-                            break;
-                        }else{
-                            rulemap.put("type","dynamicmatchrowlogical");
-                            rulemap.put("data",tempmap);
-                            queuerule.offer(rulemap);
-                        }
-                        continue;
-                    }
-                    continue;
-                }
-                if(rule.indexOf("//")!=-1){
-                    rule=rule.substring(0,rule.indexOf("//"));
-                }
-                if(ruletag==null||StringUtils.isEmpty(ruletag)){
-                    errorgroup.append(ruletag+"转换文件组配置起始标识转换类型!以starttransfertype开头;");
-                }
-                if(ruletag.startsWith("nomallogical")){
-                    listRules.add(rule);
-                }else if(ruletag.startsWith("booleanlogical")){
-                    listRules.add(rule);
-                }else if(ruletag.startsWith("dynamicmatchrowlogical")){
-                    //每一组包含reportpath,documentpath,fixedtr,dynamictrstartpos,dynamictrreleations,dynamictrendpos,groupend1信息
-                    String[] entry = new String[2];
-                    if(rule.indexOf("=")!=-1){
-                        entry[0] = rule.split("=")[0];
-                        if(rule.split("=").length==1){
-                            entry[1] = "";
-                        }else{
-                            entry[1] = rule.split("=")[1];
-                        }
-                    }
-                    if(entry[0]!=null&&entry[0].equals("reportpath")){
-                        cdl.countDown();
-                        tempmap.put(entry[0],entry[1]);
-                    }else if(entry[0]!=null&&entry[0].equals("documentpath")){
-                        cdl.countDown();
-                        tempmap.put(entry[0],entry[1]);
-                    }else if(entry[0]!=null&&entry[0].equals("fixedtoptr")){
-                        cdl.countDown();
-                        tempmap.put(entry[0],entry[1]);
-                    }else if(entry[0]!=null&&entry[0].equals("fixedbottomtr")){
-                        cdl.countDown();
-                        tempmap.put(entry[0],entry[1]);
-                    }else if(entry[0]!=null&&entry[0].equals("dynamictrstartpos")){
-                        cdl.countDown();
-                        tempmap.put(entry[0],entry[1]);
-                    }else if(entry[0]!=null&&entry[0].equals("dynamictrreleations")){
-                        cdl.countDown();
-                        tempmap.put(entry[0],entry[1]);
-                    }else if(entry[0]!=null&&entry[0].equals("dynamictrendpos")){
-                        cdl.countDown();
-                        tempmap.put(entry[0],entry[1]);
-                    }
-                }
+                listRules.add(rule);
             }
-            result.put("data",queuerule);
+            rulemap.put("type","nomallogical");
+            rulemap.put("data",listRules);
+            queuerule.offer(rulemap);
             result.put("error",errorgroup.toString());
+            result.put("data",queuerule);
             return result;
         }else{
             List<String> rules = new ArrayList<String>();
@@ -374,84 +300,6 @@ public class RuleDataFilterUtils {
     }
 
 
-    /**
-     * @param rules
-     * @return
-     * @description html固定行+动态行增加数据获取实现
-     */
-    public static Map<String,Object> splitGroupByFormElement(List<String> rules) {
-        Map<String,Object> result = new HashMap<String,Object>();
-        Map<String,String> rulemap = new HashMap<String,String>();
-        List<Map<String,String>> listRuleMaps = new ArrayList<Map<String,String>>();
-        String prefix = "";
-        CountDownLatch cdl= new CountDownLatch(6);
-        StringBuilder errorgroup = new StringBuilder("");
-        String ruletag = null;
-        for (String rule : rules) {
-            Matcher m = pattern.matcher(rule);
-            rule = m.replaceAll("");
-            if (rule == null || StringUtils.isEmpty(rule) || rule.startsWith("//") || rule.startsWith("## version") || (rule.startsWith("##") && rule.contains("version"))) {
-                continue;
-            }
-            if (rule.indexOf("//") != -1) {
-                if (rule.substring(0, rule.indexOf("//")).replaceAll("\\s*", "").endsWith("--")) {
-                    continue;
-                }
-            }
-            if (rule.replaceAll("\\s*", "").endsWith("--")||rule.replaceAll("\\s*", "").startsWith("groupstart")) {
-                rulemap = new HashMap<String,String>();
-                cdl= new CountDownLatch(6);
-                ruletag= rule;
-                continue;
-            }else if(rule.replaceAll("\\s*", "").startsWith("groupend")){
-                //结束一组规则生成组信息
-                if(cdl.getCount()!=0){
-                    errorgroup.append(ruletag+"转换文件组信息有误!组信息不全;");
-                }else{
-                    listRuleMaps.add(rulemap);
-                }
-                continue;
-            }
-            if(rule.indexOf("//")!=-1){
-                rule=rule.substring(0,rule.indexOf("//"));
-            }
-            //每一组包含reportpath,documentpath,fixedtr,dynamictrstartpos,dynamictrreleations,dynamictrendpos,groupend1信息
-            String[] entry = new String[2];
-            if(rule.indexOf("=")!=-1){
-                entry[0] = rule.split("=")[0];
-                if(rule.split("=").length==1){
-                    entry[1] = "";
-                }else{
-                    entry[1] = rule.split("=")[1];
-                }
-            }
-            if(entry[0]!=null&&entry[0].equals("reportpath")){
-                cdl.countDown();
-                rulemap.put(entry[0],entry[1]);
-            }else if(entry[0]!=null&&entry[0].equals("documentpath")){
-                cdl.countDown();
-                rulemap.put(entry[0],entry[1]);
-            }else if(entry[0]!=null&&entry[0].equals("fixedtoptr")){
-                cdl.countDown();
-                rulemap.put(entry[0],entry[1]);
-            }else if(entry[0]!=null&&entry[0].equals("fixedbottomtr")){
-                cdl.countDown();
-                rulemap.put(entry[0],entry[1]);
-            }else if(entry[0]!=null&&entry[0].equals("dynamictrstartpos")){
-                cdl.countDown();
-                rulemap.put(entry[0],entry[1]);
-            }else if(entry[0]!=null&&entry[0].equals("dynamictrreleations")){
-                cdl.countDown();
-                rulemap.put(entry[0],entry[1]);
-            }else if(entry[0]!=null&&entry[0].equals("dynamictrendpos")){
-                cdl.countDown();
-                rulemap.put(entry[0],entry[1]);
-            }
-        }
-        result.put("data",listRuleMaps);
-        result.put("error",errorgroup.toString());
-        return result;
-    }
 
 
     /**
