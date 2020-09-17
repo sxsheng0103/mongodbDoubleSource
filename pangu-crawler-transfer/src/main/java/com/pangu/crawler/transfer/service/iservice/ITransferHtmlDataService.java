@@ -1,15 +1,10 @@
 package com.pangu.crawler.transfer.service.iservice;
 
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.JSONPath;
 import com.pangu.crawler.business.dao.mongoDB.entity.AsyncBusinessTransferRuleEntity;
-import com.pangu.crawler.framework.utils.StringUtils;
-import com.pangu.crawler.transfer.utils.RuleDataFilterUtils;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 
 import java.util.*;
-import java.util.regex.Matcher;
 
 /**
  * @Author sheng.ding
@@ -24,4 +19,17 @@ public interface ITransferHtmlDataService {
     Map<String, String> combineDynamicRowsHtmlResultData(String nsrdq, String ruleszcode, String formid, String form, StringBuilder errorresult, Map<String, Object> result, JSONObject resultData, AsyncBusinessTransferRuleEntity ruleEntity, Document doc,Map<String,String> ruledata );
 
     Map<String, String> combineHtmlResultData(String nsrdq, String ruleszcode, String formid, String form, StringBuilder errorresult, Map<String, Object> result, JSONObject resultData, AsyncBusinessTransferRuleEntity ruleEntity, Document doc);
+
+
+    /**
+     * @description 当数据格式全时标准的Css选择器，不需要通过指定标识查找时，通过这个方法来转化生成标准的报文
+     * @param ruledata
+     * @param error
+     * @param doc
+     * @param nsrdq
+     * @param ruleszcode
+     * @param resultData
+     * @return
+     */
+    Map<String,String> transferNomalRule(List<String> ruledata,StringBuilder error,Document doc,String nsrdq,String ruleszcode,JSONObject resultData);
 }

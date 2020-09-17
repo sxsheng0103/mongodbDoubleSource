@@ -21,7 +21,7 @@ public class RuleDataFilterUtils {
     /**
      * @param rules
      * @return
-     * @description 获取有效的json报文
+     * @description 对于JSON类型的原始报文数据。通过这个方法先生成转换文件中的获取有效的json标准报文结构
      */
     public static Object getValidJsonBefore(List<String> rules) {
         //重组josn报文json,这里只有有效值
@@ -256,6 +256,7 @@ public class RuleDataFilterUtils {
         String prefix = "";
         StringBuilder errorgroup = new StringBuilder("");
         String ruletag = "";
+        boolean innomalstate = true;
         String transfertype = "";
         CountDownLatch cdl= new CountDownLatch(6);
         for (String rule : rules) {
@@ -307,7 +308,7 @@ public class RuleDataFilterUtils {
                 rule=rule.substring(0,rule.indexOf("//"));
             }
             if(ruletag==null||StringUtils.isEmpty(ruletag)){
-                errorgroup.append(ruletag+"转换文件组配置确实转换类型!以starttransfertype开头;");
+                errorgroup.append(ruletag+"转换文件组配置起始标识转换类型!以starttransfertype开头;");
             }
             if(ruletag.startsWith("nomallogical")){
                 listRules.add(rule);

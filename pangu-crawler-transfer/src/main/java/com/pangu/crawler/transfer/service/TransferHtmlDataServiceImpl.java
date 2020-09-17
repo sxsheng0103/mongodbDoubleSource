@@ -6,7 +6,6 @@ import com.pangu.crawler.business.dao.mongoDB.entity.AsyncBusinessTransferRuleEn
 import com.pangu.crawler.business.dao.mongoDB.operation.AsyncQueryBusinessTransferRule;
 import com.pangu.crawler.business.dao.mongoDB.operation.auxiliaryutils.Paging;
 import com.pangu.crawler.framework.utils.StringUtils;
-import com.pangu.crawler.transfer.enums.FormMap;
 import com.pangu.crawler.transfer.enums.SzEnum;
 import com.pangu.crawler.transfer.service.iservice.ITransferHtmlDataService;
 import com.pangu.crawler.transfer.utils.RuleDataFilterUtils;
@@ -45,7 +44,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 	 * @param id
 	 * @return
 	 * @description 转化原始类型为html格式的报文为标准报文
-     * 方案一(通用方案)：转换文件规则 对外报文里边的路径 如doc.ybData.zzssyyybnsrzb.zbGrid.zbGridlbVO[0].asysljsxse=htmlCSSselector
+     *              所有的html原始文件通过这个方法进行转换，通过转换规则‘/文件转换成标准报文文件
 	 */
 	public Map<String, Object> majarTransferHtmlData(Map<String, String> dataMap, String nsrdq, String ruleszcode, String formcode, String id, List<AsyncBusinessTransferRuleEntity> transferRuleEntity) {
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -54,6 +53,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 		StringBuilder error = new StringBuilder();
 		Paging<AsyncAreaTaxCodeReleationEntity> taxCodeReleationEntity = null;
 		try {
+			/*当数据存储一个数据块，所有表单html结构数据存储在一个字段里边时使用这个标识。这时遍历处理每个表单规则转换文件，转化成标准报文*/
 			boolean breakoneflag = false;
 			for (Map.Entry<String, String> map : dataMap.entrySet()) {
 //				tempresult.clear();
@@ -61,7 +61,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 					breakoneflag = true;
 				}
 				String form = map.getKey();
-				//这里是增值税里边嵌套附件税的情况   一个html的节点
+				/************** 一、这里是增值税里边嵌套附件税的情况 当数据存储的key键值是【zzsybnsr&fjs】时，这个增值税一般纳税人税种里边存储了附加税的html原始报文html数据块 *******************************************/
 				if (map.getKey().equals("zzsybnsr&fjs")) {
 					Map<String, String> zzsfjsMap = new HashMap<String, String>();
 					zzsfjsMap.put(SzEnum.fjs.getCode(), dataMap.get(map.getKey()));
@@ -70,7 +70,8 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 					paramsfjs.put("nsrdq", nsrdq);
 					paramsfjs.put("rulesz", SzEnum.fjs.getCode());
 					List<AsyncBusinessTransferRuleEntity> transferRuleEntityfjs = transferRuleDataService.queryHistoricalData(paramsfjs, null, null).getData();
-					//这种情况单独处理所有表单
+					/* zzsfjsMap 这个HashMap里边放了一个原始报文节点，里边存附件税html，
+					* 调用 transferMixHtml 方法处理附加税转换成附加税的标准报文*/
 					Map<String, Object> resultfjs = transferMixHtml(zzsfjsMap, nsrdq, SzEnum.fjs.getCode(), formcode, id, transferRuleEntityfjs,resultData);
 					tempresult = new HashMap<String, String>();
 					tempresult.put("code", resultfjs.get("code") + ":" +form );
@@ -104,10 +105,13 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 					result.put(form, tempresult);
 					continue;
 				}
+
 				AsyncBusinessTransferRuleEntity ruleEntity = null;
 				for (AsyncBusinessTransferRuleEntity ruleEntity1 : transferRuleEntity) {
 					formid = ruleEntity1.getFormid();
-					if (breakoneflag == true) { //zb代表只有一个数据块，该税种下每一个规则都在这里校验，完成后直接返回
+					/********************************************** 二、(1)zb代表只有一个数据块，该税种下每一个规则都在这里校验，完成后直接返回.
+					 * zb类型的原始报文结构包含整个税种的所有表单，下边为处理的方式*****************************/
+					if (breakoneflag == true) {
 						if (ruleEntity == null) {
 							log.warn(nsrdq + "-" + ruleszcode + "没有找到对应的表单规则文件:" + form);
 							tempresult = new HashMap<String, String>();
@@ -128,6 +132,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 					}
 
 				}
+				/********************************************** 二、(2)zb类型时,在这里获取返回转换结果*****************************/
 				if (breakoneflag == true) {
 					Set<String> resultkeys = result.keySet();
 					Map<String, String> temp1 = null;
@@ -165,7 +170,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 						return result;
 					}
 				}
-
+				/********************************************** 三、处zb、zzsybnsr&fjs类型的原始报文结构使用下边通用的格式下边为处理的方式**********/
 				if (ruleEntity == null) {
 					log.warn(nsrdq + "-" + ruleszcode + "没有找到对应的表单规则文件:" + form);
 					tempresult = new HashMap<String, String>();
@@ -200,7 +205,6 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 						}catch (Exception e){
 							error.append("异常出错");
 						}
-
 					}
 
 					if (error.toString().equals("")) {
