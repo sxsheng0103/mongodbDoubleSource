@@ -179,9 +179,8 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 					result.put(form, tempresult);
 				} else {
 					tempresult = new HashMap<String, String>();
-					List<String> rules = new ArrayList<String>();
-					rules.addAll(Arrays.asList(ruleEntity.getContent().split("\\n")));
-					Map<String, Object> ruleresult = RuleDataFilterUtils.dynamicSplitGroupHtmlRules(rules);
+
+					Map<String, Object> ruleresult = RuleDataFilterUtils.dynamicSplitGroupHtmlRules(ruleEntity.getContent());
 					Queue rulegroupQueue =  (Queue)ruleresult.get("data");
 					String errorgroup = ruleresult.get("error").toString();
 					if(!errorgroup.equals("")){
@@ -201,6 +200,8 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 							}else if(type.equals("dynamicmatchrowlogical")){//动态匹配选择器走这个
 								Map<String,String> ruledata = (Map<String,String>)rulegroup.get("data");
 								tempresult = combineDynamicRowsHtmlResultData(nsrdq, ruleszcode, formid, form, error, result, resultData, ruleEntity, doc,ruledata);
+							}else{
+								log.error("类型错误，没有这种类型的处理功能");
 							}
 						}catch (Exception e){
 							error.append("异常出错");
@@ -273,40 +274,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 	}
 
 
-	public Map<String,String> transferNomalRule(List<String> ruledata,StringBuilder error,Document doc,String nsrdq,String ruleszcode,JSONObject resultData){
-		Map<String, String> result = new HashMap<String, String>();
-		String errorrule = "";
-		try{
-			for(String rule:ruledata){
-				try{
-					errorrule = rule;
-					Elements links = doc.select(rule.substring(rule.indexOf("=") + 1)); //带有href属性的a元素
-					if (links.size() == 0) {
-						error.append(rule + ":html中没有找到节点;");
-						log.warn(nsrdq + "-" + ruleszcode + rule + ":" + ":节点不存在");
-					} else if (links.size() != 1) {
-						error.append(rule + ":html中有重复节点;");
-						log.warn(nsrdq + "-" + ruleszcode + ":" + rule + ":html中有重复节点");
-					} else {
-						JSONPath.set(resultData, rule.substring(0, rule.indexOf("=")), links.get(0).wholeText());
-					}
-				}catch (Exception e){
-//					e.printStackTrace();
-					result.put("code","error");
-					error.append(rule + "规则：["+errorrule+"]转换失败");
-				}
-			}
-			if(result.get("code")==null){
-				result.put("code","warn");
-			}
-			result.put("message",error.toString());
-		}catch (Exception e){
-			e.printStackTrace();
-			log.error("处理错误"+e.getMessage());
-		}finally {
-			return result;
-		}
-	}
+
 
 	public Map<String,String> transferBooleanTypeRule(List<String> ruledata,StringBuilder error,Document doc,String nsrdq,String ruleszcode,JSONObject resultData){
 		Map<String, String> result = new HashMap<String, String>();
@@ -358,7 +326,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 	 * @param formcode
 	 * @param id
 	 * @return
-	 * @description 方案二：当增值税和附加税在一块时（例如上海增值税+附加税）转化原始数据类型为html格式的原始报文为标准报文，
+	 * @description 方案二：当附加税在增值税里边存储在一块时（例如上海增值税+附加税）转化原始数据类型为html格式的原始报文为标准报文，
      * 将附加税当成一个整体数据块来处理
 	 */
 	public Map<String, Object> transferMixHtml(Map<String, String> dataMap, String nsrdq, String ruleszcode, String formcode, String id, List<AsyncBusinessTransferRuleEntity> transferRuleEntity,JSONObject resultData) {
@@ -450,6 +418,41 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 		}
 	}
 
+	public Map<String,String> transferNomalRule(List<String> ruledata,StringBuilder error,Document doc,String nsrdq,String ruleszcode,JSONObject resultData){
+		Map<String, String> result = new HashMap<String, String>();
+		String errorrule = "";
+		try{
+			for(String rule:ruledata){
+				try{
+					errorrule = rule;
+					Elements links = doc.select(rule.substring(rule.indexOf("=") + 1)); //带有href属性的a元素
+					if (links.size() == 0) {
+						error.append(rule + ":html中没有找到节点;");
+						log.warn(nsrdq + "-" + ruleszcode + rule + ":" + ":节点不存在");
+					} else if (links.size() != 1) {
+						error.append(rule + ":html中有重复节点;");
+						log.warn(nsrdq + "-" + ruleszcode + ":" + rule + ":html中有重复节点");
+					} else {
+						JSONPath.set(resultData, rule.substring(0, rule.indexOf("=")), links.get(0).wholeText());
+					}
+				}catch (Exception e){
+//					e.printStackTrace();
+					result.put("code","error");
+					error.append(rule + "规则：["+errorrule+"]转换失败");
+				}
+			}
+			if(result.get("code")==null){
+				result.put("code","warn");
+			}
+			result.put("message",error.toString());
+		}catch (Exception e){
+			e.printStackTrace();
+			log.error("处理错误"+e.getMessage());
+		}finally {
+			return result;
+		}
+	}
+
 
 	/**
 	 * @param nsrdq
@@ -476,7 +479,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 		List<String> rules = new ArrayList<String>();
 		StringBuilder error = new StringBuilder();
 		rules.addAll(Arrays.asList(ruleEntity.getContent().split("\\n")));
-		Map<String, List<String>> rulegroup = RuleDataFilterUtils.splitGroupByTableRules(rules);
+		Map<String, List<String>> rulegroup = RuleDataFilterUtils.splitHtmlGroupByTableRules(rules);
 		String temprule = "";
 //		JSONObject docObj = new JSONObject();
 		String dataprefix = "";

@@ -202,7 +202,7 @@ public class TransferJsonDataServiceImpl implements ITransferJsonDataService{
 
 		List<String> rules = new ArrayList<String>();
 		rules.addAll(Arrays.asList(ruleEntity.getContent().split("\\n")));
-		Map<String, List<String>> rulegroup = RuleDataFilterUtils.splitGroupByTableRules(rules);
+		Map<String, List<String>> rulegroup = RuleDataFilterUtils.splitJsonGroupByTableRules(rules);
 		String temprule = "";
 		String dataprefix = "";
 		for (Map.Entry<String, List<String>> ruleset : rulegroup.entrySet()) {
