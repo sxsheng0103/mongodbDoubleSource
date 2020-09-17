@@ -1,0 +1,121 @@
+//--login--//
+GET {ningbo}/nbdzswj-web/apps/views/beforeLogin/indexBefore/pageIndex.html HTTP/1.1
+Host: etax.ningbo.chinatax.gov.cn
+Connection: keep-alive
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Referer: https://etax.ningbo.chinatax.gov.cn/nbdzswj-web/apps/views/beforeLogin/indexBefore/pageIndex.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---login---///
+
+//--beforeLogin--//
+GET {ningbo}/login-web/login?mode=ajax&timestamp=1590652402202 HTTP/1.1
+Host: etax.ningbo.chinatax.gov.cn
+Connection: keep-alive
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36
+Content-Type: text/javascript;charset=UTF-8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.ningbo.chinatax.gov.cn/nbdzswj-web/apps/views/beforeLogin/indexBefore/pageIndex.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---beforeLogin---///
+
+//--getRsaPublicKey--//
+GET {ningbo}/login-web/base/getRsaPublicKey.do?timestamp=1577437887818 HTTP/1.1
+Host: etax.ningbo.chinatax.gov.cn
+Connection: keep-alive
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36
+Content-Type: application/json;charset=UTF-8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Referer: https://etax.ningbo.chinatax.gov.cn/nbdzswj-web/apps/views/beforeLogin/indexBefore/pageIndex.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---getRsaPublicKey---///
+
+//--send--//
+POST {ningbo}/login-web/api/sms/login/company/send HTTP/1.1
+Host: etax.ningbo.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 562
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36
+Content-Type: application/json;charset=UTF-8
+Origin: https://etax.ningbo.chinatax.gov.cn
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.ningbo.chinatax.gov.cn/nbdzswj-web/apps/views/beforeLogin/indexBefore/pageIndex.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---send---///
+
+//--loginweb--//
+POST {ningbo}/login-web/login?mode=ajaxLogin HTTP/1.1
+Host: etax.ningbo.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 3670
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36
+Content-Type: application/x-www-form-urlencoded;charset=UTF-8;charset=UTF-8
+Origin: https://etax.ningbo.chinatax.gov.cn
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.ningbo.chinatax.gov.cn/nbdzswj-web/apps/views/beforeLogin/indexBefore/pageIndex.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---loginweb---///
+
+//--loginweb--//
+userName=[[userName]]&passWord=[[passWord]]&single=&authencationHandler=GswbAuthenticationHandler&lt=[[lt]]&_eventId=submit&execution=[[execution]]&captchCode=&qd=web&randNum=[[randNum]]&sjhm=[[sjhm]]&clientAuth=&serverAuth=&certType=&enCert=&caxlh=&isSbdlh=false&broswerType=chrome&broswerVersion=81.0.4044.138&osType=Win10
+///---loginweb---///
+
+//--desktopTax--//
+GET {ningbo}/nbdzswj-web/apps/views/publicPage/headerNew.html?_=1583417833621 HTTP/1.1
+Host: etax.ningbo.chinatax.gov.cn
+Connection: keep-alive
+Accept: */*
+Sec-Fetch-Dest: empty
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Referer: https://etax.ningbo.chinatax.gov.cn/nbdzswj-web/apps/views/companyPage/desktopTax.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---desktopTax---///
+
+//--le--//
+GET {ningbo}/login-web/login?mode=ajax&timestamp=1583410725419 HTTP/1.1
+Host: etax.ningbo.chinatax.gov.cn
+Connection: keep-alive
+Accept: application/json, text/javascript, */*; q=0.01
+Sec-Fetch-Dest: empty
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36
+Content-Type: text/javascript;charset=UTF-8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Referer: https://etax.ningbo.chinatax.gov.cn/nbdzswj-web/apps/views/beforeLogin/indexBefore/pageIndex.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---le---///
+
+

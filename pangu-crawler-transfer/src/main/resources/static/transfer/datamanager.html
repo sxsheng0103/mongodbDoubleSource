@@ -1,0 +1,460 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<!--auther dingsheng-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>报文爬取数据结果及处理详情</title>
+
+  <style>
+    body{margin: 10px;}
+    .demo-carousel{height: 200px; line-height: 200px; text-align: center;}
+    .circle1{width:50px;height:50px;margin: 50px auto;border-radius:50%;border:1px solid #e1ffe0;color: #e1ffe0
+    }
+  </style>
+
+
+</head>
+<body>
+<footer th:fragment="footer">
+  <!-- 查询表单 -->
+  <form id="crawformid" class="layui-form layui-form-pane" action="">
+    <div class="layui-form-item">
+
+      <div class="layui-inline">
+        <label class="layui-form-label">纳税人地区</label>
+        <div class="layui-input-inline">
+          <select id="craw_nsrdq_query" name="nsrdq">
+          </select>
+          <!--<input type="text" name="nsrdq"  placeholder="请输入纳税人地区" autocomplete="off" class="layui-input">-->
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label" style="width:150px">原始税种编码</label>
+        <div class="layui-input-inline">
+          <!--<select id="craw_sz_query" name="sz">
+          </select>-->
+          <input type="text" name="sz"  placeholder="请输入原始税种编码" autocomplete="off" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label" style="width:120px">ID</label>
+        <div class="layui-input-inline">
+          <input type="text" name="crawid" placeholder="请输入ID" autocomplete="off" class="layui-input"><!--lay-verify="required" -->
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label" style="width:120px">纳税人识别号</label>
+        <div class="layui-input-inline">
+          <input type="text" name="nsrsbh" placeholder="请输入纳税人识别号" autocomplete="off" class="layui-input"><!--lay-verify="required" -->
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">状态</label>
+        <div class="layui-input-inline">
+          <select id="craw_state_query" name="query_state">
+            <option value=''></option>
+            <option value='1'>待转化</option>
+            <option value='2'>转化中</option>
+            <option value='3'>转化成功</option>
+            <option value='101'>转化错误</option>
+            <option value='102'>转化完成但出现警告</option>
+            <option value='103'>转化失败</option>
+            <option value='109'>转化完成，状态未知</option>
+          </select>
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">类型</label>
+        <div class="layui-input-inline">
+          <select id="craw_datatype" name="craw_datatype">
+            <option value=''></option>
+            <option value='html'>html</option>
+            <option value='json'>json</option>
+          </select>
+        </div>
+      </div>
+      <div class="layui-inline">
+        <button class="layui-btn" id="crawsubmit" lay-submit=""  lay-filter="submit">查询</button>
+        <button type="reset"  id= "crawreset" class="layui-btn layui-btn-primary">重置</button>
+        <button type="button" class="layui-btn" id="initbydataid">
+          <i class="layui-icon">&#xe67c;</i>初始化
+      </button>
+    </div>
+    </div>
+
+  </form>
+  <hr class="layui-bg-green">
+  <table class="layui-hide" id="craw_table" lay-filter="test"></table>
+
+  <script type="text/html" id="barscandara">
+    {{# if (d.zhState !='0'){}}
+    <a class="layui-btn layui-btn-xs" lay-event="scandata">查看</a>
+    {{# }if(d.zhState =='0') { }}
+    <button class="layui-btn layui-btn-xs layui-btn-disabled"  disabled="disabled" lay-event="scandata">查看</button>
+    {{# } }}
+  </script>
+  <script type="text/html" id="barscanresult">
+    {{# if (d.zhState !='0'){}}
+    <a class="layui-btn layui-btn-xs" lay-event="scanresult">查看</a>
+    {{# }if(d.zhState =='0') { }}
+    <button class="layui-btn layui-btn-xs  layui-btn-disabled"  disabled="disabled" lay-event="scanresult">查看</button>
+    {{# } }}
+  </script>
+  <script type="text/html" id="barretransfer">
+    {{# if (d.zhState !='0'){}}
+    <a class="layui-btn layui-btn-xs" lay-event="retransfer">转化</a>
+    {{# }if(d.zhState =='0') { }}
+    <button class="layui-btn layui-btn-xs layui-btn-disabled"  disabled="disabled" lay-event="retransfer">转化</button>
+    {{# } }}
+  </script>
+  <script type="text/html" id="barscanoutput">
+    {{# if (d.zhState !='0'){}}
+    <a class="layui-btn layui-btn-xs" lay-event="scanoutput">查看</a>
+    {{# }if(d.zhState =='0') { }}
+    <button class="layui-btn layui-btn-xs layui-btn-disabled" disabled="disabled" lay-event="scanoutput">查看</button>
+    {{# } }}
+  </script>
+  <script type="text/html" id="zizeng">
+    {{d.LAY_TABLE_INDEX+1}}
+  </script>
+
+  <script>
+      // 鼠标滑过操作列
+      layui.config({
+          version: '1594038785991' //为了更新 js 缓存，可忽略
+      });
+
+      layui.use(['laydate', 'form','laypage', 'layer', 'table', 'carousel', 'element', 'slider'], function(){
+          var laydate = layui.laydate //日期
+              ,laypage = layui.laypage //分页
+              ,form = layui.form //表单
+              ,layer = layui.layer //弹层
+              ,table = layui.table //表格
+
+          //执行一个 table 实例
+          var crawtable = table.render({
+              elem: '#craw_table'
+              // ,height: 420
+              ,url: '/queryStockData/' //数据接口
+              ,title: '爬取客户端报文详细表'
+              ,page: true //开启分页
+              ,limits: [ 5, 10,20,30]
+              ,toolbar: 'e' //default开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+              // ,totalRow: true //开启合计行
+              ,cols: [[ //表头
+                  {field: 'xh',width:55, title: '序号',fixed: 'left',width: 25}
+                  ,{type: 'checkbox', fixed: 'left',width: 20,}
+                  ,{field: 'id',width:80, title: 'ID',fixed: 'left'}
+                  ,{field: 'nsrdq', title: '纳税人地区',align:'center', width: 120,   fixed: 'left'}
+                  ,{field: 'bbmc', title: '原始报表名称', align:'center',width:250}
+                  ,{field: 'zhStata', title: '状态',align:'center', width: 65, templet: function(d) {
+                          var text = "";
+                          if(d.zhState ==undefined){
+                              text = "<span style='color:#ffdb8a;cursor: pointer;' data-text='' " +
+                                  "onmouseover='' title='状态未定义'><i class='layui-icon layui-icon-notice' style='font-size: 25px; color: #ffdb8a;'><!--&#xe667;--></i></span>";
+                          }else if (d.zhState === 0) {
+                              text = "<span style='color:rgba(0,0,0,0.49);;cursor: pointer;' data-text='' " +
+                                  "onmouseover='' title='不需转化'><i class='layui-icon layui-icon-ok-circle'  style='font-size: 25px; color: rgba(0,0,0,0.49);'><!--&#xe616;--></i></span>";
+                          } else if (d.zhState === 1) {
+                              text = "<span style='color:#ff210b;cursor: pointer;' data-text='' " +
+                                  "onmouseover='' title='待转化'><i class='layui-icon layui-icon-reduce-circle'  style='font-size: 25px; color: #ff210b;'><!--&#xe616;--></i></span>";
+                          } else if(d.zhState === 2){
+                              text = "<span style='color:#9dff52;cursor: pointer;' data-text='' " +
+                                  "onmouseover='' title='转化中'><i class='layui-icon layui-icon-loading' style='font-size: 25px; color: #9dff52;'><!--&#xe63d;--></i></span>";
+                          } else if(d.zhState === 3){
+                              text = "<span style='color:#38ff1e;cursor: pointer;' data-text='' " +
+                                  "onmouseover='' title='转化完成'><i class='layui-icon layui-icon-ok-circle' style='font-size: 25px; color: #38ff1e;'><!--&#xe63d;--></i></span>";
+                          } else if(d.zhState === 101){
+                              text = "<span style='color:#ff210b;cursor: pointer;' data-text='' " +
+                                  "onmouseover='' title='转化错误'><i class='layui-icon layui-icon-close' style='font-size: 25px; color: #ff210b;'><!--&#xe63d;--></i></span>";
+                          } else if(d.zhState === 102){
+                              text = "<span style='color:#fffd3b;cursor: pointer;' data-text='' " +
+                                  "onmouseover='' title='转化完成但出现警告'><i class='layui-icon layui-icon-notice' style='font-size: 25px; color: #fffd3b;'><!--&#xe63d;--></i></span>";
+                          } else if(d.zhState === 103){
+                              text = "<span style='color:#ff210b;cursor: pointer;' data-text='' " +
+                                  "onmouseover='' title='转化失败'><i class='layui-icon layui-icon-close' style='font-size: 25px; color: #ff210b;'><!--&#xe63d;--></i></span>";
+                          }else if(d.zhState === 109){
+                              text = "<span style='color:#fffd3b;cursor: pointer;' data-text='' " +
+                                  "onmouseover='' title='转化完成，状态未知'><i class='layui-icon layui-icon-help'  style='font-size: 25px; color: #fffd3b;'><!--&#x1005;--></i></span>";
+                          }else{
+                              text = "<span style='color:#1b1cff;cursor: pointer;' data-text='' " +
+                                  "onmouseover='' title='其他"+d.zhStata+"'><i class='layui-icon layui-icon-help' style='font-size: 25px; color: #1b1cff;'><!--&#xe60e;--></i></span>";
+                          }
+                          return text;
+                      }
+                  }
+                  ,{field: 'dataType', title: '原始数据类型',align:'center', width: 120,  totalRow: true}
+                  ,{field: '', title: '原始数据内容',align:'center', width: 120,toolbar: '#barscandara'}
+                  ,{field: '', title: '标准报文内容', align:'center',width: 120,toolbar: '#barscanoutput'}
+                  ,{field: '', title: '转化结果',align:'center', width: 105,toolbar: '#barscanresult'}
+                  ,{field: '', title: '手工转化',align:'center', width: 105,toolbar: '#barretransfer'}
+                  ,{field: 'zhTime', title: '转化时间',align:'center', width:145}
+                  ,{field: 'szdm', title: '原始税种编码',align:'center', width: 120}
+                  ,{field: 'nsrsbh', title: '纳税人识别号',align:'center', width:105}
+                  ,{field: 'skssqq', title: '税款所属期起',align:'center', width: 135}
+                  ,{field: 'skssqz', title: '税款所属期止',align:'center', width: 135,  totalRow: true}
+                  ,{field: 'sbrq', title: '申报日期', align:'center',width: 135,  totalRow: true}
+                  // ,{field: 'xgrq', title: '修改日期', width: 135,  totalRow: true}
+                  // ,{field: 'ytbse', title: '应补退税额', width: 135,  totalRow: true}
+                  ,{field: 'sbfs', title: '申报方式',align:'center', width: 135,  totalRow: true}
+                  ,{field: 'state', title: '申报状态',align:'center', width: 135,  totalRow: true}
+                  ,{field: 'zfbj', title: '作废标记',align:'center', width: 135,  totalRow: true}
+                  // ,{field: '_class', title: '类名', width: 135,  totalRow: true}
+                  ,{field: 'createTime', title: '创建时间',align:'center', width:135}
+                  ,{field: 'updateTime', title: '修改时间',align:'center', width: 135,  totalRow: true}
+              ]]
+          });
+          $('#crawreset').on('click', function () {
+              document.getElementById("crawformid").reset();
+              $("#crawsubmit").click();
+              $("#crawsubmit").click();
+          });
+          //监听提交
+          form.on('submit(submit)', function(data){
+              table.reload("craw_table", {
+                  where: {nsrsbh:data.field.nsrsbh,nsrdq:data.field.nsrdq,sz:data.field.sz,id:data.field.crawid,state:data.field.query_state,craw_datatype:data.field.craw_datatype}
+              });
+              return false;
+          });
+
+          form.on('reset(resetcraw)', function(data){
+              table.reload("craw_table", {
+                  where: {}
+              });
+              return false;
+          });
+
+          //监听提交
+
+          /*layui.table.on('row(operateEvent)', function (obj) {
+              var tableDiv;
+              var index = $(obj.tr.selector).attr('data-index');
+              var tableBox = $(obj.tr.selector).parents('.layui-table-box');
+              //存在固定列
+              if (tableBox.find(".layui-table-fixed.layui-table-fixed-l").length>0) {
+                  tableDiv = tableBox.find(".layui-table-fixed.layui-table-fixed-l");
+              } else {
+                  tableDiv = tableBox.find(".layui-table-body.layui-table-main");
+              }
+              var checkCell = tableDiv.find("tr[data-index=" + index + "]").find("td div.layui-table-cell div.layui-form-radio");
+              checkCell.on("click", function (e) {
+                  $(this).off();
+                  e.stopPropagation();
+              });
+              checkCell.find('i').click();
+          });*/
+          //监听行工具事件
+          table.on('tool(test)', function(obj){
+              var data = obj.data //获得当前行数据
+              ,layEvent = obj.event; //获得 lay-event 对应的值
+
+              if(layEvent === 'scandata'||layEvent === 'scanoutput'||layEvent === 'scanresult'){
+                  var content = '';
+                  var colkey = '';
+                  var queryresult = '';
+                  if(layEvent === 'scandata'){
+                      colkey = 'sbData';
+
+                  }else if(layEvent === 'scanoutput'){
+                      colkey = 'dataOut';
+                  }else if(layEvent === 'scanresult'){
+                      colkey = 'result';
+                  }
+                  $.ajax({
+                      url:"queryStockData",
+                      data:{cols:colkey,id:data.id},
+                      type:"Post",
+                      dataType:"json",
+                      async: false,
+                      success:function(data){
+                          if(data.code==='0'){
+                              queryresult =  eval('data.data[0].'+colkey+'_value');
+                          }
+                      },
+                      error:function(data){
+                          $.messager.alert('错误',data.msg);
+                      }
+                  });
+                  content = queryresult == undefined ? '':queryresult;
+                  var contenttemp = '';
+                  if(layEvent === 'scandata'){
+                      var optionhtml = '<select id="queryformorigindata" lay-filter="queryformorigindata" name="queryformorigindata">';
+                      var contenthtml = '';
+                      var firsthtml = '';
+                      $.each(JSON.parse(content),function(idx,item){
+                          if(firsthtml===''){
+                              firsthtml = ""+item+"";
+                          }
+                          optionhtml+="<option value='"+idx+"'>"+idx+"</option>";
+                          contenthtml+="<div id='"+idx+"div' style='display: none'><xmp>"+item+"</xmp></div>";
+                      });
+                      optionhtml+="/select>";
+                      $("#origincontent").append(contenthtml);
+                     contenttemp = optionhtml+'<textarea disabled name="data" id="data" placeholder="" style="width:95%;height:360px" lay-verify="jsondata">'+firsthtml+'</textarea>' +
+                          '</div></div>' +
+                          '</div>' +
+                          '</form>';
+                  }else{
+                      contenttemp = '<textarea disabled name="data" id="data" placeholder="" class="layui-textarea" style="width:95%;height:360px" lay-verify="jsondata">'+content+'</textarea>\n' +
+                          '</div></div>' +
+                          '</div>' +
+                          '</form>';
+                  }
+                  layer.open({
+                      type: 1,
+                      title:"信息",
+                      area:['50%','90%'],
+                      // shift: 25,
+                      content: '' +//<blockquote class="layui-elem-quote layui-text">注意事项: 请填写相关的数据信息! </blockquote>
+                          '<form class="layui-form" id="datatipform"> ' +
+                          '<div class="layui-form-item">' +
+                          '<label class="layui-form-label">序号</label>' +
+                          '<div class="layui-input-block">' +
+                          '<input type="text"  required lay-verify="required" name="id" style="width:290px"   disabled class="layui-input" value="'+data.xh+'" >' +
+                          '</div>' +
+                          '<div class="layui-form-item layui-form-tex">' +
+                          '<label class="layui-form-label">内容</label>' +
+                          '<div class="layui-input-block">' +contenttemp
+
+                  });
+                  form.render();
+              }else if(layEvent === 'retransfer'){
+                  var index = layer.msg('执行中，请稍候',{icon: 16,time:false,shade:0.8});
+                  $.ajax({
+                      url:"/updatetransfer",
+                      data:{'id':data.id},
+                      type:"Post",
+                      dataType:"json",
+                      async: false,
+                      success:function(data){
+                          layer.close(index);
+                          if(data.code==='success'){
+                              layer.closeAll();
+                              layer.msg(data.message);
+                          }else{
+                              layer.msg(data.message);
+                          }
+                          $("#crawsubmit").click();
+                          return;
+                      },
+                      error:function(data){
+                          $.messager.alert('错误',data.msg);
+                      }
+                  });
+              }
+          });
+          $("#initbydataid").click(function(){
+              var selectData = layui.table.checkStatus('craw_table').data;
+              debugger
+              if(selectData.length==0){
+                  layer.msg("请至少选择一条数据进行初始化");
+                  return;
+              }
+              var ids = '';
+              selectData.map((k,v)=>{
+                  if(ids===''){
+                    ids = k.id;
+                  }else{
+                    ids += ','+k.id;
+                  }
+              });
+              var index = layer.msg('执行中，请稍候',{icon: 16,time:false,shade:0.8});
+              $.ajax({
+                  url:"/updateStockDataByid",
+                  data:{'ids':ids,zhState:'1'},
+                  type:"Post",
+                  dataType:"json",
+                  async: false,
+                  success:function(data){
+                      layer.close(index);
+                      $("#crawsubmit").click();
+                      return;
+                  },
+                  error:function(data){
+                      $.messager.alert('错误',data.msg);
+                  }
+              });
+          });
+          //启动定时任务
+          $("#starttask").click(function(){
+              $.ajax({
+                  url:"task/start",
+                  data:{},
+                  type:"Post",
+                  dataType:"json",
+                  async: false,
+                  success:function(data){
+                      layer.msg('已停止');
+                      return;
+                  },
+                  error:function(data){
+                      $.messager.alert('错误',data.msg);
+                  }
+              });
+          });
+          //停止定时任务
+          $("#stoptask").click(function(){
+              $.ajax({
+                  url:"/task/stop",
+                  data:{},
+                  type:"Post",
+                  dataType:"json",
+                  async: false,
+                  success:function(data){
+                      layer.msg('启动成功');
+                      return;
+                  },
+                  error:function(data){
+                      $.messager.alert('错误',data.msg);
+                  }
+              });
+          });
+          form.on('select(queryformorigindata)', function(obj) {
+              var o = document.getElementById("queryformorigindata");
+              var obj = $("#"+o.options[o.selectedIndex].value.replace("&","\\&")+"div")[0].innerHTML;
+              var centent = (obj===null||obj===undefined)?'':obj.replace('<xmp>','').replace('</xmp>','')
+              $("#data").text(centent)
+          });
+          //分页
+          laypage.render({
+              elem: 'pageDemo' //分页容器的id
+              ,count: 100 //总页数
+              ,skin: '#1E9FFF' //自定义选中色值
+              //,skip: true //开启跳页
+              ,jump: function(obj, first){
+                  if(!first){
+                      layer.msg('第'+ obj.curr +'页', {offset: 'b'});
+                  }
+              }
+          });
+      });
+
+      $(document).ready(function f() {
+
+          $.ajax({
+              url:"/common/getdq",
+              data:{'id':'1'},
+              type:"Post",
+              dataType:"json",
+              async: false,
+              success:function(data){
+                  var dqhtml = '<option value=""></option>';
+                  var szs = JSON.parse(JSON.stringify(data));
+                  for(var o in szs){
+                      dqhtml+="<option value='"+o+"'>"+szs[[o]]+"</option>";
+                  }
+                  $("#craw_nsrdq_query").html(dqhtml);
+              },
+              error:function(data){
+                  $.messager.alert('错误',data.msg);
+              }
+          });
+      });
+      function queryodata() {
+          debugger
+      }
+  </script>
+</footer>
+<div id="origincontent"></div>
+</body>
+</html>

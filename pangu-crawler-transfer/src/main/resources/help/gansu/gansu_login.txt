@@ -1,0 +1,135 @@
+//--index--//
+GET {gansu}/bszm-web/apps/views/beforeLogin/indexBefore/pageIndex.html HTTP/1.1
+Host: etax.gansu.chinatax.gov.cn
+Connection: keep-alive
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---index---///
+
+//--getsm2PublicKey--//
+GET {gansu}/login-web/api/base/sm2publickey/get HTTP/1.1
+Host: etax.gansu.chinatax.gov.cn
+Connection: keep-alive
+Accept: */*
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Referer: https://etax.gansu.chinatax.gov.cn/bszm-web/apps/views/beforeLogin/indexBefore/pageIndex.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---getsm2PublicKey---///
+
+//--getEmployees--//
+POST {gansu}/login-web/api/auth/company/employees/get HTTP/1.1
+Host: etax.gansu.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 243
+Accept: */*
+Origin: https://etax.gansu.chinatax.gov.cn
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Content-Type: application/json;charset=UTF-8
+Referer: https://etax.gansu.chinatax.gov.cn/bszm-web/apps/views/beforeLogin/indexBefore/pageIndex.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---getEmployees---///
+
+//--getEmployees--//
+{"nsrsbh":"[[nsrsbh]]"}
+///---getEmployees---///
+
+//--senderifyode--//
+POST {gansu}/login-web/api/sms/login/central/company/send HTTP/1.1
+Host: etax.gansu.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 798
+Accept: */*
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36
+Content-Type: application/json
+Origin: https://etax.gansu.chinatax.gov.cn
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.gansu.chinatax.gov.cn/bszm-web/apps/views/beforeLogin/indexBefore/pageIndex.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---senderifyode---///
+
+//--senderifyode--//
+{"bdgxId":"[[bdgxId]]","bsrType":"[[bsrType]]","username":"[[username]]","password":"[[password]]","nsrsbh":"[[nsrsbh]]","isSensitive":[[isSensitive]],"useLateSms":[[useLateSms]]}
+///---senderifyode---///
+
+//--loginweb--//
+POST {gansu}/login-web/login HTTP/1.1
+Host: etax.gansu.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 3728
+Accept: */*
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Origin: https://etax.gansu.chinatax.gov.cn
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.gansu.chinatax.gov.cn/bszm-web/apps/views/beforeLogin/indexBefore/pageIndex.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---loginweb---///
+
+//--loginweb--//
+channelId=web&&lt=LT-16149-BVLuiovcbuHOgImDyKo9-gsdzswj&execution=478272dc-55a0-47d9-9513-c689c29f3c8a_ZXlKaGJHY2lPaUpJVXpVeE1pSjkuVTFwbFNVdFdZbmRFY1RkSGFqVllVR0pvY0dKRk5VRm5jbmxvYm5wU1NWVnNUalF6VDNWVGNYQXlORXc0VkdweU1qZFlhSE0xU2tWU2VsRmpkRW80Y3pNNGRsbHlja0ZyTURkdEwxRXlXbTVsWnlzMGQwZGpkRmR6U0ZSdVVrSkVSVkp4Y25nM1VHdEZaRTQzUVZOQ2JtUlFLelp5T0hOamFYcE9kMWhGUmpjNWJFRnZkVkp6YTNwSFEyeHZUWFEyZGpWamJHWXdNMXBMYTBkUVVuRnNjU3MyTHk5aFdYQnpNaXRDUlVsUldrNXNlRzB4Unk5dVdrNTJaVEZaVFZKcGFWUlllWHBYWmxwVWNqWkpSemx1UW5aUmIzVkJUVGxxU2xoaVZuRlhZMUpWV1ZBMFIxVk9hbEJoUzI1cVoycE1UekV4WVhwWVpUaDZlR1ZwYjNGUmRFczRjM1Z4U1dwclJqRm5Ta1l6Y1VkMFNWVmliRVpSUVRWUGRHbzJUM1EwZVdNeGRtbEJNWEJDU0drclRYbGhZM3B2YmpnelpVZ3lUbEkyY0RWWVNUUmlNbVl4WTFKWGJ6aHVXVU52VkV4bmJqVnVSakUxSzJ0cVZ6UkNSVWd4UVdwdWNESm1TRUl4YzFKRGVYQmtlV0ZuTjJkMU9IQTNkbUpIYTBWUlozSjJRVlJLZVdGQlZtbEthR2g1WkdjME5HdGlheXRDU25ZdlQwNDNiRElyZG1oRVpsTlhNVWhVTkZsV05qQkVVV2s1VVdab1ozQk5RWFU1ZWtJNGJGbHJRbmRrZWpSc1ZETTNaSGd2VXpSSFJuTjRTVTA0YVdoWVJHOXVRMVU1VmtGMlMySnFNREpHTlVOdWFFRklaUzh4TDJwQmFYcFVaV2h0ZVc0NVJsSmxRMmxwTVZoQlFYRjNOWEp5YVZGbVUyRkhlWFpHUzFrNWFWbFplVTlPT0RSWFdsSXJkakUyUm5oUWNqQlNWV042V0dOV1RsZEhPVlozYUZGNlMxWlRUVkY1ZDBoVFMyOUhaM0oxYTJGaFdrc3daSGxPYUVONVkycERNREJPVW1oWWRFaG1ORTVaV0haUFFsVmFUbmxwYkN0aWRtTmxUblZFTVZWNlZrdFVibVJVZEZSck9IVlZUMlE1VlhaRGFXTjJXalVyTWxKdkwwcEVNa2xXTmxKd1lrVjRVa3hVYTNkUVEzRkNhM0JpTVZscFZEbERWSGMzVEZSb1EzUjVjRmxMYUZwbkszZFpVbXg0U0RCQ2RFWkNaMjF0Y2k5M1QwcHZPRW92VTFOYU5EbGxjMFpEVld0eWJXaHRUekpEWW00d2EwMUVNR3hJWWs5UFVVdEViVTh5VkVoUWVUQlFWVzFRZFZwcVJsbzNka1pwYWxvd1REaHlabWx0YUZodmNEQlZXSEZyYVdOYVVqSm1WRkowVG5KUGJXY3JSVXRpWW5OSGEybHpSMDVVVUZrM2JrOU1RMkU0ZUVrM1JHUk9ha1I1VDFwVVdrWm9XRVYxTkhNd1ZqVXpaVWRxVkdRMVVqRjZkMDVuVW5GaWN6QmxlV2t5YUVSWlIwdHZiVmRJYUVKbFQyRlhTUzl1ZERGbGJIQnJjakozUzA5WWJYUmxha1l4Y0RSS1RtNW1kbGgyVkhaQlZ6ZHphekJ1VDFWcVpUSllkRWxPUkZGWVl6RkxTSGsyUldOTkswc3lkMDU0UldWU1lTdDFSVkExYzI5bU1DOU1TSE5PVHk4elJ6Vm9TVXN6YWpoNmJEWm5XR05tTXl0VlRGZDJNbEo2Vm01NFRWUlFZbmN4UlRSV1oxVkRVRTVTU1ZKcVFTdEZUREF4Vm1oUVVVUTRUMmd3VERKdWEzaHNaa0owZVdZNVRVVmpVbGREZGxacFVGVmlRelY0Tld4aFlVeGlXVXB3VFhGMksyeHZUblJPUlZKak9ESk9la3hGUzI5dlVURXZkMkl3Ym1sb1NuTkxTR054VW5wRVZrMXZXWEo1U2poeWFDOUJTMFZ0UW1WRlpVZHRWbWR5VXpCSmJtVTJhRlYyUld3MWFEZGhRazlWYkdKWVIybHhNMEp1TVRsNFNYbzVTMjlXT0VWVFVVOHhkbE51WVhOUWFtdDZUR05PZGxGNmFqUm9hMVp3UXpOdU0wdG1WR2xPYW1kSWNFdEZVMjB5ZWpCNlZGQXhNM0psY1VvMWNGWk9OVVpYYmtKQmFVZExRMlJWVlZwNFFsWTRVWEJVY2tObVQybFBSeXRQVEcxc2NtOVdVMVpzYTBwdE9XazRZMk5SVWtWWFJ6TTFWVFUxY0ZKc05UbFVkVTlMTjJsbFVtcGxhMGxSTkd0RlIyMXpOVXRzVXpoeGJWUm9ia1JKTDFSR1UxQXlNRTVFZGtZeFVtdG1SblZUVDFNMFowWjJUa2ROT1ZCVmIycFRhR2hTVTBselF6TlJNM0ZXWXpWcksxSTJibmt2ZEZoMmJISTVUMDFQTUdwemJWZDZVbTR2U1VOSlZYUlBSbk5uUWpKT04xaGhibGRyUlZkaVNHdFFLMEpxYkZkVlZFVklkRXhIVXprM1RYbExaM0pPZUZkNi5NX1I5dTNnZ2o2MDJEeEN3OEhvSnlVSHhuN0tyQ2tVdFlWYUVJZjVQTzRxcy00cXhPaFJuY3U3dWNhcERiNUpFZEJYcTBpWjUyRlZSYWptWXpHbi1Idw%3D%3D&_eventId=submit&osType=Win10&broswerType=chrome&broswerVersion=83.0.4103.97&solutionId=webCentralCompanyLogin&bdgxId=[[bdgxId]]&bsrType=[[bsrType]]&username=[[username]]&password=[[password]]&nsrsbh=[[nsrsbh]]&isSensitive=true&useLateSms=true&smsCode=[[smsCode]]
+///---loginweb---///
+
+//--checkLoginState--//
+POST {gansu}/login-web/auth/checkLoginState.do HTTP/1.1
+Host: etax.gansu.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 0
+Accept: */*
+Origin: https://etax.gansu.chinatax.gov.cn
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Referer: https://etax.gansu.chinatax.gov.cn/bszm-web/apps/views/beforeLogin/indexBefore/pageIndex.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---checkLoginState---///
+
+//--getByhInfo--//
+POST {gansu}/login-web/auth/gs/getByhInfo.do HTTP/1.1
+Host: etax.gansu.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 51
+Accept: */*
+Origin: https://etax.gansu.chinatax.gov.cn
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Referer: https://etax.gansu.chinatax.gov.cn/bszm-web/apps/views/beforeLogin/indexBefore/pageIndex.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---getByhInfo---///
+
+//--getByhInfo--//
+djxh=[[djxh]]&nsrsbh=[[nsrsbh]]
+///---getByhInfo---///
+
+//--headerNew--//
+GET {gansu}/bszm-web/apps/views/publicPage/headerNew.html?_=1592536836484 HTTP/1.1
+Host: etax.gansu.chinatax.gov.cn
+Connection: keep-alive
+Accept: */*
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.gansu.chinatax.gov.cn/bszm-web/apps/views/companyPage/desktopTax.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---headerNew---///

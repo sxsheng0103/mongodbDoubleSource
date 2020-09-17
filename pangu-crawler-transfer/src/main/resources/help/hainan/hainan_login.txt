@@ -1,0 +1,108 @@
+//--login--//
+GET {hainan}/zjgfdzswj/main/index.html HTTP/1.1
+Host: etax.hainan.chinatax.gov.cn
+Connection: keep-alive
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3
+Referer: https://etax.hainan.chinatax.gov.cn/
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---login---///
+
+//--captcha--//
+GET {hainan}/zjgfdzswj/kaptcha.jpg?v=0.8239596953387751 HTTP/1.1
+Host: etax.hainan.chinatax.gov.cn
+Connection: keep-alive
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Accept: image/webp,image/apng,image/*,*/*;q=0.8
+Referer: https://etax.hainan.chinatax.gov.cn/zjgfdzswj/main/index.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---captcha---///
+
+//--validateYzm--//
+GET {hainan}/zjgfdzswj/Yybs/validateYzm.do?yzm=[[yzm]] HTTP/1.1
+Host: etax.hainan.chinatax.gov.cn
+Connection: keep-alive
+Accept: */*
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Referer: https://etax.hainan.chinatax.gov.cn/zjgfdzswj/main/index.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---validateYzm---///
+
+//--publicKeyReq--//
+GET {hainan}/zjgfdzswj/main/util/publicKey.js?v=[[version]] HTTP/1.1
+Host: etax.hainan.chinatax.gov.cn
+Connection: keep-alive
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Accept: */*
+Referer: https://etax.hainan.chinatax.gov.cn/zjgfdzswj/main/index.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---publicKeyReq---///
+
+//--validateLogin--//
+GET {hainan}/zjgfdzswj/LoginController/loginWssb.do?username=[[username]]&password=[[password]]&yzm=[[yzm]] HTTP/1.1
+Host: etax.hainan.chinatax.gov.cn
+Connection: keep-alive
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Content-Type: application/json; charset=utf-8
+Referer: https://etax.hainan.chinatax.gov.cn/zjgfdzswj/main/index.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---validateLogin---///
+
+//--loginBsry--//
+GET {hainan}/zjgfdzswj/LoginController/loginBsry.do?username=[[username]]&password=[[password]]&loginType=PWD&service=https%3A%2F%2Fetax.hainan.chinatax.gov.cn%2Fzjgfdzswj%2Fmain%2Fhome%2Fwybs%2Findex.html HTTP/1.1
+Host: etax.hainan.chinatax.gov.cn
+Connection: keep-alive
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Content-Type: application/json; charset=utf-8
+Referer: https://etax.hainan.chinatax.gov.cn/zjgfdzswj/main/index.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---loginBsry---///
+
+//--index--//
+GET {hainan}[[ticketURL]] HTTP/1.1
+Host: etax.hainan.chinatax.gov.cn
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3
+Referer: https://etax.hainan.chinatax.gov.cn/zjgfdzswj/main/index.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---index---///
+
+//--getUser--//
+GET {hainan}/zjgfdzswj/UserController/getUser.do HTTP/1.1
+Host: etax.hainan.chinatax.gov.cn
+Connection: keep-alive
+Accept: */*
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Referer: https://etax.hainan.chinatax.gov.cn/zjgfdzswj/main/home/wybs/index.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---getUser---///
+
+//--changeQyxx--//
+GET {hainan}/zjgfdzswj/UserController/changeQyxx.do?djxh=[[djxh]] HTTP/1.1
+Host: etax.hainan.chinatax.gov.cn
+Connection: keep-alive
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Referer: https://etax.hainan.chinatax.gov.cn/zjgfdzswj/main/home/wybs/index.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---changeQyxx---///

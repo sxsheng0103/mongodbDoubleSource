@@ -1,0 +1,60 @@
+//--xiamen_queryRegister_pre--//
+POST https://ai.xiamen.chinatax.gov.cn/common/checktjts.do?tjlx=DLXZ HTTP/1.1
+Host: ai.xiamen.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 9
+Accept: */*
+Origin: https://ai.xiamen.chinatax.gov.cn
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Referer: https://ai.xiamen.chinatax.gov.cn/views/login_v2/shouye.jsp
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---xiamen_queryRegister_pre---///
+
+//--xiamen_shouye--//
+GET https://ai.xiamen.chinatax.gov.cn/views/login_v2/syiframe.jsp HTTP/1.1
+Host: ai.xiamen.chinatax.gov.cn
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: nested-navigate
+Referer: https://ai.xiamen.chinatax.gov.cn/views/login_v2/shouye.jsp
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---xiamen_shouye---///
+
+//--xiamen_queryRegister--//
+GET https://ai.xiamen.chinatax.gov.cn/swxxtx/queryNsrjbxx.do HTTP/1.1
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+Connection: keep-alive
+Host: ai.xiamen.chinatax.gov.cn
+Referer: https://ai.xiamen.chinatax.gov.cn/tnsfwHome/index.do?menuid=yhzx_01&menu_item_id=yhzx_01
+Sec-Fetch-Mode: nested-navigate
+Sec-Fetch-Site: same-origin
+Sec-Fetch-User: ?1
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36
+///---xiamen_queryRegister---///
+
+//--xiamen_queryTaxsDetermine--//
+GET https://etax.xiamen.chinatax.gov.cn:8443/lhpt/indexV2.do?menuid=yhzx_01&menu_item_id=yhzx_0102&gdsbz=GS&flag=Y&lhrz_clicent_ticket=401b9d187f00000131ddd479754a7ee8 HTTP/1.1
+Host: etax.xiamen.chinatax.gov.cn:8443
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36
+Sec-Fetch-User: ?1
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3
+Sec-Fetch-Site: same-site
+Sec-Fetch-Mode: nested-navigate
+Referer: https://ai.xiamen.chinatax.gov.cn/tnsfwHome/index.do?menuid=yhzx_01&menu_item_id=yhzx_01
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---xiamen_queryTaxsDetermine---///

@@ -1,0 +1,195 @@
+//--queryRegister--//
+GET {zhejiang}/zjgfdacx/zwnsrxxcx/init.do HTTP/1.1
+Content-Type: application/json
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+Referer: https://etax.zhejiang.chinatax.gov.cn/zjgfdacx/sscx/djxxcx/djxxcx.html
+Accept-Language: zh-CN
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko
+Host: etax.zhejiang.chinatax.gov.cn
+Connection: Keep-Alive
+///---queryRegister---///
+
+//--queryRegister_new--//
+GET {zhejiang}/zjgfcssdzswjfpyh/zgxx/query.do HTTP/1.1
+Host: etax.zhejiang.chinatax.gov.cn
+Connection: keep-alive
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Content-Type: application/json
+Referer: https://etax.zhejiang.chinatax.gov.cn/zjgfcssdzswjfpyh/fp/viewzgxx/viewzgxx.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---queryRegister_new---///
+
+//--sfzrdxxQuery--//
+GET {zhejiang}/zjgfcssdzswjfpyh/sfzrdxx/query.do HTTP/1.1
+Host: etax.zhejiang.chinatax.gov.cn
+Connection: keep-alive
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Content-Type: application/json
+Referer: https://etax.zhejiang.chinatax.gov.cn/zjgfcssdzswjfpyh/fp/viewsfzrdxx/viewsfzrdxx.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---sfzrdxxQuery---///
+
+//--queryTaxsDetermine--//
+GET {zhejiang}/zjgfcssdzswjfpyh/sfzrdxx/viewsfzrdxx/[[djxh]]/[[dsdjxh]].do HTTP/1.1
+Host: etax.zhejiang.chinatax.gov.cn
+Connection: keep-alive
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Content-Type: application/json
+Referer: https://etax.zhejiang.chinatax.gov.cn/zjgfcssdzswjfpyh/fp/viewsfzrdxx/viewsfzrdxx.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---queryTaxsDetermine---///
+
+//--ysbcx--//
+GET {zhejiang}/sbbcx/wssb/sjcx/sb_ysbcx.jsp?xmzslx=24&xmfwly=&sbxmdm=lsbbcx1 HTTP/1.1
+Host: etax.zhejiang.chinatax.gov.cn
+Connection: keep-alive
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3
+Referer: https://etax.zhejiang.chinatax.gov.cn/zjgfzjdzswjsbweb/pages/sb/nssb/sb_nssb.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---ysbcx---///
+
+//--getHistoricalDataList--//
+POST {zhejiang}/sbbcx/wssb/sjcx/sbtj_ysbcx.jsp HTTP/1.1
+Host: etax.zhejiang.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 42
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Origin: https://etax.zhejiang.chinatax.gov.cn
+Content-Type: application/x-www-form-urlencoded
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3
+Referer: https://etax.zhejiang.chinatax.gov.cn/sbbcx/wssb/sjcx/sb_ysbcx.jsp?xmzslx=24&xmfwly=&sbxmdm=lsbbcx1
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---getHistoricalDataList---///
+
+//--print_nssbb_zzfw--//
+GET {zhejiang}/sbbcx/wssb/sjcx/[[detailUrl]] HTTP/1.1
+Host: etax.zhejiang.chinatax.gov.cn
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3
+Referer: https://etax.zhejiang.chinatax.gov.cn/sbbcx/wssb/sjcx/sbtj_ysbcx.jsp
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---print_nssbb_zzfw---///
+
+//--queryForm--//
+GET {zhejiang}/sbbcx/wssb/sjcx/[[formName_detailUrl]] HTTP/1.1
+Host: etax.zhejiang.chinatax.gov.cn
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3
+Referer: https://etax.zhejiang.chinatax.gov.cn/sbbcx/wssb/sjcx/print_nssbb_zzfw.jsp?k=1
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---queryForm---///
+
+//--getTblb--//
+POST {zhejiang}/sbbcxcs/bbcx/bbcx/GetTblb.do HTTP/1.1
+Host: etax.zhejiang.chinatax.gov.cn
+Connection: keep-alive
+Accept: application/json, text/javascript, */*; q=0.01
+Origin: https://etax.zhejiang.chinatax.gov.cn
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Content-Type: application/json
+Referer: https://etax.zhejiang.chinatax.gov.cn/sbbcxcs/wssb/lscx/print_tblb.html?bblx=201970&pzxh=EC39BDA29C5A2D0A302C4216DAA2D53C
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---getTblb---///
+
+//--getTblb--//
+{"bblx":"[[bblx]]","pzxh":"[[pzxh]]"}
+///---getTblb---///
+
+//--getCkSbb--//
+POST {zhejiang}/[[detail_url]] HTTP/1.1
+Host: etax.zhejiang.chinatax.gov.cn
+Connection: keep-alive
+Accept: application/json, text/javascript, */*; q=0.01
+Origin: https://etax.zhejiang.chinatax.gov.cn
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Content-Type: application/json
+Referer: https://etax.zhejiang.chinatax.gov.cn/sbbcxcs/wssb/lscx/jdsds/dis_jdsds_A20000_2019.html?pzxh=EC39BDA29C5A2D0A302C4216DAA2D53C&xxlx_dm=A200000
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---getCkSbb---///
+
+//--getCkSbb--//
+{"bblx":"[[bb_lx]]","pzxh":"[[pzxh]]","xxlx_dm":"[[xxlx_dm]]"}
+///---getCkSbb---///
+
+//--kaptcha--//
+GET {zhejiang}/zjgfdacx/kaptcha.jpg HTTP/1.1
+Host: etax.zhejiang.chinatax.gov.cn
+Connection: keep-alive
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Accept: image/webp,image/apng,image/*,*/*;q=0.8
+Referer: https://etax.zhejiang.chinatax.gov.cn/zjgfdacx/sscx/fpxxcx/fpxxcx.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---kaptcha---///
+
+//--checkCaptcha--//
+GET {zhejiang}/zjgfdacx/checkCaptcha.do?captchaReceived=[[captchaReceived]] HTTP/1.1
+Host: etax.zhejiang.chinatax.gov.cn
+Connection: keep-alive
+Accept: */*
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Referer: https://etax.zhejiang.chinatax.gov.cn/zjgfdacx/sscx/fpxxcx/fpxxcx.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---checkCaptcha---///
+
+//--fpxxcxQuery--//
+GET {zhejiang}/zjgfdacx/fpxxcx/query.do?rqq=[[rqq]]&rqz=[[rqz]]&fplx=[[fplx]] HTTP/1.1
+Host: etax.zhejiang.chinatax.gov.cn
+Connection: keep-alive
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Content-Type: application/json
+Referer: https://etax.zhejiang.chinatax.gov.cn/zjgfdacx/sscx/fpxxcx/fpxxcx.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---fpxxcxQuery---///
+
+//--queryThisMonthQingce--//
+POST {zhejiang}/zjgfzjdzswjsbweb/nssb/nssb/dbrwinit.do HTTP/1.1
+Host: etax.zhejiang.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 13
+Accept: */*
+Origin: https://etax.zhejiang.chinatax.gov.cn
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Content-Type: application/json
+Referer: https://etax.zhejiang.chinatax.gov.cn/zjgfdzswj/main/home/wdxx/index.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---queryThisMonthQingce---///
+
+//--queryThisMonthQingce--//
+{"xmzslx":30}
+///---queryThisMonthQingce---///

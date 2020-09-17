@@ -1,0 +1,439 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="" th:replace="transfer/main" xmlns:accept="http://www.w3.org/1999/xhtml">
+<!--auther dingsheng-->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>定时任务</title>
+
+    <style>
+        body{margin: 10px;}
+        .demo-carousel{height: 200px; line-height: 200px; text-align: center;
+        }
+    </style>
+
+</head>
+<body>
+    <!-- 查询表单 -->
+    <form id="taskformid" class="layui-form layui-form-pane" action="">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="taskname" name="taskname"  placeholder="请输入名称" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">状态</label>
+                <div class="layui-input-inline">
+                    <select id="taskstatus" name="taskstatus">
+                        <option value='' selected></option>
+                        <option value='0'>停止中</option>
+                        <option value='1'>运行中</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <button class="layui-btn" id="tasksubmit"  lay-submit=""  lay-filter="tasksubmit">查询</button>
+                <button type="reset" id="taskreset" class="layui-btn layui-btn-primary">重置</button>
+              <button type="button" class="layui-btn" id="addtask">
+                    <i class="layui-icon"></i>新增
+                </button>
+            </div>
+        </div>
+    </form>
+    <hr class="layui-bg-green">
+    <table class="layui-hide" id="task_table" lay-filter="tasktable"></table>
+    <script type="text/html" id="barupdatetask">
+        <a class="layui-btn layui-btn-xs" lay-event="updatetask">修改</a>
+        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="deltask">删除</a>
+        {{# if (d.status =='0'||d.status ==undefined){}}
+        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="updatestatus">启用</a>
+        {{# }if(d.status =='1') { }}
+        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="updatestatus">停用</a>
+        {{# } }}
+    </script>
+
+    <script type="text/html" id="zizeng">
+        {{d.LAY_TABLE_INDEX+1}}
+    </script>
+
+    <div id="formtaskdiv" style="display: none" class="layui-form">
+        <form id = "formtaskform" class="layui-form"  action="task/updateTaskTimer" method="post"  enctype="multipart/form-data">
+            <div class="layui-form-item">
+                <div class="layui-input-inline">
+                    <input type="hidden" id="task_id" name="task_id"  disabled/>
+                    <input type="hidden" id="task_update" name="task_update"  disabled/>
+                </div>
+            </div>
+            <div id="frameFile" name="frameFile"></div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="task_name" name="task_name"  placeholder="请输入名称" autocomplete="off"  lay-verify="required" class="layui-input">
+                </div>
+            </div>
+            <!--<div class="layui-form-item">
+                <label class="layui-form-label">是否推迟</label>
+                <div class="layui-input-inline">
+                    <select  id="task_isDelay" name="task_isDelay" lay-filter="isDelay" lay-verify="required">
+                        <option value='' ></option>
+                        <option value='0' selected>否</option>
+                        <option value='1'>是</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">推迟时间</label>
+                <div class="layui-input-inline">
+                    <input type="number" id="task_delayTime" name="task_delayTime"  placeholder="请输入推迟时间" autocomplete="off"  class="layui-input"><font color="red">分钟</font>
+                </div>
+            </div>-->
+            <div class="layui-form-item">
+                <label class="layui-form-label">执行类型</label>
+                <div class="layui-input-inline">
+                    <select id="task_expressType" name="task_expressType" lay-verify="required">
+                        <option value='' ></option>
+                        <option value='0' selected>固定频率执行</option>
+                        <!--<option value='1'>固定时间</option>-->
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">地区</label>
+                <div class="layui-input-inline">
+                    <div id="task_nsrdq_div"   name="task_nsrdq_div">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">税种</label>
+                <div class="layui-input-inline">
+                    <div id="task_sz_div"  name="task_sz_div">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">执行周期</label>
+                <div class="layui-input-inline">
+                    <input type="number" id="task_expressContent" name="task_expressContent"  placeholder="请输入执行周期" autocomplete="off" lay-verify="required" class="layui-input"><font color="red">秒/次</font>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn"  lay-submit lay-filter="tasksubmit2">立即提交</button>
+                    <button id="task_reset" type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var arritemssz = [];
+            $.ajax({
+                url:"/common/getsz",
+                data:{'id':'1'},
+                type:"Post",
+                dataType:"json",
+                async: false,
+                success:function(data){
+                    var szs = JSON.parse(JSON.stringify(data));
+                    for(var o in szs){
+                        arritemssz.push({name:szs[[o]],value:o});
+                    }
+                },
+                error:function(data){
+                    $.messager.alert('错误',data.msg);
+                }
+            });
+            //初始化多选下拉框
+            xmSelect.render({
+                el: '#task_sz_div',
+                language: 'zn',
+                data: arritemssz,
+                name: 'task_sz',//用于表单提交
+                id: 'task_sz',//用于表单提交
+                layVerify: 'required',//非空校验
+            });
+
+            var arritems = [];
+            $.ajax({
+                url: "/common/getdq",
+                data: {'id': '1'},
+                type: "Post",
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    var szs = JSON.parse(JSON.stringify(data));
+                    for (var o in szs) {
+                        arritems.push({name: szs[[o]], value: o});
+                    }
+                },
+                error: function (data) {
+                    $.messager.alert('错误', data.msg);
+                }
+            });
+            //渲染多选
+            xmSelect.render({
+                el: '#task_nsrdq_div',
+                language: 'zn',
+                data: arritems,
+                name: 'task_nsrdq',//用于表单提交
+                layVerify: 'required',//非空校验
+                 filterable:'true',//开启搜索
+                paging:'true',//显示分页
+                pageSize:'5',//默认10
+             });
+        });
+    </script>
+    <script>
+        layui.config({
+            version: '1594038785991' //为了更新 js 缓存，可忽略
+        });
+        layui.use('upload', function(){
+            var $ = layui.jquery
+            ,upload = layui.upload;
+            upload.render({
+                elem: '#uploadExample'
+                ,url: 'https://httpbin.org/post' //改成您自己的上传接口
+                ,auto: false
+                ,accept: 'file' //普通文件
+                ,exts: 'zip|rar|7z' //只允许上传压缩文件
+                ,multiple: false
+                ,done: function(res){
+                    layer.msg('上传成功');
+                    layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', res.files.file);
+                    console.log(res)
+                }
+            });
+        });
+        layui.use(['laydate', 'form','laypage', 'layer', 'table', 'carousel', 'element', 'slider'], function(){
+            var laydate = layui.laydate //日期
+                ,laypage = layui.laypage //分页
+                ,form = layui.form //表单
+                ,layer = layui.layer //弹层
+                ,table = layui.table //表格
+
+            //执行一个 table 实例
+            var tasktable = table.render({
+                elem: '#task_table'
+                // ,height: 420
+                ,url: '/task/queryTaskData/' //数据接口
+                ,title: '定时任务表'
+                ,page: true //开启分页
+                ,limits: [ 5, 10,20,30]
+                ,toolbar: 'e' //default开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+                // ,totalRow: true //开启合计行
+                ,cols: [[ //表头
+                    {field: 'xh',width:55, title: '序号'}
+                    ,{field: 'name', title: '名称', width: 200 , align:'center'}
+                    ,{field: 'expressType_value', title: '执行类型', align:'center' ,width: 180,  totalRow: true}
+                    ,{field: 'expressContent', title: '执行周期', align:'center', width: 265}
+                    // ,{field: 'isdelay_value', title: '是否推迟',  align:'center',width: 120}
+                    // ,{field: 'delayTime', title: '推迟时间',  align:'center', width: 135,}
+                    ,{field: 'dqnames', title: '地区',  align:'center', width: 135}
+                    ,{field: 'sznames', title: '税种',  align:'center', width: 135}
+                    ,{field: 'starttime', title: '开始时间', align:'center', width: 135}
+                    ,{field: 'endtime', title: '结束时间',align:'center', width: 135}
+                    ,{field: 'status_value', title: '启用状态',align:'center', width: 95}
+                    ,{field: 'operate', title: '操作',align:'center',width: 185,toolbar: '#barupdatetask'}
+                ]],
+
+            });
+
+            $('#taskreset').on('click', function () {
+                document.getElementById("taskformid").reset();
+                $("#tasksubmit").click();
+            });
+
+
+
+            //监听提交
+            form.on('submit(tasksubmit)', function(data){
+                table.reload("task_table", {
+                    where: {taskname:data.field.taskname,taskstatus:data.field.taskstatus}
+                });
+                return false;
+            });
+
+            //监听提交
+            form.on('submit(tasksubmit2)', function (data) {
+                var index = layer.msg('提交中，请稍候',{icon: 16,time:false,shade:0.8});
+                //return false;
+                var form = document.getElementById("formtaskform");                                                                     <!--      -->
+                form.action="/task/updateTaskTimer?task_id="+$("#task_id").val()+"&task_name="+$("#task_name").val()+"&task_update="+$("#task_update").val()+"&task_isDelay="+$("#task_isDelay").val()    +"&task_delayTime="+$("#task_delayTime").val()+"&task_expressType="+$("#task_expressType").val()+"&task_nsrdq="+$("#task_nsrdq_div > xm-select > input[name='task_nsrdq']").val()+"&task_sz="+$("#task_sz_div > xm-select > input[name='task_sz']").val()+"&task_expressType="+$("#task_expressType").val()+"&task_expressContent="+$("#task_expressContent").val();
+                var options = {
+                    target:'#task_table',
+                    type: 'post',//提交方式
+                    url:  form.action,
+                    data : '{rule_formid:'+$("#task_formid_formquery").val()+'}',
+                    success: function(data) {
+                        layer.close(index);
+                        if(data.code==='success'){
+                            layer.closeAll();
+                            table.reload("task_table");
+                            layer.msg(data.message);
+                        }else{
+                            layer.msg(data.message);
+                        }
+                    }
+                };
+                $("#formtaskform").ajaxSubmit(options); // jquery 表单提交
+                return false;
+            });
+
+
+            $("#addtask").click(function(){
+                document.getElementById("formtaskform").reset();
+                $("#task_sz_div > xm-select > div.xm-label.single-row > div > div[class='label-content']").remove();
+                $("#task_sz_div > xm-select > div.xm-body.absolute > div > div > div.scroll-body > div > i[style='color: rgb(0, 150, 136); border: none;']").attr('style','border-color: rgb(0, 150, 136);')
+                $("#task_nsrdq_div > xm-select > div.xm-label.single-row > div > div[class='label-content']").remove();
+                $("#task_nsrdq_div > xm-select > div.xm-body.absolute > div > div > div.scroll-body > div > i[style='color: rgb(0, 150, 136); border: none;']").attr('style','border-color: rgb(0, 150, 136);')
+                layer.open({
+                    type: 1,
+                    title:"新增",
+                    area:['30%','84%'],
+                    content:$("#formtaskdiv"),
+                    success:function(layero, index){
+                        $("#task_reset").show();
+                        $("#task_id").attr('disabled',false);
+                        $("#task_update").attr('disabled',false);
+                        $("#task_update").val('add');
+                        $("#task_isDelay").attr('disabled',false);
+                        $("#task_delayTime").attr('disabled',false);
+                        $("#task_name").attr('disabled',false);
+                        $("#task_expressType").attr('disabled',false);
+                        $("#task_expressContent").attr('disabled',false);
+                    }
+                });
+            });
+
+            //监听行工具事件
+            table.on('tool(tasktable)', function(obj){
+                var data = obj.data //获得当前行数据
+                    ,layEvent = obj.event; //获得 lay-event 对应的值
+                var content = '';
+                if(layEvent === 'scantask'){
+                    content = data.content == undefined ? '':data.content;
+                    layer.open({
+                        area: ['700px', '500px'],
+                        title:"查看",
+                        type: 1,
+                        content: '' +//<blockquote class="layui-elem-quote layui-text">注意事项: 请填写相关的数据信息! </blockquote>
+                            '<form class="layui-form"> ' +
+                            '<div class="layui-form-item">' +
+                            '<label class="layui-form-label">序号</label>' +
+                            '<div class="layui-input-block">' +
+                            '<input type="text"  required lay-verify="required" name="id" style="width:290px"   disabled class="layui-input" value="'+data.xh+'" >' +
+                            '</div>' +
+                            '<div class="layui-form-item layui-form-tex">' +
+                            '<label class="layui-form-label">内容</label>' +
+                            '<div class="layui-input-block">' +
+                            '<textarea disabled name="data" id="data" placeholder="" class="layui-textarea" style="width:95%;height:360px" lay-verify="jsondata">'+content+'</textarea>\n' +
+                            '</div></div>' +
+                            '</div>' +
+                            '</form>'
+                    });
+                }else if(layEvent === 'updatetask'){
+                    document.getElementById("formtaskform").reset();
+                    $("#task_sz_div > xm-select > div.xm-label.single-row > div > div[class='label-content']").remove();
+                    $("#task_sz_div > xm-select > div.xm-body.absolute > div > div > div.scroll-body > div > i[style='color: rgb(0, 150, 136); border: none;']").attr('style','border-color: rgb(0, 150, 136);')
+                    $("#task_nsrdq_div > xm-select > div.xm-label.single-row > div > div[class='label-content']").remove();
+                    $("#task_nsrdq_div > xm-select > div.xm-body.absolute > div > div > div.scroll-body > div > i[style='color: rgb(0, 150, 136); border: none;']").attr('style','border-color: rgb(0, 150, 136);')
+                    layer.open({
+                        type: 1,
+                        title:"修改",
+                        area:['30%','84%'],
+                        content:$("#formtaskdiv"),
+                        success:function(layero, index){
+                            $("#task_reset").hide();
+                            $("#task_id").val(data.id);
+                            $("#task_name").val(data.name);
+                            $("#task_update").val('update');
+                            $("#task_isDelay").val(data.isdelay);
+                            $("#task_delayTime").val(data.delayTime);
+                            $("#task_expressType").val(data.expressType);
+                            $("#task_expressContent").val(data.expressContent);
+                           /* $("#task_id").attr('disabled',true);
+                            $("#task_name").attr('disabled',true);
+                            $("#task_update").attr('disabled',true);
+                            $("#task_expressType").attr('disabled',true);
+                            $("#task_isDelay").attr('disabled',true);*/
+                        }
+                    });
+                }else if(layEvent === 'deltask'){
+                layer.confirm("确认要删除吗", { title: "删除确认" }, function (index) {
+                    form.action="/task/updateTaskTimer?task_id="+data.id+"&task_update=delete&&task_isDelay=0&task_delayTime=1";
+                        var options = {
+                            target:'#task_table',
+                            type: 'post',//提交方式
+                            url:  form.action,
+                            data : '',
+                            success: function(data) {
+                                if(data.code==='success'){
+                                    layer.closeAll();
+                                    table.reload("task_table");
+                                    layer.msg(data.message);
+                                }else{
+                                    layer.msg(data.message);
+                                }
+                            }
+                        };
+                        $("#formtaskform").ajaxSubmit(options); // jquery 表单提交
+                        return false;
+                });
+
+                }else if(layEvent === 'updatestatus') {
+                    var status = (data.status==='0'||data.status === undefined)?'1':'0';
+                    var url = (data.status==='0'||data.status === undefined)?'/task/startTask':'/task/stopTask';
+                    var index = layer.msg('执行中，请稍候',{icon: 16,time:false,shade:0.8});
+                    $.ajax({
+                        url:url,
+                        data:{'id':data.id,'status':status},
+                        type:"Post",
+                        dataType:"json",
+                        async: false,
+                        success:function(data){
+                            layer.close(index);
+                            if(data.code=='success'){
+                                layer.msg(data.message);
+                                $("#tasksubmit").click();
+                            }else{
+                                layer.msg(data.message);
+                            }
+                        },
+                        error:function(data){
+                            $.messager.alert('错误',data.msg);
+                        }
+                    });
+                }
+            });
+
+            //分页
+            laypage.render({
+                elem: 'pagetask_table' //分页容器的id
+                ,count: 100 //总页数
+                ,skin: '#1E9FFF' //自定义选中色值
+                //,skip: true //开启跳页
+                ,jump: function(obj, first){
+                    if(!first){
+                        layer.msg('第'+ obj.curr +'页', {offset: 'b'});
+                    }
+                }
+            });
+        });
+        $(document).ready(function f() {
+
+            layui.use('form', function(){
+                var form = layui.form;
+                var $ = layui.$;
+                form.render();
+            });
+        });
+
+    </script>
+</body>
+</html>

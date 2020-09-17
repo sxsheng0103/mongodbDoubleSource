@@ -1,0 +1,69 @@
+//--login--//
+GET {ningxia}/sword?ctrl=LoginCtrlTmp_logout?error=nonlogin HTTP/1.1
+Accept: text/html, application/xhtml+xml, image/jxr, */*
+Referer: http://www.baidu.com/link?url=P2K8798USvCQ_bOEZ4E2UZYWrzryTyI6eboR-5oVOquFlv0GV6O6Ljnm51DFrTU-WX7acZD25qOt7kjHMYZZvAPD5-wz5nb0-swv7CDRv-m&wd=&eqid=fdb15c96000931b8000000065e3ea45e
+Accept-Language: zh-CN
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko
+Accept-Encoding: gzip, deflate
+Host: etax.ningxia.chinatax.gov.cn
+Connection: Keep-Alive
+///---login---///
+
+//--captcha--//
+GET {ningxia}/download.sword?ctrl=CheckcodeCtrl_getCheckcode&t=0.8761450859424769 HTTP/1.1
+Accept: image/png, image/svg+xml, image/jxr, image/*;q=0.8, */*;q=0.5
+Referer: {ningxia}/sword?ctrl=LoginCtrlTmp_logout
+Accept-Language: zh-CN
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko
+Accept-Encoding: gzip, deflate
+Host: etax.ningxia.chinatax.gov.cn
+Connection: Keep-Alive
+///---captcha---///
+
+//--getRsaPublicKey--//
+GET {ningxia}/wsbs/gdslh/params.json?_=1581220549727 HTTP/1.1
+Accept: */*
+X-Requested-With: XMLHttpRequest
+Referer: {ningxia}/sword?ctrl=LoginCtrlTmp_logout#
+Accept-Language: zh-CN
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko
+Host: etax.ningxia.chinatax.gov.cn
+Connection: Keep-Alive
+///---getRsaPublicKey---///
+
+
+//--validateLogin--//
+POST {ningxia}/ajax.sword?ctrl=LnGdsLoginCtrl_loginByYhmMm HTTP/1.1
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Accept: */*
+X-Requested-With: XMLHttpRequest
+Referer: {ningxia}/sword?ctrl=LoginCtrlTmp_logout?error=nonlogin#
+Accept-Language: zh-CN
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko
+Host: etax.ningxia.chinatax.gov.cn
+Content-Length: 585
+Connection: Keep-Alive
+Cache-Control: no-cache
+///---validateLogin---///
+
+//--index--//
+POST {ningxia}/form.sword?sName=LnGdsPortalCtrl_openWin HTTP/1.1
+Host: etax.ningxia.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 1422
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36
+Sec-Fetch-Dest: document
+Origin: {ningxia}
+Content-Type: application/x-www-form-urlencoded
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Referer: {ningxia}/sword?ctrl=LoginCtrlTmp_logout
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---index---///

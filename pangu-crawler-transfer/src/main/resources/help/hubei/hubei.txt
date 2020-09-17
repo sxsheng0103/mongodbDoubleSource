@@ -1,0 +1,146 @@
+//--indexPage--//
+GET {hubei}/portal/ HTTP/1.1
+Host: etax.hubei.chinatax.gov.cn
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---indexPage---///
+
+//--homePage--//
+GET {hubei}/portal/home.c HTTP/1.1
+Host: etax.hubei.chinatax.gov.cn
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36
+Sec-Fetch-Dest: document
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Referer: {hubei}/portal/
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---homePage---///
+
+//--load--//
+GET {hubei}/webroot/nsfw/load.jsp?url=nsfw/xxcx/index.jsp HTTP/1.1
+Host: etax.hubei.chinatax.gov.cn
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36
+Sec-Fetch-Dest: iframe
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: navigate
+Referer: {hubei}/portal/iframe.c?dm=14201021500&menu=_&title=%E7%BA%B3%E7%A8%8E%E4%BA%BA%E4%BF%A1%E6%81%AF&goUrl=/webroot/nsfw/load.jsp?url=nsfw/xxcx/index.jsp
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---load---///
+
+//--getImg--//
+POST {hubei}/portal/vCode.c HTTP/1.1
+Host: etax.hubei.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 0
+Accept: */*
+X-Requested-With: XMLHttpRequest
+Sec-Fetch-Dest: empty
+X-CSRF-Token: 7aab674a-fc0d-40f5-960d-61a0b8d7de7b
+c-token: [[token]]
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36
+Origin: {hubei}
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Referer: {hubei}/portal/
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---getImg---///
+
+//--login--//
+POST {hubei}/portal/login.c HTTP/1.1
+Host: etax.hubei.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 103
+X-CSRF-Token: 7aab674a-fc0d-40f5-960d-61a0b8d7de7b
+c-token: 7aab674a-fc0d-40f5-960d-61a0b8d7de7b
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36
+Content-Type: application/json;charset=UTF-8
+Accept: application/json, text/javascript, */*; q=0.01
+Sec-Fetch-Dest: empty
+X-Requested-With: XMLHttpRequest
+Origin: {hubei}
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Referer: {hubei}/portal/
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---login---///
+//--login--//
+{"handleCode":"login","reqData":{"username":"[[userName]]","password":"[[password]]","vcode":"[[vcode]]"}}
+///---login---///
+
+//--selectUser--//
+POST {hubei}/portal/cutNsr.do HTTP/1.1
+Host: etax.hubei.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 74
+Cache-Control: max-age=0
+Origin: {hubei}
+Upgrade-Insecure-Requests: 1
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36
+Sec-Fetch-Dest: document
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Referer: {hubei}/portal/home.c
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---selectUser---///
+//--selectUser--//
+rdo_djxh=[[djxh]]&c-token=[[token]]
+///---selectUser---///
+
+//--queryRegister--//
+GET {hubei}/webroot/nsfw/xxcx/index.jsp HTTP/1.1
+Host: etax.hubei.chinatax.gov.cn
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36
+Sec-Fetch-Dest: iframe
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: navigate
+Referer: {hubei}/webroot/nsfw/load.jsp?url=nsfw/xxcx/index.jsp
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---queryRegister---///
+
+//--getTaxsDetermine--//
+POST {hubei}/webroot/yhsAction.do?method=szrdxx HTTP/1.1
+Host: etax.hubei.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 0
+Accept: application/json, text/javascript, */*; q=0.01
+Sec-Fetch-Dest: empty
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36
+Origin: {hubei}
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Referer: {hubei}/webroot/nsfw/xxcx/index.jsp
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---getTaxsDetermine---///
+
+
+
+
+

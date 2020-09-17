@@ -1,0 +1,113 @@
+//--pageIndex--//
+GET {sichuan}/bszm-web/apps/views/beforeLogin/indexBefore/pageIndex.html HTTP/1.1
+Host: etax.sichuan.chinatax.gov.cn
+Connection: keep-alive
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36
+Content-Type: application/json; charset=UTF-8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.sichuan.chinatax.gov.cn/bszm-web/apps/views/beforeLogin/indexBefore/pageIndex.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---pageIndex---///
+
+//--getSm2PublicKey--//
+GET {sichuan}/login-web/api/base/sm2publickey/get?timestamp=1592806162784 HTTP/1.1
+Host: etax.sichuan.chinatax.gov.cn
+Connection: keep-alive
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36
+Content-Type: application/json;charset=UTF-8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.sichuan.chinatax.gov.cn/bszm-web/apps/views/beforeLogin/indexBefore/pageIndex.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---getSm2PublicKey---///
+
+//--getEmployees--//
+POST {sichuan}/login-web/api/auth/sc/company/employees/withbyh/get HTTP/1.1
+Host: etax.sichuan.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 243
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36
+Content-Type: application/json;charset=UTF-8
+Origin: https://etax.sichuan.chinatax.gov.cn
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.sichuan.chinatax.gov.cn/bszm-web/apps/views/beforeLogin/indexBefore/pageIndex.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---getEmployees---///
+
+//--getEmployees--//
+{"nsrsbh":"[[nsrsbh]]"}
+///---getEmployees---///
+
+//--send--//
+POST {sichuan}/login-web/api/sms/login/central/company/send HTTP/1.1
+Host: etax.sichuan.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 563
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36
+Content-Type: application/json;charset=UTF-8
+Origin: https://etax.sichuan.chinatax.gov.cn
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.sichuan.chinatax.gov.cn/bszm-web/apps/views/beforeLogin/indexBefore/pageIndex.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---send---///
+
+//--send--//
+{"nsrsbh":"[[nsrsbh]]","captcha":"[[captcha]]","isSensitive":[[isSensitive]],"bsrType":"[[bsrType]]","bdgxId":"[[bdgxId]]","password":"[[password]]"}
+///---send---///
+
+//--loginweb--//
+POST {sichuan}/login-web/login HTTP/1.1
+Host: etax.sichuan.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 3574
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36
+Content-Type: application/x-www-form-urlencoded;charset=UTF-8;charset=UTF-8
+Origin: https://etax.sichuan.chinatax.gov.cn
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.sichuan.chinatax.gov.cn/bszm-web/apps/views/beforeLogin/indexBefore/pageIndex.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---loginweb---///
+
+//--loginweb--//
+channelId=web&lt=LT-331741-9VOOv6juKnpFcaQdaK3I-nbdzswj&_eventId=submit&broswerType=chrome&broswerVersion=83.0.4103.97&osType=Win10&execution=f24bbbad-2818-4d99-a18d-614c6483d701_ZXlKaGJHY2lPaUpJVXpVeE1pSjkuWWpOSlVqSmtkMFZzVFhjdk5FZHdSRlUwT1RBd2JtUTJhMDFXVDFOdmRESllkR2RTVm5oNWVYaFZkWFZpUjFwSk9GWlNOMWxhV205aVRUZzBSR2hxVGtkcmVtUkdZM0JHYlZCelJrOW1TMUJMTW5velVXZDJabWRSTTNaSWQyVk9WME5ZUjBaUE1FUkdWVzlwVG5oMldYQlRPRWRRY21aa0syRndUMmRxYjBVcmJYQTNZMUZ1TUdSSU9YQmhZVWRaZG1kT1ZsbFNiSFJYUm14NU55dElSSE5ZU1dKUmIxUjFlakJDVkVod1ZrUTNkR1ZxVHpKRVlVVklaMkpqVEd4QlV6UXlhWFl4VjBsVWExSXljVkZHT1RWWU5VVktkbFpMTW1wU1lXZEpUa3B2U0M5RFQwOVpVVzh2VFVaeWJGTnBXbEZMYm5WRlZHcGxiWGQwYUN0dVdtVkhaMVpyWmxwd2FYQkdVSE14VjNWRGRIUTRNMFJ4UkV0UlVtaFpPV1ZqYW5sRVQyaFBhRVp3YlU1SVIzTjNTemwzU25BMmFYbExNV05ZY1RadllYTllieTlWYm5kQlVtTnNRMG80V1VGUlFrNHlPVFpaUVZkMlIzUjVWbHA1Tms5VWFFRkhkbWhQV1hVeFlreG9TamRzTlRCWlFrNW9aSEo0UnpsbWRHUnphWHBvU21KdFdsaHhMMnhOTmxCd2VYWlFTRVUzZW1adVR6UmtWMHhQYUdKSFRFMVdURVUwSzFsVVlWQllTbmhRWWlzeWEyczRZU3N2WlhSdE5tNVdZMDlqWjFObU1YUmpMMFZ0VldkdE5XUldVWGhaU1hKcmVDOVNZWGhKTHpadlYxWTNXWFF3V0hZeU4yeFpPVVpPVVVwbWVWaFhObmd2UzFCT2RUWkxVVGw0Wm5admRHRlhURGxTUlN0RE5raGxSa2xsUjFOdmEyZE1iMVJKVWtzclJqaGhWekJ0TTFjNFVtRlJSbE0xV25WWlRrd3dXbkl3Wms0Mk0xWlZja1paVTNkYVdsSnhSa2hRZEVOclNsZGhRVVJ3VEhkWFNHcHlOVFExYlhOeWVEWkpXa2QzVVhRck5YTXpOU3RSTW05SGJGVkpkR1pHU1VSTE1FcEpkRkY0WTJGNGMwbHJOMVptWkd0QmFubDFPR3BZWjFsc2MxQkJZVFYzWlRSdFFUSkNMemhhV0hsQ2ExTm5RMU5wWmtSbVZqbFVVMUJKY0RSQmMxTXljSFpNUkdZeFNFVXdaMnA2V0VwSVlVWTFaMU51T1RNMlVqbHVWazR3Um5GS2JrVlZhMHQzV21SS1ZtVk5VVXh3S3pKVldtUnBielZITUhSR04yMUVkbE5PUmxwcFVtNWxOaXRFYWxwSVpXZGlSblZTUjJsNFkzcHdZWEJWVFZjNGVtWlhPV1ZQVTBWS05FZE9OVzFYVFVwNFdHdG9jVzlrVkdORWIzY3ZOSFJrU25FMmREQmFhMXB6VFRSQldUSnBWa2RLV2pOTU1GTk9ZelJzVkhWU1QycHlOMEYwYURsWldWRkNaQ3RqYkhSTGVVRk1hV0ZxUjA5dk56QXJPVnBUYmsweWFXVnVWWGxZTmtOQ2FHcHhaMnh1YkdzcmNuVnVTWHBMYm5Ndk5VTnJRMjlIWkV3MFJucDNTbWhrUzNwVmMxUjRlRUZMVm1wdlFWaGtkRXRsVlM5VFNtdEdRblJzU2tSb2NGWjBZa2c1VDFObGREbGtVRUoyU2s5alltZG1NM1JIVVZGTWVtdGtibVoyZEV4SlpHZHlhRVJ1ZDBoQ09WUk1ORzVhVFRFeVozVnVaek5NVjJKS01HZFZXSHAxTkRSV2RFazBNRUpDYkdnMFNGWnJjbll4VkdsNlNtaHNRbHBZTUhodmVqUkVhbXRNZWs5dGRVeHBkSFkxTUVSb1FYbzNVVzFtU2paSVEyUnVUVkYzTkU5eVVEZEpOa0pLTW1kNmRrVlhiVkZtWmxGaGJtcEtTMnh0VDJOb2JHdFJVMVJuTHpsS0t5OXlRVnByYkROSVYyUTNORlJYWTFwV2R6SjNWbFZUYzFaWWJGUmthbmgzT0dnd1IzQkphMEpHY1dFclIwbENkMFk1TjNoVlJsQjBZbWhFVVdOaGVubEZXV014U21velYxSk9aRGRYVVhSRE5VaERVV2MyTW1Gbllrb3JkRXNyWVVscWFYZzFUMVJsYW5aNWFteHRWMkZPTkc0NFZVTXpZbWhJYUdsdGNERjBNVmhOVTJKTlJDdGhOazFHWW1GSFpFTmhXV1ZrVkc1UE5TdFFWVFl5V0doaEwwVjBWaXQzSzNCUE9XdEJkMlIxTlVaMVl6ZEhjbkZxWmxOTU1rdEdZbFJDV1ZGTWF6VktRV0ZxY1dsMFoyOTFPVGxzTkRKRllUWmtlbkl3TlhGeE9GYzBLMUZMTjJFM0wyNWpXazVYVUUxWmRWVlRNR0pKZHpoUVZVWlRVMXBKTDFWRU5EQkhaVFJSTVdnclRqTTJSWGhGTTFCUFREZzNaWG96ZW0xV2VrNWhLM0pyV1dsYWJ6QkZlVzk2UlZKVFdXRTBTV0oyVlcxalEzVkJlbXBaUWtoWFdGQTVSeTlZUW5Obk1HTXZkMFZWV2xRMGRqaHJWQ3RxUkdwTlVsTXdSbnBpVWxKQ1FUMDkuRTQwR3N1dGpEUU05X1I4RjVDS0l5alZjSlFlRmdsY0d1c1BxNXYydVB2ZGFNVVpmZFo3QjVKaDNtZGFmUm95eWpaSFZMTTJSWko3QThNbmVaOHB4QUE%3D&solutionId=webCompanyLogin&single=&nsrsbh=[[nsrsbh]]&bdgxId=[[bdgxId]]&bsrType=[[bsrType]]&isSensitive=true&smsCode=[[smsCode]]&password=[[password]]
+///---loginweb---///
+
+//--index--//
+GET {sichuan}/bszm-web/apps/views/publicPage/headerNew.html?_=1592806932358 HTTP/1.1
+Host: etax.sichuan.chinatax.gov.cn
+Connection: keep-alive
+Accept: */*
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.sichuan.chinatax.gov.cn/bszm-web/apps/views/publicPage/desk.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---index---///

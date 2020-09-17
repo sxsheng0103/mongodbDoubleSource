@@ -1,0 +1,83 @@
+//--nsrxtsz--//
+GET https://etax.jilin.chinatax.gov.cn:10812/sword?ctrl=LnGdsPortalCtrl_dkgns&gnmc=nsrxtsz&gndm=CS51000100999770&gnbt=%E7%BA%B3%E7%A8%8E%E4%BA%BA%E4%BF%A1%E6%81%AF HTTP/1.1
+Host: etax.jilin.chinatax.gov.cn:10812
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36
+Sec-Fetch-Dest: document
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Referer: https://etax.jilin.chinatax.gov.cn:10812/form.sword?sName=LnGdsPortalCtrl_openWin
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---nsrxtsz---///
+
+//--sfzrdxx--//
+GET https://etax.jilin.chinatax.gov.cn:10812/sword?ctrl=JsptXtkjMhXxCtrl_sfzrdxxInit&1811&sDate=1583304167525&rUUID= HTTP/1.1
+Host: etax.jilin.chinatax.gov.cn:10812
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36
+Sec-Fetch-Dest: iframe
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: navigate
+Referer: https://etax.jilin.chinatax.gov.cn:10812/sword?ctrl=LnGdsPortalCtrl_initPageln&gnlj=%2Fsword%3Fctrl%3DJsptXtkjMhXxCtrl_sfzrdxxInit%261811%26sDate%3D1583304167525%26rUUID%3D&menu_url=https%3A%2F%2Fetax.jilin.chinatax.gov.cn%3A10812%2Fsword%3Fctrl%3DLnGdsPortalCtrl_dkgns%26gnmc%3Dnsrxtsz%26gndm%3DCS51000100999770%26gnbt%3D%E7%BA%B3%E7%A8%8E%E4%BA%BA%E4%BF%A1%E6%81%AF&menu_caption=%E7%BA%B3%E7%A8%8E%E4%BA%BA%E4%BF%A1%E6%81%AF&func_url=/sword?ctrl=JsptXtkjMhXxCtrl_sfzrdxxInit&1811&sDate=1583304167525&rUUID=&func_caption=%E8%AE%A4%E5%AE%9A%E4%BF%A1%E6%81%AF&gndm=CS51000100999180
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---sfzrdxx---///
+
+//--nsrxx--//
+GET https://etax.jilin.chinatax.gov.cn:10812/sword?ctrl=JsptXtkjMhXxCtrl_nsrxxInit&62636&sDate=1583303515460&rUUID= HTTP/1.1
+Host: etax.jilin.chinatax.gov.cn:10812
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36
+Sec-Fetch-Dest: iframe
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: navigate
+Referer: https://etax.jilin.chinatax.gov.cn:10812/sword?ctrl=LnGdsPortalCtrl_initPageln&gnlj=%2Fsword%3Fctrl%3DJsptXtkjMhXxCtrl_nsrxxInit%2662636%26sDate%3D1583303515460%26rUUID%3D&menu_url=https%3A%2F%2Fetax.jilin.chinatax.gov.cn%3A10812%2Fsword%3Fctrl%3DLnGdsPortalCtrl_dkgns%26gnmc%3Dnsrxtsz%26gndm%3DCS51000100999770%26gnbt%3D%E7%BA%B3%E7%A8%8E%E4%BA%BA%E4%BF%A1%E6%81%AF&menu_caption=%E7%BA%B3%E7%A8%8E%E4%BA%BA%E4%BF%A1%E6%81%AF&func_url=/sword?ctrl=JsptXtkjMhXxCtrl_nsrxxInit&62636&sDate=1583303515460&rUUID=&func_caption=%E7%99%BB%E8%AE%B0%E4%BF%A1%E6%81%AF&gndm=CS51000100999181
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---nsrxx---///
+
+//--querySbHis--//
+POST {jilin}/ajax.sword?ctrl=LnGdsZbsyCtrl_queryZbsy&gwssswjg=16402021600 HTTP/1.1
+Host: etax.ningxia.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 238
+Accept: */*
+Sec-Fetch-Dest: empty
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Origin: https://etax.ningxia.chinatax.gov.cn
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Referer: https://etax.ningxia.chinatax.gov.cn/form.sword?sName=LnGdsPortalCtrl_openWin&gwssswjg=16402021600
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---querySbHis---///
+
+//--getHisDetail--//
+POST {jilin}/form.sword?sName=SB702SbdyCtrl_printByPzxh&gwssswjg=12112823500 HTTP/1.1
+Host: etax.liaoning.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 765
+Cache-Control: max-age=0
+Origin: https://etax.liaoning.chinatax.gov.cn
+Upgrade-Insecure-Requests: 1
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36
+Sec-Fetch-Dest: iframe
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Referer: https://etax.liaoning.chinatax.gov.cn/sword?ctrl=SB702SbdyCtrl_initView&68353&sDate=1585205024916&rUUID=
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---getHisDetail---///

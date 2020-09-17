@@ -1,0 +1,206 @@
+//--pageIndex--//
+GET {xinjiang}/login-web/auth/checkLoginState.do?_=1592878538121 HTTP/1.1
+Host: etax.xinjiang.chinatax.gov.cn
+Connection: keep-alive
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36
+Content-Type: application/json; charset=UTF-8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.xinjiang.chinatax.gov.cn/wszx-web/bszm/apps/views/beforeLogin/indexBefore/pageIndex.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---pageIndex---///
+
+//--doLogin--//
+GET {xinjiang}/wszx-web/bszm/apps/views/publicPage/headerNew.html?_=1592882377183 HTTP/1.1
+Host: etax.xinjiang.chinatax.gov.cn
+Connection: keep-alive
+Accept: */*
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.xinjiang.chinatax.gov.cn/wszx-web/bszm/apps/views/companyPage/desktopTax.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---doLogin---///
+
+//--getSm2PublicKey--//
+GET {xinjiang}/login-web/api/base/sm2publickey/get?timestamp=1592878691031 HTTP/1.1
+Host: etax.xinjiang.chinatax.gov.cn
+Connection: keep-alive
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36
+Content-Type: application/json;charset=UTF-8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.xinjiang.chinatax.gov.cn/wszx-web/bszm/apps/views/beforeLogin/indexBefore/pageIndex.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---getSm2PublicKey---///
+
+//--queryBsry--//
+POST {xinjiang}/login-web/auth/xj/queryBsry.do HTTP/1.1
+Host: etax.xinjiang.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 25
+Accept: */*
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Origin: https://etax.xinjiang.chinatax.gov.cn
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.xinjiang.chinatax.gov.cn/wszx-web/bszm/apps/views/beforeLogin/indexBefore/pageIndex.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---queryBsry---///
+
+//--queryBsry--//
+nsrsbh=[[nsrsbh]]
+///---queryBsry---///
+
+//--hasCaptch--//
+POST {xinjiang}/login-web/auth/xj/hasCaptch.do HTTP/1.1
+Host: etax.xinjiang.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 24
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36
+Content-Type: application/x-www-form-urlencoded;charset=UTF-8;charset=UTF-8
+Origin: https://etax.xinjiang.chinatax.gov.cn
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.xinjiang.chinatax.gov.cn/wszx-web/bszm/apps/views/beforeLogin/indexBefore/pageIndex.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---hasCaptch---///
+
+//--hasCaptch--//
+phone=[[phone]]&type=[[type]]
+///---hasCaptch---///
+
+//--sendYzm--//
+POST {xinjiang}/login-web/auth/xj/sendVerifyCode.do HTTP/1.1
+Host: etax.xinjiang.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 50
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36
+Content-Type: application/x-www-form-urlencoded;charset=UTF-8;charset=UTF-8
+Origin: https://etax.xinjiang.chinatax.gov.cn
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.xinjiang.chinatax.gov.cn/wszx-web/bszm/apps/views/beforeLogin/indexBefore/pageIndex.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---sendYzm---///
+
+//--sendYzm--//
+nsrsbh=[[nsrsbh]]&type=[[type]]&phone=[[phone]]
+///---sendYzm---///
+
+//--loginweb--//
+POST {xinjiang}/login-web/login HTTP/1.1
+Host: etax.xinjiang.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 3522
+Accept: */*
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Origin: https://etax.xinjiang.chinatax.gov.cn
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.xinjiang.chinatax.gov.cn/wszx-web/bszm/apps/views/beforeLogin/indexBefore/pageIndex.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---loginweb---///
+
+//--loginweb--//
+userName=[[userName]]&passWord=[[passWord]]&single=&osType=Win10&broswerType=chrome&broswerVersion=83.0.4103.97&authencationHandler=GswbAuthenticationHandler&lt=LT-115565-wTD7iiIjzV9WbbMfJyJS-xjdzswj&captchCode=&_eventId=submit&execution=3d9cd026-771a-4bda-87bd-0bb60493d482_ZXlKaGJHY2lPaUpJVXpVeE1pSjkuZEM5NGFFZHBhRUV2VGpVNFIzQnNiblpYZUVSc2RUUXJNMGhHWldkTU5EUkpZVGhCVjFoRlpHUjNaR0ozUVhFNWRscEJRVUpWWjJwNkszWlhkbkUzV2prd1QwdFZPSGg0U1ZsRE0zZzJOWFJQYkdSc1ZYTnVXU3RSZVRoUVYxUkpUMnRZUXpkTVkwVkZlbmMyTm01c1VIWlJjR0pDY1dOV2JHaE9WVzExUVdSTFlscG9VMnB6YTBGMVFtd3Jaa1JUTHk5aldUVlVPRnBMYUhRME56TlZaMlJTU0V4U2QzbzVaWFl3ZWpGdU0yTnpOMHRJT0V0UFJFTmFOM2R4YkU5a1NETkhaak52SzJRMGVXbFNiRGx4TmpabWF6YzNXa1Z5VURKYVVWbHdTM2hYYzFKS00xTm1abHBFZFdwalMyTTVNRmNyTlRkWk1HdzJhMEp2UjJwbU1EaG9ZMHhSWTJkVVp6bGFWVzl3ZUVsQlVGbDNjSE5HUTJGMGMwbFVaRWhqVFN0eWJUSkhjWFpoU3pSMlNVTnNVamhxYXk5c1ZXSlpMMFJaSzJGYVdUZ3JabVZLV25GQmF6UTFTRTlIVFRGdU16WmhVVkJaVWsxcFIyNVJXREVyVFN0M2RteElkVEEyTlc1RWNtTkxZMkZoZWxaT2VURTRSMFp5TkhaelJrZHlPSEpRY0ZvMGFHdHFSVWRpV1RCSVFuRkdRa2wwS3pkTVlTOWhSa1J2TVZveU1XRnNTMDlwUzB3eGRIQXpWRGRVYVhGRFpHSmtReTlSYjBOVVZVbFlVVloyVHpWMk9FaG1OMlp4UVUxbU1XeEtlRFYxWm5WSFUxSnJkbFJSVWxsMlVHVkNObXBZY0hJMk1VUlNiMVpXTjNkclF6bENXa3hpV1VSUFJtcHlSbE5DTVRoTGRFTnFXbGc0WjBwdmRHeGhLemgwU2t4b1ptcFhTVlpOYVVGV2QxZFVlR1ZMU2taSmJYSktLMmwwTkZCMlpYRjRPREJsZURrM1ZIbG5UREZrU2tzMlNYaHFURU0zZVdFME5XUjJkRFJ0UkVaclJWUTFTRGh3T1RBMVlYZFhjRlk0YzFKbU9Xc3hUVzFPT1V0ck9ERmtWRlYwTlZVdk5VcHFlWEV4TDNWeFFXUjJSMVF3ZG5jcldISnJWMnQ1VW0xUVpWUmtaVE16U1VwWldXSlJlbkJYVjI4d1NrZ3lUV1ppT0hKc2JGWlhNbXR5ZHpKTU1EWlNXV3RvVmxnNVRYRlpiVzF1YVRGR05VWnJhRzVQZFZodWNuaFFhemNyV1dWNmRYaEVjSHBCV2sxVFFtcDViMGhIYlRaSlNqZDJhVW80V1RablVuQlpTa1IzVlV0clVGRlhhRTFpWVdaemJFVXhaRVl3YVd4UmMzYzFSMVJoTldodWNETndUVTk2Y1VaMGMweHZSRkJzV0hRM01YUlFkMnhpVGtGdlFYUmlUblpuUkdacmNsSm5hVU5tTWpRNFZuRm9SVVpZTVZOQ05XMU5PR2RaYmtSYU5VMHhSMFYxUW5wT2RVRnhURGQxWVZodFpuTkVNQzgzUTI5UlRIcFlXSEF4WXpKak1sWkJSVmxZY1Zkek5uZ3hiVGxXUkhaeFVVZFJTRWh6TmxGSlRDc3JNbmxMVWpCeVVXTXJWV3hsYVVOVldFaDZTRVF3T0ZoTmFIaFNWMjE0UWtOSVQyNVRiMjF3ZEROS1MxVk9PVkZIVDJRMGRVcGlWbXA0ZWs5c2IzWnJXbWRhTUdZMVEwTTJRa0UzY0U5VmVtTkViSFpQU0VWNVVHVTJSVlZNTkVkcVJIZEhXV3RPYVZCYVJFOU9Oa2hPZFM5cVoxYzVaa1ZJV1dKTVUwZzJObTlhYlVwcWJVaFdjSE53TjNKMGFFSnFTekpHZEhaSE4wNDJibVZMVjJabFVEVTFVMlU0Um5NNU1UbGtlamRQTVc0NU1WTXZabk5WZFdoNGVHVlBXRXd5UTJRNU9WUjVOUzlWVW5kek9HRlRZVWRUVGl0c01YSk5NbGhNWnlzNGJIZExTM1JhVmxRM2JUZzRZaTh5YUROQlUxY3hTV3QwUVd0bFEyWk5ObFpXU2xaaFlYb3lXbXhDYzJSTlZHTjZjUzlvTVdWaUwwSjBUalZIVDFwb1NXUlpVbWxMVUdvd1RIUmxUVlpsZGsxVmVsTmtXWE0yVDB4MlUwUlZWRWd3Wld4cWN6WmxVamd4U1hGV1VIUmhVbWh1Tlc5MVRtbDRaMWx4YmpKdFRWa3ZlbGN5VW5sSmRuQnpVRzV5Y21OeksweExibGx1TVdZd2IzbDRhMFk0YVVwdWVrSm9Xa1ZqUm5WMFZUWmphV0YyZW1kVU0wTlliMjAxVmtoVVkxSlRiREJWTjA1Q1ZXWnpXVkphZGpKTU5WWlhhM1ZuT1hSRlZtbFdaRUUwU1ZGR2VrNXhhVFJDV0hOTFJEQkNjRXg1VUhoTU5WTndXbTV3YWtnM1JYTTBLM2hOVUZZMVJ6TnZRbkZyTlVwa1owRllRaTgxVWxWNE1uSjRZWE5JVDI5Q05XWm5lR0pxVDNKaE1FaFdLM051U0NzdlZFOW5VM2h5TjJwSmNXTlVhemgxWld4RU9XVmtaMUZRYldNM0wzZFVObEY0V1ZsU1pHeHFaMHhvUlZaVVoxVTkuUWN6aG1ybDVBai1GLWpwNHlxVC1uS2hxbmhsV3pMdmkxNHdpWXdFbFhBbG5COXJuSGs4blR0djhoV09MWDB4OHRXaVdkbUx3S1Z4TDNnNFc2ZmxCWXc%3D&randNum=[[randNum]]
+///---loginweb---///
+
+//--index--//
+GET {xinjiang}/wszx-web/bszm/apps/views/publicPage/headerNew.html?_=1592882377183 HTTP/1.1
+Host: etax.xinjiang.chinatax.gov.cn
+Connection: keep-alive
+Accept: */*
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.xinjiang.chinatax.gov.cn/wszx-web/bszm/apps/views/companyPage/desktopTax.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---index---///
+
+
+
+
+//--sfzxx--//
+GET https://etax.xinjiang.chinatax.gov.cn/yhzx-web/api/nsrxx/sfzxx/list?timestamp=1577255642433 HTTP/1.1
+Connection: keep-alive
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36
+Content-Type: application/json;charset=UTF-8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Referer: https://etax.xinjiang.chinatax.gov.cn/yhzx-web/index.html?id=2202&code=2202
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---sfzxx---///
+
+//--userInfo--//
+GET https://etax.xinjiang.chinatax.gov.cn/yhzx-web/api/user/userInfo/get?timestamp=1577255641836 HTTP/1.1
+Host: etax.xinjiang.chinatax.gov.cn
+Connection: keep-alive
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36
+Content-Type: application/json;charset=UTF-8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Referer: https://etax.xinjiang.chinatax.gov.cn/yhzx-web/index.html?id=2202&code=2202
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---userInfo---///
+
+//--sbHis--//
+POST https://etax.xinjiang.chinatax.gov.cn/sbzx-web/api/sb/jgcx/sbqkcx HTTP/1.1
+Host: etax.xinjiang.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 89
+Accept: application/json, text/javascript, */*; q=0.01
+Origin: https://etax.xinjiang.chinatax.gov.cn
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.70 Safari/537.36
+Content-Type: application/json; charset=UTF-8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Referer: https://etax.xinjiang.chinatax.gov.cn/sbzx-web/apps/views/sbjgcx/sbjgcx.html?id=122&code=sbxx
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---sbHis---///
+
+//--sbHis--//
+{"zsxmDm":"[[zsxmDm]]","sssqQ":"[[skssqq]]","sssqZ":"[[skssqz]]","sbrqQ":"[[sbrqq]]","sbrqZ":"[[snrqz]]","sbztDm":"[[sbztDm]]"}
+///---sbHis---///
+
+

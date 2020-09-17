@@ -1,0 +1,6 @@
+
+git pull --rebase http://sxsheng0103@163.com:ds399131@github.com/sxsheng0103/mongodbDoubleSource.git
+
+
+
+git remote set-url http://sxsheng0103@163.com:ds399131@github.com/sxsheng0103/mongodbDoubleSource.git

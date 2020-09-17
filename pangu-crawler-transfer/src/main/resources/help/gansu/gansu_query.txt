@@ -1,0 +1,161 @@
+//--queryRegister--//
+GET {gansu}/ucenter/api/yhgl/nsrxx/get?timestamp=[[1587978032829]] HTTP/1.1
+Host: etax.gansu.chinatax.gov.cn
+Connection: keep-alive
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36
+Content-Type: application/json;charset=UTF-8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.gansu.chinatax.gov.cn/ucenter/index.html?id=468&code=468
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---queryRegister---///
+
+//--queryTaxsDetermine--//
+GET {gansu}/ucenter/api/yhgl/nsrxx/sfzxx/list?timestamp=[[timestamp]] HTTP/1.1
+Host: etax.gansu.chinatax.gov.cn
+Connection: keep-alive
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Content-Type: application/json;charset=UTF-8
+Referer: https://etax.gansu.chinatax.gov.cn/ucenter/index.html?id=468&code=468
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---queryTaxsDetermine---///
+
+//--sbxxcx--//
+GET {gansu}/bszm-web/apps/views/beforeLogin/publicHeader.html?_=1587974449311 HTTP/1.1
+Host: etax.gansu.chinatax.gov.cn
+Connection: keep-alive
+Accept: */*
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.gansu.chinatax.gov.cn/bszm-web/apps/views/publicPage/menuFunctions.html?type=wycx&userType=01&id=999601&code=999601
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---sbxxcx---///
+
+//--HeadView--//
+GET {gansu}/sbzx-web/apps/views/public/head/HeadView.html?_=1588041149405 HTTP/1.1
+Host: etax.gansu.chinatax.gov.cn
+Connection: keep-alive
+Accept: text/html, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36
+Content-Type: application/json; charset=UTF-8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.gansu.chinatax.gov.cn/sbzx-web/apps/views/sbjgcx/sbjgcx.html?id=34&code=10435
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---HeadView---///
+
+//--sbqkcx--//
+POST {gansu}/sbzx-web/api/sb/jgcx/sbqkcx HTTP/1.1
+Host: etax.gansu.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 89
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36
+Content-Type: application/json; charset=UTF-8
+Origin: https://etax.gansu.chinatax.gov.cn
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.gansu.chinatax.gov.cn/sbzx-web/apps/views/sbjgcx/sbjgcx.html?id=34&code=10435
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---sbqkcx---///
+
+//--nsrInfo--//
+GET {gansu}/yhs-web/api/user/nsrInfo/get?timestamp=1592980201991 HTTP/1.1
+Host: etax.xinjiang.chinatax.gov.cn
+Connection: keep-alive
+Accept: application/json, text/javascript, */*; q=0.01
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36
+Content-Type: application/json;charset=UTF-8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.xinjiang.chinatax.gov.cn/yhs-web/cxzx/index.html?id=195&code=sbxxcx
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---nsrInfo---///
+
+//--downFreeUniteMarkerPDF--//
+GET {gansu}/yhs-web/api/sbcx/downFreeUniteMarkerPDF?zsxmDm=[[zsxmDm]]&sbzlDm=[[sbzlDm]]&sbuuid=[[sbuuid]]&sssqQ=[[sssqQ]]&sssqZ=[[sssqZ]]&gdsBz=[[gdsBz]]&pzxh=[[pzxh]] HTTP/1.1
+Host: etax.gansu.chinatax.gov.cn
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Referer: https://etax.gansu.chinatax.gov.cn/sbzx-web/apps/views/sbjgcx/sbjgcx.html?id=34&code=10435
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---downFreeUniteMarkerPDF---///
+
+//--fpcx--//
+GET {gansu}/bszm-web/apps/views/beforeLogin/publicHeader.html?_=1588151444096 HTTP/1.1
+Host: etax.gansu.chinatax.gov.cn
+Connection: keep-alive
+Accept: */*
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.gansu.chinatax.gov.cn/bszm-web/apps/views/publicPage/menuFunctions.html?type=wycx&userType=01&id=999605&code=999605
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---fpcx---///
+
+//--navigation--//
+GET {gansu}/bszm-web/api/desktop/navigation/403/get?timestamp=1588151572790 HTTP/1.1
+Host: etax.gansu.chinatax.gov.cn
+Connection: keep-alive
+Accept: */*
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36
+Content-Type: application/json;charset=UTF-8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.gansu.chinatax.gov.cn/yhs-web/cxzx/index.html?&id=403&code=403
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+Cookie: yfx_c_g_u_id_10003746=_ck19123009191919093540571355757; yfx_key_10003746=; yfx_mr_10003746=%3A%3Amarket_type_free_search%3A%3A%3A%3Abaidu%3A%3A%3A%3A%3A%3A%3A%3Awww.baidu.com%3A%3A%3A%3Apmf_from_free_search; yfx_c_g_u_id_10003747=_ck20010210064710764563775012916; yfx_c_g_u_id_10003701=_ck20010709302711878615191455509; yfx_mr_10003701=%3A%3Amarket_type_free_search%3A%3A%3A%3Abaidu%3A%3A%3A%3A%3A%3A%3A%3Awww.baidu.com%3A%3A%3A%3Apmf_from_free_search; yfx_key_10003701=; yfx_c_g_u_id_10003721=_ck20020310261411203359191702713; yfx_key_10003721=; yfx_mr_10003721=%3A%3Amarket_type_free_search%3A%3A%3A%3Abaidu%3A%3A%3A%3A%3A%3A%3A%3Awww.baidu.com%3A%3A%3A%3Apmf_from_free_search; yfx_c_g_u_id_10003710=_ck20020410520615233171835961915; yfx_f_l_v_t_10003710=f_t_1580784726520__r_t_1580784726520__v_t_1580784726520__r_c_0; yfx_mr_10003710=%3A%3Amarket_type_free_search%3A%3A%3A%3Abaidu%3A%3A%3A%3A%3A%3A%3A%3Awww.baidu.com%3A%3A%3A%3Apmf_from_free_search; yfx_key_10003710=; yfx_c_g_u_id_10003748=_ck20020515533415929862197337136; yfx_f_l_v_t_10003748=f_t_1580889214582__r_t_1580889214582__v_t_1580889214582__r_c_0; yfx_key_10003748=; yfx_mr_10003748=%3A%3Amarket_type_free_search%3A%3A%3A%3Abaidu%3A%3A%3A%3A%3A%3A%3A%3Awww.baidu.com%3A%3A%3A%3Apmf_from_free_search; yfx_c_g_u_id_10000056=_ck20020611070410312332150737373; yfx_mr_10000056=%3A%3Amarket_type_free_search%3A%3A%3A%3Abaidu%3A%3A%3A%3A%3A%3A%3A%3Awww.baidu.com%3A%3A%3A%3Apmf_from_free_search; yfx_key_10000056=; yfx_c_g_u_id_10003139=_ck20021318395117177124678773367; _trs_uv=k6km30r6_735_deo8; yfx_f_l_v_t_10000056=f_t_1580958424022__r_t_1583225145866__v_t_1583225145866__r_c_5; yfx_f_l_v_t_10003721=f_t_1580696774120__r_t_1583310204896__v_t_1583310204896__r_c_4; yfx_f_l_v_t_10003701=f_t_1578360627167__r_t_1583407844731__v_t_1583407844731__r_c_1; yfx_f_l_v_t_10003746=f_t_1577668759902__r_t_1584579562347__v_t_1584579562347__r_c_14; yfx_c_g_u_id_10000433=_ck20032510460919816755937232511; yfx_f_l_v_t_10000433=f_t_1585104369965__r_t_1585104369965__v_t_1585104369965__r_c_0; yfx_mr_10000433=%3A%3Amarket_type_free_search%3A%3A%3A%3Abaidu%3A%3A%3A%3A%3A%3A%3A%3Awww.baidu.com%3A%3A%3A%3Apmf_from_free_search; yfx_key_10000433=; yfx_c_g_u_id_10003707=_ck20032510475812210785585644796; yfx_f_l_v_t_10003707=f_t_1585104478204__r_t_1585104478204__v_t_1585104478204__r_c_0; yfx_mr_10003707=%3A%3Amarket_type_free_search%3A%3A%3A%3Abaidu%3A%3A%3A%3A%3A%3A%3A%3Awww.baidu.com%3A%3A%3A%3Apmf_from_free_search; yfx_key_10003707=; yfx_c_g_u_id_10000015=_ck20032510490610115703888495719; yfx_f_l_v_t_10000015=f_t_1585104546002__r_t_1585104546002__v_t_1585104546002__r_c_0; yfx_mr_10000015=%3A%3Amarket_type_free_search%3A%3A%3A%3Abaidu%3A%3A%3A%3A%3A%3A%3A%3Awww.baidu.com%3A%3A%3A%3Apmf_from_free_search; yfx_key_10000015=; yfx_mr_10003747=%3A%3Amarket_type_free_search%3A%3A%3A%3Abaidu%3A%3A%3A%3A%3A%3A%3A%3Awww.baidu.com%3A%3A%3A%3Apmf_from_free_search; yfx_mr_f_10003747=%3A%3Amarket_type_free_search%3A%3A%3A%3Abaidu%3A%3A%3A%3A%3A%3A%3A%3Awww.baidu.com%3A%3A%3A%3Apmf_from_free_search; yfx_key_10003747=; yfx_c_g_u_id_10003712=_ck20040809421113822987723612205; yfx_f_l_v_t_10003712=f_t_1586310131372__r_t_1586310131372__v_t_1586310131372__r_c_0; yfx_mr_10003712=%3A%3Amarket_type_free_search%3A%3A%3A%3Abaidu%3A%3A%3A%3A%3A%3A%3A%3Awww.baidu.com%3A%3A%3A%3Apmf_from_free_search; yfx_key_10003712=; yfx_mr_f_10003712=%3A%3Amarket_type_free_search%3A%3A%3A%3Abaidu%3A%3A%3A%3A%3A%3A%3A%3Awww.baidu.com%3A%3A%3A%3Apmf_from_free_search; tab=%22%22; yfx_c_g_u_id_10001429=_ck20042610293914164317404711431; yfx_f_l_v_t_10001429=f_t_1587868179398__r_t_1587868179398__v_t_1587868179398__r_c_0; yfx_mr_f_10001429=%3A%3Amarket_type_free_search%3A%3A%3A%3Abaidu%3A%3A%3A%3A%3A%3A%3A%3Awww.baidu.com%3A%3A%3A%3Apmf_from_free_search; yfx_mr_10001429=%3A%3Amarket_type_free_search%3A%3A%3A%3Abaidu%3A%3A%3A%3A%3A%3A%3A%3Awww.baidu.com%3A%3A%3A%3Apmf_from_free_search; yfx_key_10001429=; yfx_f_l_v_t_10003139=f_t_1581590391697__r_t_1587950808566__v_t_1587965891478__r_c_10; yfx_f_l_v_t_10003747=f_t_1577930807063__r_t_1587978127198__v_t_1587978127198__r_c_19; _va_ref=%5B%22%22%2C%22%22%2C1587978127%2C%22https%3A%2F%2Fwww.baidu.com%2Flink%3Furl%3DPhqWT8EG-qLMNlqAfT_pxdEnuUfYv3HFkrV_ueebU-VJbyqyeSLfEG84n95NKET-%26wd%3D%26eqid%3Dd6fccc5a000560ea000000045ea69f7c%22%5D; _va_id=73e948b6fb5ef54d.1585723089.2.1587978127.1587978127.; DZSWJ_TGC=b2105ece4079410da5f7d7a92f8c1a9c; SSO_LOGIN_TGC=cb42caa858f343d2a96a2b873d3c8943; yfx_f_l_v_t_10003747=f_t_1577930807063__r_t_1588151265788__v_t_1588151265788__r_c_20; TGC=TGT-132789-IQtikFbj2ysU1NxlVbqiXTuUvYXbL4eoGmzBiAuZMahbFeQ4t4-gsdzswj; JSESSIONID=26_FNdr4fu5q6MuTVKwAlz6h99r_bhqLVR5Gwqk8cqnR24bXdMfr!180730314
+///---navigation---///
+
+//--fplbxx--//
+POST {gansu}/yhs-web/api/nsrfp/query/fplbxx HTTP/1.1
+Host: etax.gansu.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 113
+Accept: */*
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36
+Content-Type: application/json;charset=UTF-8
+Origin: https://etax.gansu.chinatax.gov.cn
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://etax.gansu.chinatax.gov.cn/yhs-web/cxzx/index.html?&id=403&code=403
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---fplbxx---///

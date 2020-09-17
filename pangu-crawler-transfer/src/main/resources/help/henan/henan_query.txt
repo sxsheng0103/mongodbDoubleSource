@@ -1,0 +1,29 @@
+//--getDjxx--//
+POST http://etax.henan.chinatax.gov.cn/web/server/platform/userInfo/getDjxx.do HTTP/1.1
+Host: etax.henan.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 27
+Accept: application/json, text/javascript, */*; q=0.01
+Origin: http://etax.henan.chinatax.gov.cn
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Referer: http://etax.henan.chinatax.gov.cn/web/dzswj/taxclient/yhzx/jbxx.html
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---getDjxx---///
+
+//--getRdxx--//
+POST http://etax.henan.chinatax.gov.cn/web/server/platform/userInfo/getRdxx.do HTTP/1.1
+Host: etax.henan.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 27
+Accept: application/json, text/javascript, */*; q=0.01
+Origin: http://etax.henan.chinatax.gov.cn
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Referer: http://etax.henan.chinatax.gov.cn/web/dzswj/taxclient/yhzx/jbxx.html
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+///---getRdxx---///

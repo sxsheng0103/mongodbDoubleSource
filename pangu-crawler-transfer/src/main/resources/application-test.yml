@@ -1,0 +1,26 @@
+server:
+  port: 8086
+
+#加载日志配置文件
+logging:
+  level:
+    root: info
+    com:
+      pangu:
+        crawler: DEBUG
+
+pangu:
+  servername:
+  sb:
+    action: false
+  cookie:
+    forceOverrideKeys: JSESSIONID
+  cache:
+    http:
+      host: http://124.205.255.18:48590
+spring:
+  data: #mongdb数据库配置R
+    mongodb:
+#      uri: mongodb://db_aictech:Zkyl#20200302@60.205.201.117:27017/db_aictech
+      uri: mongodb://aictech:aictech#2020@10.10.53.20:27017,10.10.53.21:27017,10.10.53.22:27017/db_aictech
+      enabled : true

@@ -1,0 +1,4 @@
+spring:
+  profiles:
+    #指定读取配置文件:local(本地环境6)、dev(开发环境7)、test(测试环境9)、prod(生产环境8)
+    active: prod

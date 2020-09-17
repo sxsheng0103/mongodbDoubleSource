@@ -1,0 +1,41 @@
+package com.pangu.crawler.framework.model;
+
+public class AreaCode {
+    public static final String guizhou = "guizhou";
+    public static final String fujian = "fujian";
+    public static final String beijing = "beijing";
+    public static final String gansu = "gansu";
+    public static final String zhejiang = "zhejiang";
+    public static final String yunnan = "yunnan";
+    public static final String hainan = "hainan";
+    public static final String sichuan = "sichuan";
+    public static final String ningxia = "ningxia";
+    public static final String jilin = "jilin";
+    public static final String liaoning = "liaoning";
+    public static final String qinghai = "qinghai";
+    public static final String shaanxi = "shaanxi";
+    public static final String jiangsu = "jiangsu";
+    public static final String shanxi = "shanxi";
+    public static final String chongqing = "chongqing";
+    public static final String jiangxi = "jiangxi";
+    public static final String shandong = "shandong";
+    public static final String guangdong = "guangdong";
+    public static final String hunan = "hunan";
+    public static final String anhui = "anhui";
+    public static final String qingdao = "qingdao";
+    public static final String xiamen = "xiamen";
+    public static final String dalian = "dalian";
+    public static final String ningbo = "ningbo";
+    public static final String shenzhen = "shenzhen";
+    public static final String neimeng = "neimeng";
+    public static final String shanghai = "shanghai";
+    public static final String xinjiang = "xinjiang";
+    public static final String xizang = "xizang";
+    public static final String henan = "henan";
+    public static final String guangxi = "guangxi";
+    public static final String hebei = "hebei";
+    public static final String heilongjian = "heilongjig";
+    public static final String hubei = "hubei";
+    public static final String tianjin = "tianjin";
+    public static final String heilongjiang = "heilongjiang";
+}

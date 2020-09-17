@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<!--auther dingsheng-->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>数据转化报文平台</title>
+    <style>
+        body{margin: 10px;}
+        .demo-carousel{height: 200px; line-height: 200px; text-align: center;}
+    </style>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../layui/layui.js"></script>
+    <script  type="text/javascript" src="../js/xm-select.js"></script>
+    <!--<script type="text/javascript" src="../layui/layui.all.js"></script>-->
+    <link rel="stylesheet"  href="../layui/css/layui.css" rel="stylesheet">
+    <!--<script type="text/javascript" src="../layui/lay/modules/layer.js"></script>-->
+    <script type="text/javascript" src="../js/jquery-form.js"></script>
+</head>
+<body>
+<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+    <ul class="layui-tab-title">
+        <li class="layui-this">数据管理</li>
+        <li>配置管理</li>
+        <li>规则管理</li>
+        <li>任务管理</li>
+    </ul>
+    <div class="layui-tab-content" style="height: 100px;">
+        <div id="datamanager" class="layui-tab-item layui-show">
+
+        </div>
+
+        <div id="configmanager" class="layui-tab-item">
+
+        </div>
+
+        <div id="rulemanager" class="layui-tab-item">
+
+        </div>
+        <div id="taskmanager" class="layui-tab-item">
+
+        </div>
+
+
+    </div>
+</div>
+<script>
+    layui.use(['laydate', 'form','laypage', 'layer', 'table', 'carousel', 'element', 'slider'], function(){
+        var laydate = layui.laydate //日期
+            ,laypage = layui.laypage //分页
+            ,form = layui.form //表单
+            ,layer = layui.layer //弹层
+            ,table = layui.table //表格
+    });
+    $(document).ready(function () {
+        $('#datamanager').load('transfer/datamanager.html');
+        $('#configmanager').load('transfer/taxreleation.html');
+        $('#rulemanager').load('transfer/rulemanager.html');
+        $('#taskmanager').load('transfer/taskmanager.html');
+    });
+   /* $(function(){
+        $('#datamanager').load('transfer/crawdata.html');
+        $('#rulemanager').load('transfer/rule.html');
+    });*/
+</script>
+
+</body>
+</html>

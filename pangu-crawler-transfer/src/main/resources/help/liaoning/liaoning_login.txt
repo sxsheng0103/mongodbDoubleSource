@@ -1,0 +1,62 @@
+//--login--//
+GET {liaoning}/sword?ctrl=LoginCtrlTmp_logout HTTP/1.1
+Accept: text/html, application/xhtml+xml, image/jxr, */*
+Referer: https://etax.liaoning.chinatax.gov.cn/
+Accept-Language: zh-CN
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko
+Accept-Encoding: gzip, deflate
+Host: etax.liaoning.chinatax.gov.cn
+Connection: Keep-Alive
+///---login---///
+
+//--captcha--//
+GET {liaoning}/download.sword?ctrl=CheckcodeCtrl_getCheckcode&t=0.7645135188187002 HTTP/1.1
+Accept: image/png, image/svg+xml, image/jxr, image/*;q=0.8, */*;q=0.5
+Referer: https://etax.liaoning.chinatax.gov.cn/sword?ctrl=LoginCtrlTmp_logout
+Accept-Language: zh-CN
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko
+Accept-Encoding: gzip, deflate
+Host: etax.liaoning.chinatax.gov.cn
+Connection: Keep-Alive
+///---captcha---///
+
+//--getRsaPublicKey--//
+GET {liaoning}/wsbs/gdslh/params.json?_=1580872662242 HTTP/1.1
+Accept: */*
+X-Requested-With: XMLHttpRequest
+Referer: https://etax.liaoning.chinatax.gov.cn/sword?ctrl=LoginCtrlTmp_logout#
+Accept-Language: zh-CN
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko
+Host: etax.liaoning.chinatax.gov.cn
+Connection: Keep-Alive
+///---getRsaPublicKey---///
+
+//--validateLogin--//
+POST {liaoning}/ajax.sword?ctrl=LnGdsLoginCtrl_loginByYhmMm HTTP/1.1
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+Accept: */*
+X-Requested-With: XMLHttpRequest
+Referer: https://etax.liaoning.chinatax.gov.cn/sword?ctrl=LoginCtrlTmp_logout#
+Accept-Language: zh-CN
+Accept-Encoding: gzip, deflate
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko
+Host: etax.liaoning.chinatax.gov.cn
+Content-Length: 580
+Connection: Keep-Alive
+Cache-Control: no-cache
+///---validateLogin---///
+
+//--index--//
+POST {liaoning}/form.sword?sName=LnGdsPortalCtrl_openWin HTTP/1.1
+Accept: text/html, application/xhtml+xml, image/jxr, */*
+Referer: https://etax.liaoning.chinatax.gov.cn/sword?ctrl=LoginCtrlTmp_logout
+Accept-Language: zh-CN
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko
+Content-Type: application/x-www-form-urlencoded
+Accept-Encoding: gzip, deflate
+Host: etax.liaoning.chinatax.gov.cn
+Content-Length: 126
+Connection: Keep-Alive
+Cache-Control: no-cache
+///---index---///

@@ -1,0 +1,117 @@
+//--index--//
+GET /enterprise/dzswjlogin/dzswj_login.jsp?type=main HTTP/1.1
+Host: etax.shandong.chinatax.gov.cn
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.108 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3
+Referer: http://etax.shandong.chinatax.gov.cn/
+Accept-Encoding: gzip
+Accept-Language: zh-CN,zh;q=0.9
+Connection: keep-alive
+///---index---///
+
+//--getImg--//
+GET https://etax.neimenggu.chinatax.gov.cn/login-web/api/googleCaptcha?1581064720889 HTTP/1.1
+Host: etax.neimenggu.chinatax.gov.cn
+Connection: keep-alive
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36
+Sec-Fetch-Dest: image
+Accept: image/webp,image/apng,image/*,*/*;q=0.8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: no-cors
+Referer: https://etax.neimenggu.chinatax.gov.cn/login-web/index.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---getImg---///
+
+//--getLoginInfo--//
+GET https://etax.neimenggu.chinatax.gov.cn/login-web/login?mode=ajax&timestamp=1581065190226 HTTP/1.1
+Host: etax.neimenggu.chinatax.gov.cn
+Connection: keep-alive
+Accept: application/json, text/javascript, */*; q=0.01
+Sec-Fetch-Dest: empty
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36
+Content-Type: text/javascript;charset=UTF-8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Referer: https://etax.neimenggu.chinatax.gov.cn/login-web/index.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---getLoginInfo---///
+
+//--getPublicKey--//
+GET https://etax.neimenggu.chinatax.gov.cn/login-web/base/getRsaPublicKey.do?timestamp=1581066297682 HTTP/1.1
+Host: etax.neimenggu.chinatax.gov.cn
+Connection: keep-alive
+Accept: application/json, text/javascript, */*; q=0.01
+Sec-Fetch-Dest: empty
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36
+Content-Type: application/json;charset=UTF-8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Referer: https://etax.neimenggu.chinatax.gov.cn/login-web/index.html?v=20200117222256
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---getPublicKey---///
+
+//--doLogin--//
+POST https://etax.neimenggu.chinatax.gov.cn/login-web/login?mode=ajaxLogin HTTP/1.1
+Host: etax.neimenggu.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 3054
+Accept: application/json, text/javascript, */*; q=0.01
+Sec-Fetch-Dest: empty
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36
+Content-Type: application/x-www-form-urlencoded;charset=UTF-8;charset=UTF-8
+Origin: https://etax.neimenggu.chinatax.gov.cn
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Referer: https://etax.neimenggu.chinatax.gov.cn/login-web/index.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---doLogin---///
+//--doLogin--//
+userName=[[userName]]&passWord=[[passWord]]&single=01&authencationHandler=GswbAuthenticationHandler&lt=[[lt]]&_eventId=submit&execution=[[execution]]&captchCode=[[captchCode]]&qd=web&randNum=&sjhm=&clientAuth=&serverAuth=&certType=&enCert=&caxlh=
+///---doLogin---///
+
+//--getUsers--//
+GET https://etax.neimenggu.chinatax.gov.cn/login-web/auth/checkLoginState.do?timestamp=1581067557035 HTTP/1.1
+Host: etax.neimenggu.chinatax.gov.cn
+Connection: keep-alive
+Accept: application/json, text/javascript, */*; q=0.01
+Sec-Fetch-Dest: empty
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36
+Content-Type: application/json;charset=UTF-8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Referer: https://etax.neimenggu.chinatax.gov.cn/login-web/index.html
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---getUsers---///
+
+//--selectUser--//
+POST https://etax.neimenggu.chinatax.gov.cn/login-web/api/auth/change/qysf/web HTTP/1.1
+Host: etax.neimenggu.chinatax.gov.cn
+Connection: keep-alive
+Content-Length: 67
+Accept: application/json, text/javascript, */*; q=0.01
+Sec-Fetch-Dest: empty
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36
+Content-Type: application/x-www-form-urlencoded;charset=UTF-8;charset=UTF-8
+Origin: https://etax.neimenggu.chinatax.gov.cn
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Referer: https://etax.neimenggu.chinatax.gov.cn/login-web/index.html?v=20200117222256
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+///---selectUser---///
+//--selectUser--//
+djxh=[[djxh]]&nsrsbh=[[nsrsbh]]&bdgxId=&byhBz=1
+///---selectUser---///
+
+
