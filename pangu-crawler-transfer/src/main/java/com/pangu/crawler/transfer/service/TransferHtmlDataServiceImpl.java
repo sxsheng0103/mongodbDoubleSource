@@ -15,9 +15,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -425,6 +427,13 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 			for(String rule:ruledata){
 				try{
 					errorrule = rule;
+					if(rule.substring(rule.indexOf("=") + 1)!=null&&rule.substring(rule.indexOf("=") + 1).trim().equals("--")){
+						JSONPath.set(resultData, rule.substring(0, rule.indexOf("=")), "--");
+						continue;
+					}
+					if(rule.lastIndexOf("//")!=-1){
+						rule = rule.substring(0,rule.lastIndexOf("//"));
+					}
 					Elements links = doc.select(rule.substring(rule.indexOf("=") + 1)); //带有href属性的a元素
 					if (links.size() == 0) {
 						error.append(rule + ":html中没有找到节点;");
@@ -540,7 +549,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 
 	Element trelement = null;
 	String rowMarkInfo = "";
-
+	List<Element> doclist  = new ArrayList<Element>();//存放两个相同的征收项目、征收品目doc节点
 	/**
 	 * @param nsrdq
 	 * @param ruleszcode
@@ -580,7 +589,8 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 			tempresult.put("message", form + ":规则文件中未找到规则");
 			return tempresult;
 		}
-		//遍历json模糊查找document节点匹配行tr
+
+				//遍历json模糊查找document节点匹配行tr
 		Object docObj = new JSONObject();
 		for (Map.Entry<String, JSONObject> e : rulegroupJson.entrySet()) {
 			String docPath = (StringUtils.isNotEmpty(e.getKey())&&e.getKey().indexOf("@")!=-1)?e.getKey().substring(0, e.getKey().indexOf("@")):"";
@@ -589,6 +599,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 			Elements links = doc.select(elementPath + " > tr");
 
 			arr.stream().forEach((jsonobejct) -> {
+				int realrow = 0;
 				int row = arr.indexOf(jsonobejct);
 				try {
 					JSONObject json = (JSONObject) jsonobejct;
@@ -610,9 +621,11 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 					int mincols = primiry.size() + items.size();
 					if (doc != null) {
 						try {
+
 							//带有href属性的a元素
 							trelement = null;
-							long coutn = Arrays.asList(links.toArray(new Element[]{})).stream().filter(trlink -> {
+							doclist.clear();
+							long count = Arrays.asList(links.toArray(new Element[]{})).stream().filter(trlink -> {
 								Elements tds = trlink.getElementsByTag("td");
 								if (tds.size() >= mincols) {
 									rowMarkInfo = "";
@@ -636,14 +649,15 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
                                             souceName = m.replaceAll("");
                                         }
                                         if (!souceName.equals(trtdtext)) {
-                                            return false;
+                                            return false;//本来返回false，在这里直接结束掉这一条判断
                                         }
                                     }
 
 									trelement = trlink;
-									//这种现对上海附加税处理
+									//这种现对上海附加税处理,过滤无效的行数据
                                     double testvalue = tds.get(3).wholeText()==null?new Double(0.00):new Double(tds.get(3).wholeText().trim().replace(",",""));
 									if(testvalue!=0.00){
+										doclist.add(trlink);
                                         return true;
                                     }else{
                                         return false;
@@ -651,37 +665,14 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 								}
 								return false;
 							}).count();
-							if (coutn == 1) {
-								for (Map.Entry<String, Object> document : json.entrySet()) {
-									try {
-										if (document.getValue().toString().startsWith("$tr")) {
-											String value = ((String) document.getValue()).substring(((String) document.getValue()).indexOf("@") + 1);
-											Matcher m = pstr.matcher(value);
-											if (m.find()) {
-												value = m.replaceAll("");
-											}
-											JSONPath.set(resultData, docPath + "[" + row + "]." + document.getKey(), value);
-										} else {
-										    String index = null;
-											String indexstr = null;
-											Matcher m = tdrule.matcher(String.valueOf(document.getValue()));
-											if (m.find()) {
-												indexstr = m.group();
-                                                Matcher matcher = pattern.matcher(indexstr);
-                                                if (matcher.find()) {
-                                                    index = matcher.group();
-                                                }
-											}
-											Element td = trelement.getElementsByTag("td").get(Integer.parseInt(index)-1);
-											JSONPath.set(resultData, docPath + "[" + row + "]." + document.getKey(), td.wholeText());
-										}
-									} catch (Exception eo) {
-										error.append(docPath + "[" + row + "]." + document.getKey() + "生成报文数据异常" + eo.getMessage());
-										log.warn(nsrdq + "-" + ruleszcode + docPath + "[" + row + "]." + document.getKey() + "生成报文数据异常" + eo.getMessage());
-										eo.printStackTrace();
-									}
+							if (count == 1) {
+								htmlFillJosonValue(json,pstr, tdrule,pattern,resultData,docPath,trelement,error,nsrdq,ruleszcode,row);
+							}else if (count == 2) {//上海增值税存在征收项目和征收品目相同出现两条的情况。这里处理两条的情况
+								realrow =2*row-1;
+								for(Element trelement:doclist){
+									htmlFillJosonValue(json,pstr, tdrule,pattern,resultData,docPath,trelement,error,nsrdq,ruleszcode,++realrow);
 								}
-							} else if (coutn > 1) {
+							} else if (count > 1) {
 								error.append(docPath + "[" + row + "].【"+rowMarkInfo+"】行找到重复行");
 								log.warn(nsrdq + "-" + ruleszcode + docPath + "[" + row + "].【"+rowMarkInfo+"】行找到重复行");
 							} else {
@@ -711,6 +702,52 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 			tempresult.put("message", form + error.toString());
 		}
 		return tempresult;
+	}
+
+
+	/**
+	 * @param json
+	 * @param pstr
+	 * @param tdrule
+	 * @param resultData
+	 * @param docPath
+	 * @param trelement
+	 * @param error
+	 * @param nsrdq
+	 * @param ruleszcode
+	 * @param row
+	 */
+	public static void htmlFillJosonValue(JSONObject json,Pattern pstr,Pattern tdrule,Pattern pattern,JSONObject resultData,String docPath,Element trelement,StringBuilder error,
+										  String nsrdq,String ruleszcode,int row){
+		for (Map.Entry<String, Object> document : json.entrySet()) {
+			try {
+				if (document.getValue().toString().startsWith("$tr")) {
+					String value = ((String) document.getValue()).substring(((String) document.getValue()).indexOf("@") + 1);
+					Matcher m = pstr.matcher(value);
+					if (m.find()) {
+						value = m.replaceAll("");
+					}
+					JSONPath.set(resultData, docPath + "[" + row + "]." + document.getKey(), value);
+				} else {
+					String index = null;
+					String indexstr = null;
+					Matcher m = tdrule.matcher(String.valueOf(document.getValue()));
+					if (m.find()) {
+						indexstr = m.group();
+						Matcher matcher = pattern.matcher(indexstr);
+						if (matcher.find()) {
+							index = matcher.group();
+						}
+					}
+					Element td = trelement.getElementsByTag("td").get(Integer.parseInt(index)-1);
+					JSONPath.set(resultData, docPath + "[" + row + "]." + document.getKey(), td.wholeText());
+				}
+			} catch (Exception eo) {
+				error.append(docPath + "[" + row + "]." + document.getKey() + "生成报文数据异常" + eo.getMessage());
+				log.warn(nsrdq + "-" + ruleszcode + docPath + "[" + row + "]." + document.getKey() + "生成报文数据异常" + eo.getMessage());
+				eo.printStackTrace();
+			}
+		}
 	}
 
 	/**

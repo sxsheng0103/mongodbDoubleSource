@@ -75,6 +75,7 @@ public class TransferJsonDataServiceImpl implements ITransferJsonDataService{
 							tempresult.put("message", "没有找到对应的表单规则文件:" + formid);
 							result.put(formid, tempresult);
 						} else {
+							error.setLength(0);
 							tempresult = combineJSONResultData(nsrdq, ruleszcode, formid, form, error, result, resultData, ruleEntity, jsonsource);
 							result.put(formid, tempresult);
 						}
@@ -180,6 +181,11 @@ public class TransferJsonDataServiceImpl implements ITransferJsonDataService{
 
 
 	/**
+	 * @direction  一组数据通过指定规则生成标准报文
+	 * 					规则参考山东增值税附表1
+	 * 				       xxx[0].ewbhxh=@@1  、xxx[0].hmc=@@13%税率的货物及加工修理修配劳务  以@@开始的字段是 以【0】为下标的元素并且值以@@开始的行为这一组元素的识别行
+	 * 				       xxx[0].exterkey=@@#[?(@.ewbhxh=1)]                               以@@#开始的字段是 以【0】为下表的元素的结束符号
+	 * 				    其他的行   xxx[0].kchXxynse=xxx.bqxsqkmxbGridlbVO[?(@.hmc='13%税率的货物及加工修理修配劳务')].kchXxynse 为通过指定名称查找对应行的字段【如：kchXxynse】
 	 * @param nsrdq
 	 * @param ruleszcode
 	 * @param formid

@@ -155,7 +155,7 @@
                                   "onmouseover='' title='状态未定义'><i class='layui-icon layui-icon-notice' style='font-size: 25px; color: #ffdb8a;'><!--&#xe667;--></i></span>";
                           }else if (d.zhState === 0) {
                               text = "<span style='color:rgba(0,0,0,0.49);;cursor: pointer;' data-text='' " +
-                                  "onmouseover='' title='不需转化'><i class='layui-icon layui-icon-ok-circle'  style='font-size: 25px; color: rgba(0,0,0,0.49);'><!--&#xe616;--></i></span>";
+                                  "onmouseover='' title='无需转化'><i class='layui-icon layui-icon-ok-circle'  style='font-size: 25px; color: rgba(0,0,0,0.49);'><!--&#xe616;--></i></span>";
                           } else if (d.zhState === 1) {
                               text = "<span style='color:#ff210b;cursor: pointer;' data-text='' " +
                                   "onmouseover='' title='待转化'><i class='layui-icon layui-icon-reduce-circle'  style='font-size: 25px; color: #ff210b;'><!--&#xe616;--></i></span>";
@@ -320,6 +320,7 @@
                   });
                   form.render();
               }else if(layEvent === 'retransfer'){
+              debugger
                   var index = layer.msg('执行中，请稍候',{icon: 16,time:false,shade:0.8});
                   $.ajax({
                       url:"/updatetransfer",
@@ -346,7 +347,6 @@
           });
           $("#initbydataid").click(function(){
               var selectData = layui.table.checkStatus('craw_table').data;
-              debugger
               if(selectData.length==0){
                   layer.msg("请至少选择一条数据进行初始化");
                   return;
