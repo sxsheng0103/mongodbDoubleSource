@@ -123,7 +123,7 @@ public class AsyncQueryBusinessTransferRule {
 			return result;
 		}
 	}
-
+	private static Integer lockvariable = 0;//防止操作溢出，枷锁
 	public Map<String,String> updateTransferRuleDataByid(List<String> rules,Map<String,String> params) {
 		Map<String,String> result = new HashMap<>(2);
 		try{
@@ -132,42 +132,43 @@ public class AsyncQueryBusinessTransferRule {
 			String rule_formid = params.get("rule_formid");
 			String rule_sz = params.get("rule_sz");
 			String rule_type = params.get("rule_type");
-			Criteria cxyj=Criteria.where("nsrdq").is(rule_nsrdq)
-					.and("sz").is(rule_sz).and("type").is(rule_type).and("formid").is(rule_formid).and("iscurrent").is(true);
-			List<AsyncBusinessTransferRuleEntity> dataInfoEntity = mongoTemplate.find(Query.query(cxyj),AsyncBusinessTransferRuleEntity.class);
-			if(dataInfoEntity.size()>0){
-				for(AsyncBusinessTransferRuleEntity data :dataInfoEntity){
-					data.setIscurrent(false);
-					data.setPrimaryid(data.getId());
-					mongoTemplate.save(data);
-					primaryid = data.getId();
-				}
-			}
+				synchronized(lockvariable){
+					Criteria cxyj=Criteria.where("nsrdq").is(rule_nsrdq).and("sz").is(rule_sz).and("type").is(rule_type).and("formid").is(rule_formid).and("iscurrent").is(true);
+					List<AsyncBusinessTransferRuleEntity> dataInfoEntity = mongoTemplate.find(Query.query(cxyj),AsyncBusinessTransferRuleEntity.class);
+					if(dataInfoEntity.size()>0){
+						for(AsyncBusinessTransferRuleEntity data :dataInfoEntity){
+							data.setIscurrent(false);
+							data.setPrimaryid(data.getId());
+							mongoTemplate.save(data);
+							primaryid = data.getId();
+						}
+					}
 
-			AsyncBusinessTransferRuleEntity businessMappingFileEntity = new AsyncBusinessTransferRuleEntity();
-			businessMappingFileEntity.setContent(StringUtils.join(rules,"\n"));
-			businessMappingFileEntity.setSz(rule_sz);
-			businessMappingFileEntity.setSzname("");
-			businessMappingFileEntity.setNsrdq(rule_nsrdq);
-			businessMappingFileEntity.setFormid(rule_formid);
-			businessMappingFileEntity.setType(rule_type);
-			businessMappingFileEntity.setFormname("");
-			businessMappingFileEntity.setStarttime("1999-12-12");
-			businessMappingFileEntity.setEndtime("9999-12-12");
-			businessMappingFileEntity.setVersion(sjt.format(new Date()));
-			businessMappingFileEntity.setIscurrent(true);
-			businessMappingFileEntity.setStatus("0");
-			mongoTemplate.save(businessMappingFileEntity);
+					AsyncBusinessTransferRuleEntity businessMappingFileEntity = new AsyncBusinessTransferRuleEntity();
+					businessMappingFileEntity.setContent(StringUtils.join(rules,"\n"));
+					businessMappingFileEntity.setSz(rule_sz);
+					businessMappingFileEntity.setSzname("");
+					businessMappingFileEntity.setNsrdq(rule_nsrdq);
+					businessMappingFileEntity.setFormid(rule_formid);
+					businessMappingFileEntity.setType(rule_type);
+					businessMappingFileEntity.setFormname("");
+					businessMappingFileEntity.setStarttime("1999-12-12");
+					businessMappingFileEntity.setEndtime("9999-12-12");
+					businessMappingFileEntity.setVersion(sjt.format(new Date()));
+					businessMappingFileEntity.setIscurrent(true);
+					businessMappingFileEntity.setStatus("0");
+					mongoTemplate.save(businessMappingFileEntity);
 
-			cxyj=Criteria.where("primaryid").is(primaryid).and("iscurrent").is(false);
-			dataInfoEntity = mongoTemplate.find(Query.query(cxyj),AsyncBusinessTransferRuleEntity.class);
+					cxyj=Criteria.where("primaryid").is(primaryid).and("iscurrent").is(false);
+					dataInfoEntity = mongoTemplate.find(Query.query(cxyj),AsyncBusinessTransferRuleEntity.class);
 //			dataInfoEntity.addAll(mongoTemplate.find(Query.query(Criteria.where("primaryid").is(primaryid)),AsyncBusinessTransferRuleEntity.class));
-			for(AsyncBusinessTransferRuleEntity data :dataInfoEntity){
-				data.setPrimaryid(businessMappingFileEntity.getId());
-				mongoTemplate.save(data);
-			}
-			result.put("code","success");
-			result.put("message","保存成功");
+					for(AsyncBusinessTransferRuleEntity data :dataInfoEntity){
+						data.setPrimaryid(businessMappingFileEntity.getId());
+						mongoTemplate.save(data);
+					}
+					result.put("code","success");
+					result.put("message","保存成功");
+				}
 		}catch (Exception e){
 			result.put("code","fail");
 			result.put("message","保存失败"+e.getMessage());

@@ -16,6 +16,9 @@ public class TimeUtils {
     public static final SimpleDateFormat sdf5 = new SimpleDateFormat("HH:mm:ss");
 
     public static String getCurrentDateTime(Date date, SimpleDateFormat sdf){
+        if(date == null){
+            date = new Date();
+        }
         return  sdf.format(date);
     }
 }

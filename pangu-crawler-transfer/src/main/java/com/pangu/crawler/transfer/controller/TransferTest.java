@@ -85,9 +85,14 @@ public class TransferTest {
      * 备份数据
      */
     @Test
-    public void TransferServiceDispatch() throws Exception{
+    public void TransferServiceDispatch(String path) throws Exception{
         try{
-            File outpath = new File("D:\\file\\"+new SimpleDateFormat("yyyyMMdd HHmmss").format(new Date()));
+            File outpath = null;
+            if(path!=null&&!path.equals("")){
+                outpath = new File(path+"\\..\\file\\"+new SimpleDateFormat("yyyyMMdd HHmmss").format(new Date()));
+            }else{
+                outpath = new File("D:\\file\\"+new SimpleDateFormat("yyyyMMdd HHmmss").format(new Date()));
+            }
             outpath.mkdirs();
             Paging<AsyncTaskTimerEntity> taskTimerEntity= taskManagerService.queryHistoricalData(Collections.emptyMap(),null,null);
             if(taskTimerEntity.getData().size()>0){
