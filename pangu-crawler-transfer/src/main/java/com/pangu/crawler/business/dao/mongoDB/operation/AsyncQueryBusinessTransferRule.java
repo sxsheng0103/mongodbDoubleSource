@@ -127,6 +127,7 @@ public class AsyncQueryBusinessTransferRule {
 	public Map<String,String> updateTransferRuleDataByid(List<String> rules,Map<String,String> params) {
 		Map<String,String> result = new HashMap<>(2);
 		try{
+			String primaryid = "";
 			String rule_nsrdq = params.get("rule_nsrdq");
 			String rule_formid = params.get("rule_formid");
 			String rule_sz = params.get("rule_sz");
@@ -137,9 +138,12 @@ public class AsyncQueryBusinessTransferRule {
 			if(dataInfoEntity.size()>0){
 				for(AsyncBusinessTransferRuleEntity data :dataInfoEntity){
 					data.setIscurrent(false);
+					data.setPrimaryid(data.getId());
 					mongoTemplate.save(data);
+					primaryid = data.getId();
 				}
 			}
+
 			AsyncBusinessTransferRuleEntity businessMappingFileEntity = new AsyncBusinessTransferRuleEntity();
 			businessMappingFileEntity.setContent(StringUtils.join(rules,"\n"));
 			businessMappingFileEntity.setSz(rule_sz);
@@ -154,6 +158,14 @@ public class AsyncQueryBusinessTransferRule {
 			businessMappingFileEntity.setIscurrent(true);
 			businessMappingFileEntity.setStatus("0");
 			mongoTemplate.save(businessMappingFileEntity);
+
+			cxyj=Criteria.where("primaryid").is(primaryid).and("iscurrent").is(false);
+			dataInfoEntity = mongoTemplate.find(Query.query(cxyj),AsyncBusinessTransferRuleEntity.class);
+//			dataInfoEntity.addAll(mongoTemplate.find(Query.query(Criteria.where("primaryid").is(primaryid)),AsyncBusinessTransferRuleEntity.class));
+			for(AsyncBusinessTransferRuleEntity data :dataInfoEntity){
+				data.setPrimaryid(businessMappingFileEntity.getId());
+				mongoTemplate.save(data);
+			}
 			result.put("code","success");
 			result.put("message","保存成功");
 		}catch (Exception e){

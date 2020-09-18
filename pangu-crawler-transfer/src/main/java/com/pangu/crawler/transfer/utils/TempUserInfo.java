@@ -11,6 +11,7 @@ import java.util.Date;
  **/
 public class TempUserInfo {
 
+    public static String activeConfigtype  = "dev";
     public static final  String user ="chinab2b";
     public static final  String pass ="tax@commonQWE";
     public static String cookieValue = UUIDUtils.get16UUID();

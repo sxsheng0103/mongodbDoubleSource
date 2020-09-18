@@ -35,11 +35,11 @@ import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 //@EnableAspectJAutoProxy
 @SpringBootApplication (exclude = {MultipartAutoConfiguration.class,MongoAutoConfiguration.class,MongoDataAutoConfiguration.class})
 
-//@EnableAsync(proxyTargetClass=true)
+@EnableAsync(proxyTargetClass=true)
 //@EnableSwagger2
 @EnableMongoMultiDataSource
 //@EnableMongoAuditing
-//@EnableScheduling
+@EnableScheduling
 @ComponentScan(value = "com.pangu.crawler")
 public class PanguCrawlerBootStrap {
 

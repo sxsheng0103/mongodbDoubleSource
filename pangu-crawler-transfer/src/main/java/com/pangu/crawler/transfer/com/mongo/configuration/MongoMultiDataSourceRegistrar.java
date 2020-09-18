@@ -3,6 +3,7 @@ package com.pangu.crawler.transfer.com.mongo.configuration;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.ServerAddress;
+import com.pangu.crawler.transfer.utils.TempUserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.ConstructorArgumentValues;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
@@ -81,7 +82,7 @@ public class MongoMultiDataSourceRegistrar implements ImportBeanDefinitionRegist
         PropertySource<?> propertySource = ((StandardServletEnvironment) environment)
                 .getPropertySources().get("applicationConfig: [classpath:/application.yml]");
         Map<String, String> appMap = (Map<String, String>) propertySource.getSource();
-
+        TempUserInfo.activeConfigtype = environment.getActiveProfiles()[0];
         /**
          * 不能用sit作为后缀，不能修改配置文件名称，只能使用bootstrap开头
          */

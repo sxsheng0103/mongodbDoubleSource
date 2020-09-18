@@ -62,6 +62,10 @@ public class AsyncBusinessTransferRuleEntity {
 	@ApiModelProperty(value = "当前版本", hidden = true)
 	public boolean iscurrent;
 
+	@Field("primaryid")
+	@ApiModelProperty(value = "主规则id", hidden = true)
+	public String primaryid;
+
 	@Field("type")
 	@ApiModelProperty(value = "解析类型(0,html;1,json;2;pdf)", hidden = true)
 	public String type;

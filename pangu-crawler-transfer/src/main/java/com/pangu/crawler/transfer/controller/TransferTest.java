@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.stereotype.Service;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.BufferedWriter;
@@ -36,6 +37,7 @@ import java.util.Map;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = PanguCrawlerBootStrap.class)
 @Slf4j
+@Service
 public class TransferTest {
 
     @Autowired
@@ -83,7 +85,7 @@ public class TransferTest {
      * 备份数据
      */
     @Test
-    public   void TransferServiceDispatch() throws Exception{
+    public void TransferServiceDispatch() throws Exception{
         try{
             File outpath = new File("D:\\file\\"+new SimpleDateFormat("yyyyMMdd HHmmss").format(new Date()));
             outpath.mkdirs();
