@@ -34,7 +34,7 @@ public class FormMap {
     public static final String zzs_lhfjs = "lhfjs";
     public static final String zzs_dlqyzzsxxsehjxsecdd = "dlqyzzsxxsehjxsecdd";
     public static final String zzs_hznsqytycdd = "hznsqytycdd";
-    public static final String zzs_zzsybnsrfjs = "zzsybnsr&fjs";
+//    public static final String zzs_zzsybnsrfjs = "zzsybnsr&fjs";
     //企业所得税A类
     public static final String asss_a200000Ywbd = "a200000Ywbd";
     public static final String asss_a201010Ywbd = "a201010Ywbd";
@@ -86,7 +86,7 @@ public class FormMap {
                 formEnum.getForms().put(zzs_lhfjs,zzs_lhfjs);
                 formEnum.getForms().put(zzs_dlqyzzsxxsehjxsecdd,zzs_dlqyzzsxxsehjxsecdd);
                 formEnum.getForms().put(zzs_hznsqytycdd,zzs_hznsqytycdd);
-                formEnum.getForms().put(zzs_zzsybnsrfjs,zzs_zzsybnsrfjs);
+//                formEnum.getForms().put(zzs_zzsybnsrfjs,zzs_zzsybnsrfjs);
             }else if(formEnum.getSzCode().equals("qysdsayjb")){
                 formEnum.getForms().put(asss_a200000Ywbd,asss_a200000Ywbd);
                 formEnum.getForms().put(asss_a201010Ywbd,asss_a201010Ywbd);

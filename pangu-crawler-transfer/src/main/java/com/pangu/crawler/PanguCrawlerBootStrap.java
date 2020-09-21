@@ -65,7 +65,8 @@ public class PanguCrawlerBootStrap {
             put("xinjiang", "https://etax.xinjiang.chinatax.gov.cn");
         }});*/
         SpringApplication.run(PanguCrawlerBootStrap.class, args);
-        logger.info("               ___              _ _           _   _            ______             _   _               _____ _             _   _             \n" +
+        logger.info("                                                                                                                                           \n" +
+                "               ___              _ _           _   _            ______             _   _               _____ _             _   _             \n"+
                 "              / _ \\            | (_)         | | (_)           | ___ \\           | | (_)             /  ___| |           | | (_)            \n" +
                 "             / /_\\ \\_ __  _ __ | |_  ___ __ _| |_ _  ___  _ __ | |_/ / ___   ___ | |_ _ _ __   __ _  \\ `--.| |_ __ _ _ __| |_ _ _ __   __ _ \n" +
                 "             |  _  | '_ \\| '_ \\| | |/ __/ _` | __| |/ _ \\| '_ \\| ___ \\/ _ \\ / _ \\| __| | '_ \\ / _` |  `--. \\ __/ _` | '__| __| | '_ \\ / _` |\n" +

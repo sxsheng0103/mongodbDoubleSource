@@ -195,6 +195,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 						Map<String,Object> rulegroup = 	(Map<String,Object>)rulegroupQueue.poll();
 						String type = rulegroup.get("type").toString();
 						try{
+
 							if(type.equals("nomallogical")){//普通查找走这个
 								tempresult = transferNomalRule((List<String>)rulegroup.get("data"),error,doc,nsrdq,ruleszcode,resultData);
 							}else if(type.equals("booleanlogical")){//布尔查找走这个■□
@@ -202,6 +203,17 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 							}else if(type.equals("dynamicmatchrowlogical")){//动态匹配选择器走这个
 								Map<String,String> ruledata = (Map<String,String>)rulegroup.get("data");
 								tempresult = combineDynamicRowsHtmlResultData(nsrdq, ruleszcode, formid, form, error, result, resultData, ruleEntity, doc,ruledata);
+							}else if(type.equals("fixmatchrowlogical")){//模糊查找行走这个
+								Map<String,String> paramsData = new HashMap<String,String>(1);
+								paramsData.put(map.getKey(),map.getValue());
+								final AsyncBusinessTransferRuleEntity ruleEntityTemp = ruleEntity;
+								Map<String,Object> resulttemp = new HashMap<String,Object>();
+								resulttemp =  transferMixHtml(paramsData, nsrdq, ruleszcode, formcode, id, new ArrayList<AsyncBusinessTransferRuleEntity>(){{add(ruleEntityTemp);}},resultData);
+								resulttemp.remove("data");resulttemp.remove("code");
+								resulttemp.remove("finalresult");
+								for(Map.Entry e:resulttemp.entrySet()){
+									tempresult.put(e.getKey().toString(),e.getValue()==null?"":e.getValue().toString());
+								}
 							}else{
 								log.error("类型错误，没有这种类型的处理功能");
 							}
@@ -350,7 +362,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 				String formid = "";
 				Document doc = null;
 				try {
-					doc = Jsoup.parse(map.getValue());
+					doc = Jsoup.parse(map.getValue().toString());
 				} catch (Exception eq) {
 					log.warn(nsrdq + "-" + ruleszcode + "转化document失败,需要检查原始数据格式问题:" + eq.getMessage());
 					tempresult = new HashMap<String, String>();
@@ -395,6 +407,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 						warn = true;
 					} else if (temp1.get("code")!=null&&temp1.get("code").contains("error")) {
 						errorf = true;
+						break;
 					}
 				}
 			}
@@ -567,6 +580,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 		Pattern pattern = Pattern.compile("(\\d+)");
 		Pattern pstr = Pattern.compile("\\s*|\t|\r|\n");
 		Pattern trrule = Pattern.compile("\\$tr\\{\\$td(\\d+)}@\\s*");
+		Pattern contentrule = Pattern.compile("\\$\\{@([\\s\\S]*)@}");
 		Pattern tdrule = Pattern.compile("\\$\\{td(\\d+)}");
 		Map<String, String> tempresult = new HashMap<String, String>();
 		if (ruleEntity == null) {
@@ -581,7 +595,14 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 		Map<String, List<String>> rulegroup = RuleDataFilterUtils.splitGroupMatchColsByTableRules(rules);
 		Map<String, JSONObject> rulegroupJson = new HashMap<String, JSONObject>();
 		for (Map.Entry<String, List<String>> ruleplist : rulegroup.entrySet()) {
-			rulegroupJson.put(ruleplist.getKey(), (JSONObject) RuleDataFilterUtils.getValidJsonBefore(ruleplist.getValue()));
+			try{
+				rulegroupJson.put(ruleplist.getKey(), (JSONObject) RuleDataFilterUtils.getValidJsonBefore(ruleplist.getValue()));
+			}catch (Exception e){
+				log.warn(nsrdq + "-" + ruleszcode + "规则文件有错误"+e.getMessage());//+formid+"<->"
+				tempresult.put("code", "warn:" + form);
+				tempresult.put("message", form + ":规则文件有错误"+e.getMessage());
+				return tempresult;
+			}
 		}
 		if (rulegroupJson.entrySet().size() <= 0) {
 			log.warn(nsrdq + "-" + ruleszcode + "规则文件中未找到规则:" + form);//+formid+"<->"
@@ -606,7 +627,8 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 					Set<String> primiry = new HashSet<String>(6);
 					Set<String> items = new HashSet<String>();
 					for (Map.Entry<String, Object> e3 : json.entrySet()) {
-						if ((tdrule.matcher(e3.getValue() == null ? "" : e3.getValue().toString()).find()) || (trrule.matcher(e3.getValue() == null ? "" : e3.getValue().toString()).find())) {
+						if ((tdrule.matcher(e3.getValue() == null ? "" : e3.getValue().toString()).find()) || (trrule.matcher(e3.getValue() == null ? "" : e3.getValue().toString()).find())
+								|| (contentrule.matcher(e3.getValue() == null ? "" : e3.getValue().toString()).find())) {
 						} else {
 							error.append(docPath + "[" + row + "]." + e3.getKey() + ":[error]格式配置错误,请检查数据规范填写");
 							log.warn(nsrdq + "-" + ruleszcode + docPath + "[" + row + "]." + e3.getKey() + ":[error]格式配置错误,请检查数据规范填写");
@@ -646,22 +668,23 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
                                         }
                                         m = pstr.matcher(tds.get(Integer.valueOf(trtdindex)).wholeText());
                                         if (m.find()) {
-                                            souceName = m.replaceAll("");
-                                        }
+                                            souceName = m.replaceAll("").replaceAll("　　","");
+                                         }
                                         if (!souceName.equals(trtdtext)) {
                                             return false;//本来返回false，在这里直接结束掉这一条判断
                                         }
                                     }
 
 									trelement = trlink;
+									return true;
 									//这种现对上海附加税处理,过滤无效的行数据
-                                    double testvalue = tds.get(3).wholeText()==null?new Double(0.00):new Double(tds.get(3).wholeText().trim().replace(",",""));
+                                  /*  double testvalue = tds.get(3).wholeText()==null?new Double(0.00):new Double(tds.get(3).wholeText().trim().replace(",",""));
 									if(testvalue!=0.00){
 										doclist.add(trlink);
                                         return true;
                                     }else{
                                         return false;
-                                    }
+                                    }*/
 								}
 								return false;
 							}).count();
@@ -719,8 +742,10 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 	 */
 	public static void htmlFillJosonValue(JSONObject json,Pattern pstr,Pattern tdrule,Pattern pattern,JSONObject resultData,String docPath,Element trelement,StringBuilder error,
 										  String nsrdq,String ruleszcode,int row){
+		Pattern contentrule = Pattern.compile("\\$\\{@([\\s\\S]*)@}");
 		for (Map.Entry<String, Object> document : json.entrySet()) {
 			try {
+				Matcher mcontent = contentrule.matcher(document.getValue() == null ? "" : document.getValue().toString());
 				if (document.getValue().toString().startsWith("$tr")) {
 					String value = ((String) document.getValue()).substring(((String) document.getValue()).indexOf("@") + 1);
 					Matcher m = pstr.matcher(value);
@@ -728,7 +753,11 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 						value = m.replaceAll("");
 					}
 					JSONPath.set(resultData, docPath + "[" + row + "]." + document.getKey(), value);
-				} else {
+				} else if(document.getValue()!=null&&document.getValue().toString().trim().equals("--")){
+					JSONPath.set(resultData, docPath + "[" + row + "]." + document.getKey(), "--");
+				}else if(mcontent.find()){
+					JSONPath.set(resultData, docPath + "[" + row + "]." + document.getKey(), mcontent.group().replaceAll("\\$\\{@|@}",""));
+				}else{
 					String index = null;
 					String indexstr = null;
 					Matcher m = tdrule.matcher(String.valueOf(document.getValue()));

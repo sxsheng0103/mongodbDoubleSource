@@ -186,8 +186,12 @@ public class RuleDataFilterUtils {
                 }
                 if (rule.indexOf("//") != -1) {
                     if (rule.substring(0, rule.indexOf("//")).replaceAll("\\s*", "").endsWith("--")) {
+                        listRules.add("predeal-"+rule);
                         continue;
                     }
+                } else if (rule.replaceAll("\\s*", "").endsWith("--")) {
+                    listRules.add("predeal-"+rule);
+                    continue;
                 }
                 if (rule.replaceAll("\\s*", "").startsWith("starttransfertype")) {
                     cdl= new CountDownLatch(6);
@@ -220,6 +224,10 @@ public class RuleDataFilterUtils {
                             queuerule.offer(rulemap);
                         }
                         continue;
+                    }else if(ruletag.startsWith("fixmatchrowlogical")){
+                        rulemap.put("type","fixmatchrowlogical");
+                        rulemap.put("data",splitGroupMatchColsByTableRules(listRules));
+                        queuerule.offer(rulemap);
                     }
                     continue;
                 }
@@ -232,6 +240,8 @@ public class RuleDataFilterUtils {
                 if(ruletag.startsWith("nomallogical")){
                     listRules.add(rule);
                 }else if(ruletag.startsWith("booleanlogical")){
+                    listRules.add(rule);
+                }else if(ruletag.startsWith("fixmatchrowlogical")){
                     listRules.add(rule);
                 }else if(ruletag.startsWith("dynamicmatchrowlogical")){
                     //每一组包含reportpath,documentpath,fixedtr,dynamictrstartpos,dynamictrreleations,dynamictrendpos,groupend1信息
@@ -292,9 +302,17 @@ public class RuleDataFilterUtils {
             } else {
                 temprule = rule;
             }
+            if(temprule.startsWith("predeal-")){
+                temprule = temprule.substring(8);
+            }
             key = temprule.substring(0, temprule.indexOf("="));
             value = temprule.substring(temprule.indexOf("=") + 1);
-            JSONPath.set(resultData, key, value);
+            try{
+                JSONPath.set(resultData, key, value);
+            }catch (Exception e){
+                new RuntimeException("规则出错:"+rule);
+            }
+
         }
         return resultData;
     }
@@ -318,9 +336,11 @@ public class RuleDataFilterUtils {
             }
             if (rule.indexOf("//") != -1) {
                 if (rule.substring(0, rule.indexOf("//")).replaceAll("\\s*", "").endsWith("--")) {
+                    listRules.add("predeal-"+rule);
                     continue;
                 }
             } else if (rule.replaceAll("\\s*", "").endsWith("--")) {
+                listRules.add("predeal-"+rule);
                 continue;
             }
             if (rule.startsWith("matchtrprefix=") && rule.indexOf("//") != -1) {
