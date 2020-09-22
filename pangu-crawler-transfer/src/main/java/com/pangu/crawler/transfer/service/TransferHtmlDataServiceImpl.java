@@ -10,6 +10,7 @@ import com.pangu.crawler.transfer.enums.SzEnum;
 import com.pangu.crawler.transfer.service.iservice.ITransferHtmlDataService;
 import com.pangu.crawler.transfer.utils.RuleDataFilterUtils;
 import com.pangu.crawler.transfer.utils.TimeUtils;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -200,10 +201,10 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 								tempresult = transferNomalRule((List<String>)rulegroup.get("data"),error,doc,nsrdq,ruleszcode,resultData);
 							}else if(type.equals("booleanlogical")){//布尔查找走这个■□
 								tempresult = transferBooleanTypeRule((List<String>)rulegroup.get("data"),error,doc,nsrdq,ruleszcode,resultData);
-							}else if(type.equals("dynamicmatchrowlogical")){//动态匹配选择器走这个
+							}else if(type.equals("dynamicmatchrowlogical")){//动态匹配选择器走这个  上海增值税减免税表
 								Map<String,String> ruledata = (Map<String,String>)rulegroup.get("data");
 								tempresult = combineDynamicRowsHtmlResultData(nsrdq, ruleszcode, formid, form, error, result, resultData, ruleEntity, doc,ruledata);
-							}else if(type.equals("fixmatchrowlogical")){//模糊查找行走这个
+							}else if(type.equals("fixmatchrowlogical")){//模糊查找行走这个  如云南企业会计制度现金流量表
 								Map<String,String> paramsData = new HashMap<String,String>(1);
 								paramsData.put(map.getKey(),map.getValue());
 								final AsyncBusinessTransferRuleEntity ruleEntityTemp = ruleEntity;
@@ -626,6 +627,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 					JSONObject json = (JSONObject) jsonobejct;
 					Set<String> primiry = new HashSet<String>(6);
 					Set<String> items = new HashSet<String>();
+					int ignorecount = 0;
 					for (Map.Entry<String, Object> e3 : json.entrySet()) {
 						if ((tdrule.matcher(e3.getValue() == null ? "" : e3.getValue().toString()).find()) || (trrule.matcher(e3.getValue() == null ? "" : e3.getValue().toString()).find())
 								|| (contentrule.matcher(e3.getValue() == null ? "" : e3.getValue().toString()).find())) {
@@ -634,13 +636,16 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 							log.warn(nsrdq + "-" + ruleszcode + docPath + "[" + row + "]." + e3.getKey() + ":[error]格式配置错误,请检查数据规范填写");
 							continue;
 						}
-						if (e3.getValue().toString().startsWith("$tr")) {
+						if (e3.getKey().contains("markcol")) {
+							ignorecount++;
+							primiry.add(e3.getValue().toString());
+						}else if (e3.getValue().toString().startsWith("$tr")) {
 							primiry.add(e3.getValue().toString());
 						} else {
 							items.add(e3.getValue().toString());
 						}
 					}
-					int mincols = primiry.size() + items.size();
+					int mincols = primiry.size() + items.size() - ignorecount;
 					if (doc != null) {
 						try {
 
@@ -668,7 +673,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
                                         }
                                         m = pstr.matcher(tds.get(Integer.valueOf(trtdindex)).wholeText());
                                         if (m.find()) {
-                                            souceName = m.replaceAll("").replaceAll("　　","");
+                                            souceName = m.replaceAll("").replaceAll("　　","").replaceAll("　","");
                                          }
                                         if (!souceName.equals(trtdtext)) {
                                             return false;//本来返回false，在这里直接结束掉这一条判断
@@ -746,7 +751,9 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 		for (Map.Entry<String, Object> document : json.entrySet()) {
 			try {
 				Matcher mcontent = contentrule.matcher(document.getValue() == null ? "" : document.getValue().toString());
-				if (document.getValue().toString().startsWith("$tr")) {
+				if(document.getKey().contains("markcol")){
+					continue;
+				}else if (document.getValue().toString().startsWith("$tr")) {
 					String value = ((String) document.getValue()).substring(((String) document.getValue()).indexOf("@") + 1);
 					Matcher m = pstr.matcher(value);
 					if (m.find()) {
