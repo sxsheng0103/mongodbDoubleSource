@@ -240,11 +240,13 @@ public class MainFrame extends Application {
     }
 
     public void beginRecodeVideo(){
+
         if(videoRecord!=null){videoRecord.stop();}
         int width = (int) (sceneX-screenX_start);
         int height = (int)(sceneY-screenY_start);
-        Rectangle rectangle = new Rectangle((int)screenX_start,(int)screenY_start,width, height); // 截屏的大小
-
+//        Rectangle rectangle = new Rectangle((int)screenX_start,(int)screenY_start,width, height); // 截屏的大小
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        Rectangle rectangle = new Rectangle((int)screenX_start,(int)screenY_start,screen.width-3, screen.height-3); //
         //最小化主窗口
         primary.setIconified(true);
         //调用录屏API

@@ -229,11 +229,12 @@ public class VideoRecode {
     /**
      * 停止
      */
-    public void stop() {
+    public void stop(){
         if (null != screenTimer) {
             screenTimer.shutdownNow();
         }
         try {
+            Thread.sleep(3000l);//等待线程结束掉
             recorder.stop();
             recorder.release();
             recorder.close();
@@ -250,6 +251,8 @@ public class VideoRecode {
                 dataLineInfo = null;
                 audioFormat = null;
             }
+        }catch (InterruptedException e) {
+            // TODO Auto-generated catch block
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
