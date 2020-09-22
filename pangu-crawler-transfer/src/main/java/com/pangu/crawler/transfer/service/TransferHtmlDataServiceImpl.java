@@ -20,7 +20,6 @@ import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -335,7 +334,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 				}catch (Exception e){
 					log.error("规则：["+errorrule+"]转换失败");
 					result.put("code","error");
-					errorTemp.append(rule + "规则：["+errorrule+"]转换失败");
+					errorTemp.append("规则：["+errorrule+"]转换失败");
 				}
 
 			}
@@ -458,6 +457,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 		try{
 			for(String rule:ruledata){
 				try{
+					rule = rule.replaceAll("predeal-","");
 					errorrule = rule;
 					if(rule.substring(rule.indexOf("=") + 1)!=null&&rule.substring(rule.indexOf("=") + 1).trim().equals("--")){
 						JSONPath.set(resultData, rule.substring(0, rule.indexOf("=")), "--");
@@ -474,12 +474,12 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 						errorTemp.append(rule + ":html中有重复节点;");
 						log.warn(nsrdq + "-" + ruleszcode + ":" + rule + ":html中有重复节点");
 					} else {
-						JSONPath.set(resultData, rule.substring(0, rule.indexOf("=")), links.get(0).wholeText());
+						JSONPath.set(resultData, rule.substring(0, rule.indexOf("=")), links.get(0).wholeText().replaceAll("　","").replaceAll(" ",""));
 					}
 				}catch (Exception e){
 //					e.printStackTrace();
 					result.put("code","error");
-					errorTemp.append(rule + "规则：["+errorrule+"]转换失败");
+					errorTemp.append("规则：["+errorrule.replaceAll("predeal-","")+"]转换失败");
 				}
 			}
 			if(result.get("code")==null){
@@ -649,7 +649,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 					int ignorecount = 0;
 					for (Map.Entry<String, Object> e3 : json.entrySet()) {
 						if ((tdrule.matcher(e3.getValue() == null ? "" : e3.getValue().toString()).find()) || (trrule.matcher(e3.getValue() == null ? "" : e3.getValue().toString()).find())
-								|| (contentrule.matcher(e3.getValue() == null ? "" : e3.getValue().toString()).find())) {
+								|| (contentrule.matcher(e3.getValue() == null ? "" : e3.getValue().toString()).find())||(e3.getValue()!=null&&e3.getValue().toString().trim().equals("--"))) {
 						} else {
 							error.append(docPath + "[" + row + "]." + e3.getKey() + ":[error]格式配置错误,请检查数据规范填写");
 							log.warn(nsrdq + "-" + ruleszcode + docPath + "[" + row + "]." + e3.getKey() + ":[error]格式配置错误,请检查数据规范填写");
@@ -692,7 +692,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
                                         }
                                         m = pstr.matcher(tds.get(Integer.valueOf(trtdindex)).wholeText());
                                         if (m.find()) {
-                                            souceName = m.replaceAll("").replaceAll("　　","").replaceAll("　","");
+                                            souceName = m.replaceAll("").replaceAll("　","");
                                          }
                                         if (!souceName.equals(trtdtext)) {
                                             return false;//本来返回false，在这里直接结束掉这一条判断
@@ -890,7 +890,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 									skipTr = true;
 									row = row+1;
 									for(String tdproperty:fixtoppropertyTrs.split(",")){
-										JSONPath.set(resultData, reportpath + "[" + row + "]." + tdproperty.split("-")[0], tds.get(Integer.valueOf(tdproperty.split("-")[1])-1).wholeText());
+										JSONPath.set(resultData, reportpath + "[" + row + "]." + tdproperty.split("-")[0], tds.get(Integer.valueOf(tdproperty.split("-")[1])-1).wholeText().replaceAll(" ",""));
 									}
 								}
 							}
@@ -903,7 +903,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 									row = row+1;
 									skipTr = true;
 									for(String tdproperty:fixbtmpropertyTrs.split(",")){
-										JSONPath.set(resultData, reportpath + "[" + row + "]." + tdproperty.split("-")[0], tds.get(Integer.valueOf(tdproperty.split("-")[1])-1).wholeText());
+										JSONPath.set(resultData, reportpath + "[" + row + "]." + tdproperty.split("-")[0], tds.get(Integer.valueOf(tdproperty.split("-")[1])-1).wholeText().replaceAll(" ",""));
 									}
 								}
 							}
@@ -914,7 +914,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 									dynamicarr.remove(tr);
 									row = row+1;
 									for(String tdproperty:dynamicpropertyTrs.split(",")){
-										JSONPath.set(resultData, reportpath + "[" + row + "]." + tdproperty.split("-")[0], tds.get(Integer.valueOf(tdproperty.split("-")[1])-1).wholeText());
+										JSONPath.set(resultData, reportpath + "[" + row + "]." + tdproperty.split("-")[0], tds.get(Integer.valueOf(tdproperty.split("-")[1])-1).wholeText().replaceAll(" ",""));
 									}
 								}
 							}
