@@ -123,6 +123,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 							result.put(form, tempresult);
 							continue;
 						} else {
+							error.setLength(0);
 							tempresult = combineHtmlResultData(nsrdq, ruleszcode, formid, form, error, result, resultData, ruleEntity, doc);
 							result.put(form, tempresult);
 						}
@@ -192,6 +193,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 						tempresult.put("message", form + ":"+errorgroup);
 						result.put(form, tempresult);
 					}
+					error.setLength(0);
 					while(!rulegroupQueue.isEmpty()){
 						Map<String,Object> rulegroup = 	(Map<String,Object>)rulegroupQueue.poll();
 						String type = rulegroup.get("type").toString();
@@ -201,10 +203,23 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 								tempresult = transferNomalRule((List<String>)rulegroup.get("data"),error,doc,nsrdq,ruleszcode,resultData);
 							}else if(type.equals("booleanlogical")){//布尔查找走这个■□
 								tempresult = transferBooleanTypeRule((List<String>)rulegroup.get("data"),error,doc,nsrdq,ruleszcode,resultData);
-							}else if(type.equals("dynamicmatchrowlogical")){//动态匹配选择器走这个  上海增值税减免税表
+							}else if(type.equals("dynamicmatchrowlogical")){//动态增加行 使用这个匹配选择器走这个  上海增值税减免税表
 								Map<String,String> ruledata = (Map<String,String>)rulegroup.get("data");
 								tempresult = combineDynamicRowsHtmlResultData(nsrdq, ruleszcode, formid, form, error, result, resultData, ruleEntity, doc,ruledata);
 							}else if(type.equals("fixmatchrowlogical")){//模糊查找行走这个  如云南企业会计制度现金流量表
+								/*## version:2020.09.22 @dingsheng
+								//标准报文 增值税一般纳税人交付报文_V20200608  原始数据 91530112MA6NBN2T1H 申报日期  20200709
+								//html文件含有动态行时配置转换规则文件的说明
+								//starttransfertype=dynamicmatchrowlogical 为解析类型标识
+								//reportpath为对外报文里边的路径
+								//documentpath为html的tbody路径，取css路径
+								//dynamictrstartpos为查找起始行
+								//fixedtoptr动态行上边的固定数据行
+								//dynamictrreleations 动态增加的行
+								//fixedbottomtr动态行下边的固定数据行
+								//dynamictrendpos结束行标识  1-二、免税项目【含义为第一个td里边的内容是二、免税项目】
+								//groupend1 组结束标识，这个表里边减税和免税分别为一组
+								//endtransfertype解析标识结束符*/
 								Map<String,String> paramsData = new HashMap<String,String>(1);
 								paramsData.put(map.getKey(),map.getValue());
 								final AsyncBusinessTransferRuleEntity ruleEntityTemp = ruleEntity;
@@ -293,21 +308,22 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 
 	public Map<String,String> transferBooleanTypeRule(List<String> ruledata,StringBuilder error,Document doc,String nsrdq,String ruleszcode,JSONObject resultData){
 		Map<String, String> result = new HashMap<String, String>();
+		StringBuilder errorTemp = new StringBuilder();
 		String errorrule = "";
 		try{
 			for(String rule:ruledata){
 				try{
 					if(rule.substring(rule.indexOf("=") + 1).trim().equals("")){
-						error.append(rule + ":html中没有指定html路径");
+						errorTemp.append(rule + ":html中没有指定html路径");
 						log.warn(nsrdq + "-" + ruleszcode + rule + ":" + ":html中没有指定html路径");
 						continue;
 					}
 					Elements links = doc.select(rule.substring(rule.indexOf("=") + 1)); //带有href属性的a元素
 					if (links.size() == 0) {
-						error.append(rule + ":html中没有找到节点;");
+						errorTemp.append(rule + ":html中没有找到节点;");
 						log.warn(nsrdq + "-" + ruleszcode + rule + ":" + ":节点不存在");
 					} else if (links.size() != 1) {
-						error.append(rule + ":html中有重复节点;");
+						errorTemp.append(rule + ":html中有重复节点;");
 						log.warn(nsrdq + "-" + ruleszcode + ":" + rule + ":html中有重复节点");
 					} else {
 						if(links.get(0).wholeText().trim().contains("■ 是") ){
@@ -319,18 +335,19 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 				}catch (Exception e){
 					log.error("规则：["+errorrule+"]转换失败");
 					result.put("code","error");
-					error.append(rule + "规则：["+errorrule+"]转换失败");
+					errorTemp.append(rule + "规则：["+errorrule+"]转换失败");
 				}
 
 			}
 			if(result.get("code")==null){
 				result.put("code","warn");
 			}
-			result.put("message",error.toString());
+			result.put("message",errorTemp.toString());
 		}catch (Exception e){
 			e.printStackTrace();
 			log.error("处理错误"+e.getMessage());
 		}finally {
+			error.append(errorTemp);
 			return result;
 		}
 	}
@@ -437,6 +454,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 	public Map<String,String> transferNomalRule(List<String> ruledata,StringBuilder error,Document doc,String nsrdq,String ruleszcode,JSONObject resultData){
 		Map<String, String> result = new HashMap<String, String>();
 		String errorrule = "";
+		StringBuilder errorTemp = new StringBuilder();
 		try{
 			for(String rule:ruledata){
 				try{
@@ -450,10 +468,10 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 					}
 					Elements links = doc.select(rule.substring(rule.indexOf("=") + 1)); //带有href属性的a元素
 					if (links.size() == 0) {
-						error.append(rule + ":html中没有找到节点;");
+						errorTemp.append(rule + ":html中没有找到节点;");
 						log.warn(nsrdq + "-" + ruleszcode + rule + ":" + ":节点不存在");
 					} else if (links.size() != 1) {
-						error.append(rule + ":html中有重复节点;");
+						errorTemp.append(rule + ":html中有重复节点;");
 						log.warn(nsrdq + "-" + ruleszcode + ":" + rule + ":html中有重复节点");
 					} else {
 						JSONPath.set(resultData, rule.substring(0, rule.indexOf("=")), links.get(0).wholeText());
@@ -461,17 +479,18 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 				}catch (Exception e){
 //					e.printStackTrace();
 					result.put("code","error");
-					error.append(rule + "规则：["+errorrule+"]转换失败");
+					errorTemp.append(rule + "规则：["+errorrule+"]转换失败");
 				}
 			}
 			if(result.get("code")==null){
 				result.put("code","warn");
 			}
-			result.put("message",error.toString());
+			result.put("message",errorTemp.toString());
 		}catch (Exception e){
 			e.printStackTrace();
 			log.error("处理错误"+e.getMessage());
 		}finally {
+			error.append(errorTemp);
 			return result;
 		}
 	}
@@ -801,6 +820,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 	 */
 	public Map<String, String> combineDynamicRowsHtmlResultData(String nsrdq, String ruleszcode, String formid, String form, StringBuilder error, Map<String, Object> result, JSONObject resultData, AsyncBusinessTransferRuleEntity ruleEntity, Document doc,Map<String,String> ruledata) {
 		Map<String, String> result1 = new HashMap<String, String>(2);
+		StringBuilder errorTemp = new StringBuilder();
 		try{
 			String fixtopmarkTrs= null;String fixtoppropertyTrs = null;
 			String dynamicmarkTrs= null;String dynamicpropertyTrs = null;
@@ -904,12 +924,12 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 				}
 			}catch (Exception e){
 				log.error("动态行获取出错"+e.getMessage());
-				error.append("动态行获取出错"+e.getMessage());
+				errorTemp.append("动态行获取出错"+e.getMessage());
 			}
 			//最终提示未找到的行
-			if (!error.toString().equals("")) {
+			if (!errorTemp.toString().equals("")) {
 				result1.put("code", "error:" + form);
-				result1.put("message", form + error.toString());
+				result1.put("message", form + errorTemp.toString());
 			} else if(dynamicarr.size()>0||fixbtmarr.size()>0||fixtoparr.size()>0){
 				result1.put("code", "warn:" + form);
 				result1.put("message", form + ":" + "转化成功,但有警告信息!["+ org.apache.commons.lang3.StringUtils.join(dynamicarr,"],[")+"]名称的行信息未找到");
@@ -920,6 +940,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 		}catch (Exception e){
 			e.printStackTrace();
 		}finally {
+			error.append(errorTemp);
 			return result1;
 		}
 	}
