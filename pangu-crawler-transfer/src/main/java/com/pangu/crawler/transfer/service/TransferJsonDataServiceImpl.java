@@ -120,13 +120,15 @@ public class TransferJsonDataServiceImpl implements ITransferJsonDataService{
 						return result;
 					}
 				}
-				if (ruleEntity == null) {
-					log.warn(nsrdq + "-" + ruleszcode + "没有找到对应的表单规则文件:" + form);
-					result.put("code", "warn");
-					result.put("message", "没有找到对应的表单规则文件:" + form);
-				} else {
-					tempresult = combineJSONResultData(nsrdq, ruleszcode, formid, form, error, result, resultData, ruleEntity, jsonsource);
-					result.put(form, tempresult);
+				if(breakoneflag != true){
+					if (ruleEntity == null) {
+						log.warn(nsrdq + "-" + ruleszcode + "没有找到对应的表单规则文件:" + form);
+						result.put("code", "warn");
+						result.put("message", "没有找到对应的表单规则文件:" + form);
+					} else {
+						tempresult = combineJSONResultData(nsrdq, ruleszcode, formid, form, error, result, resultData, ruleEntity, jsonsource);
+						result.put(form, tempresult);
+					}
 				}
 			}
 		} catch (JSONException e) {
