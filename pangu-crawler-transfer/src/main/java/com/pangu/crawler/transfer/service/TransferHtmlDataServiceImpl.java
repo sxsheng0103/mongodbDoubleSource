@@ -230,7 +230,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 									tempresult.put(e.getKey().toString(),e.getValue()==null?"":e.getValue().toString());
 								}
 							}else{
-								log.error("类型错误，没有这种类型的处理功能");
+								log.error("解析类型错误，没有这种类型的处理功能");
 							}
 						}catch (Exception e){
 							error.append("异常出错");

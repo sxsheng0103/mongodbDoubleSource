@@ -1,6 +1,8 @@
 package com.pangu.crawler.transfer.service;
 
 import com.alibaba.fastjson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.pangu.crawler.business.dao.mongoDB.entity.AsyncBusinessTransferRuleEntity;
 import com.pangu.crawler.business.dao.mongoDB.operation.AsyncQueryBusinessTransferRule;
 import com.pangu.crawler.framework.utils.StringUtils;
@@ -208,16 +210,44 @@ public class TransferJsonDataServiceImpl implements ITransferJsonDataService{
 
 		List<String> rules = new ArrayList<String>();
 		rules.addAll(Arrays.asList(ruleEntity.getContent().split("\\n")));
-		Map<String, List<String>> rulegroup = RuleDataFilterUtils.splitJsonGroupByTableRules(rules);
+		error.setLength(0);
+		Map<String,Object> ruleresult = RuleDataFilterUtils.splitJsonGroupByTableRules(rules);
+		Queue rulegroupQueue =  (Queue)ruleresult.get("data");
 		String temprule = "";
 		String dataprefix = "";
-		for (Map.Entry<String, List<String>> ruleset : rulegroup.entrySet()) {
-			dataprefix = ruleset.getKey();
+		while(!rulegroupQueue.isEmpty()){
+			Map<String,Object> rulegroup = 	(Map<String,Object>)rulegroupQueue.poll();
+			String type = rulegroup.get("type").toString();
+				if(type.equals("nomallogical")||type.equals("prefixlogical")){//普通查找走这个
+					transferNomalJsonRule( ruleszcode, jsonsource, temprule, (List<String>)rulegroup.get("data"), dataprefix, nsrdq, error,resultData);
+				}else if(type.equals("dynamicaddrowlogical")){
+					transferdynamicaddrowJsonRule( ruleszcode, jsonsource, (Map)rulegroup.get("data"), nsrdq, error,resultData);
+				}else{
+					log.error("解析类型错误，没有这种类型的处理功能");
+				}
+		}
+
+		if (error.toString().equals("")) {
+//			resultData.put("",docObj);
+//			resultData.putAll((JSONObject)docObj);
+			tempresult.put("code", "success:" + formid);
+			tempresult.put("message", formid + ":" + "转化成功");
+		} else {
+			tempresult.put("code", "error:" + formid);
+			tempresult.put("message", formid + error.toString());
+		}
+		return tempresult;
+	}
+
+
+
+
+	public void transferNomalJsonRule(String ruleszcode,JSONObject jsonsource,String temprule,List<String> rulelist,String dataprefix,String nsrdq,StringBuilder error,JSONObject resultData){
 			/**
 			 * @variable matchextenal 记录需要查找有多条数据的精准变量值
 			 */
 			String matchextenal = null;
-			for (String rule : ruleset.getValue()) {
+			for (String rule : rulelist) {
 				if (StringUtils.isNotEmpty(rule)) {
 					if (rule.indexOf("//") != -1) {
 						temprule = rule.substring(0, rule.indexOf("//")).replace("\\s", "");
@@ -314,17 +344,59 @@ public class TransferJsonDataServiceImpl implements ITransferJsonDataService{
 			}
 //			resultData.put("",docObj);
 //			resultData.putAll((JSONObject)docObj);
-		}
-		if (error.toString().equals("")) {
-//			resultData.put("",docObj);
-//			resultData.putAll((JSONObject)docObj);
-			tempresult.put("code", "success:" + formid);
-			tempresult.put("message", formid + ":" + "转化成功");
-		} else {
-			tempresult.put("code", "error:" + formid);
-			tempresult.put("message", formid + error.toString());
-		}
-		return tempresult;
 	}
 
+	/*处理动态添加的行，例如山东增值税  表单hznsqyzzsfpb */
+	public void transferdynamicaddrowJsonRule(String ruleszcode,JSONObject jsonsource,Map rulegroup,String nsrdq,StringBuilder error,JSONObject resultData){
+
+		String reportpath = (String)rulegroup.get("reportpath");
+		String jsonpath = (String)rulegroup.get("jsonpath");
+		Set<String>	propertyreleations =  (Set<String>)rulegroup.get("propertyreleations");
+		Object o = null;
+		try{
+			o = JSONPath.eval(jsonsource, jsonpath);
+		}catch (Exception e){
+			log.info("动态添加行没有找到数据");
+		}
+		if(o==null){
+			JSONPath.set(resultData, reportpath,new JSONArray());
+		}else{
+			Object val = null;
+			int i = 0;
+			for(Object e: ((JSONArray) o)){
+				JSONObject element = (JSONObject)e;
+
+				for(String property : propertyreleations){
+					if(property==null){
+						log.warn(nsrdq + "-" + ruleszcode  + "-属性["+property+"]:[error]属性关系内容为空");
+						error.append("-属性["+property+"]:[error]属性["+property+"]:[error]属性关系内容为空\n");
+						continue;
+					}
+
+					if(property.split("@@@").length!=2){
+						log.warn(nsrdq + "-" + ruleszcode  + "-属性["+property+"]:[error]属性格式错误,原始报文和标准报文字段名称中间用三个@隔开");
+						error.append("-属性["+property+"]:[error]属性格式错误,原始报文和标准报文字段名称中间用三个@隔开\n");
+						continue;
+					}
+					if(property.split("@@@")[1].startsWith("generateIncreasedKey")){
+						JSONPath.set(resultData, reportpath+"["+i+"]."+property.split("@@@")[0], (i+1));
+						continue;
+					}
+					try{
+						val = JSONPath.eval(element, property.split("@@@")[0]);
+					}catch(Exception e1){
+						log.warn(nsrdq + "-" + ruleszcode  + "-属性["+property+"]:[error]不存在或查找数据异常");
+						error.append("-属性["+property+"]:[error]不存在或查找数据异常\n");
+					}
+					try{
+						JSONPath.set(resultData, reportpath+"["+i+"]."+property.split("@@@")[1], val);
+					}catch(Exception e1){
+						log.warn(nsrdq + "-" + ruleszcode  + "-属性["+property+"]:[error]数据生成失败,请检查数据格式");
+						error.append("-属性["+property+"]:[error]数据生成失败,请检查数据格式");
+					}
+				}
+				i++;
+			}
+		}
+	}
 }
