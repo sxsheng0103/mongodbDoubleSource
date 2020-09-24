@@ -631,7 +631,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 			return tempresult;
 		}
 
-				//遍历json模糊查找document节点匹配行tr
+				//遍历html 的dom元素tr模糊查找document节点匹配行tr
 		Object docObj = new JSONObject();
 		for (Map.Entry<String, JSONObject> e : rulegroupJson.entrySet()) {
 			String docPath = (StringUtils.isNotEmpty(e.getKey())&&e.getKey().indexOf("@")!=-1)?e.getKey().substring(0, e.getKey().indexOf("@")):"";

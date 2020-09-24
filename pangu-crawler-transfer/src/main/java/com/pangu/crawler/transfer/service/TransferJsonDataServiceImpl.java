@@ -348,7 +348,7 @@ public class TransferJsonDataServiceImpl implements ITransferJsonDataService{
 //			resultData.putAll((JSONObject)docObj);
 	}
 
-	/*处理动态添加的行，例如山东增值税  表单hznsqyzzsfpb */
+	/*处理动态添加的行，例如山东增值税  表单hznsqyzzsfpb  山东企业会计制度现金流量表（没有ewbhxh，只能全部获取） */
 	public void transferdynamicaddrowJsonRule(String ruleszcode,JSONObject jsonsource,Map rulegroup,String nsrdq,StringBuilder error,JSONObject resultData){
 
 		String reportpath = (String)rulegroup.get("reportpath");
