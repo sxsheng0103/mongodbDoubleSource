@@ -3,6 +3,7 @@ package com.pangu.crawler.transfer.utils;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPath;
 import com.pangu.crawler.framework.utils.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -17,6 +18,7 @@ import java.util.regex.Pattern;
  * @Date 2020/8/21 17:27
  * @Version 1.0
  **/
+@Slf4j
 public class RuleDataFilterUtils {
 
 
@@ -27,42 +29,100 @@ public class RuleDataFilterUtils {
      * @return
      * @description 规则分割规则方案
      */
-    public static Map<String, List<String>> splitJsonGroupByTableRules(List<String> rules) {
+    public static  Map<String,Object>  splitJsonGroupByTableRules(List<String> rules) {
+        Map<String,Object> result = new HashMap<String,Object>();
         Map<String, List<String>> map = new HashMap<String, List<String>>();
         List<String> listRules = new ArrayList<String>();
         String prefix = "";
-        Collections.reverse(rules);
+//        Collections.reverse(rules);
+        String transfertype = null;
+        Map<String,Object> rulemap = new HashMap<String,Object>();
+        Map<String,Object> tempdata = new HashMap<String,Object>();
+        Set<String> tempset = new HashSet<String>();
+        Queue queuerule = new ConcurrentLinkedQueue();
         for (String rule : rules) {
             Matcher m = pattern.matcher(rule);
             rule = m.replaceAll("");
             if (rule == null || StringUtils.isEmpty(rule) || rule.startsWith("//") || rule.startsWith("## version") || (rule.startsWith("##") && rule.contains("version"))) {
                 continue;
             }
+            if (rule.replaceAll("\\s*", "").startsWith("starttransfertype")) {
+                rulemap = new HashMap<String,Object>();
+                tempdata = new HashMap<String,Object>();
+                tempset = new HashSet<String>();
+                transfertype=rule.substring(rule.indexOf("=")+1);
+                if(transfertype.indexOf("//")!=-1){
+                    transfertype = transfertype.substring(0,transfertype.indexOf("//"));
+                }
+                continue;
+            }else if (transfertype!=null) {
+                if(rule.replaceAll("\\s*", "").startsWith("endtransfertype")){
+                    //结束一组规则生成组信息
+                    if(transfertype.startsWith("dynamicaddrowlogical")){
+                        rulemap.put("type","dynamicaddrowlogical");
+                        tempdata.put("propertyreleations",tempset);
+                        rulemap.put("data",tempdata);
+                        queuerule.offer(rulemap);
+                    }
+                    transfertype = null;
+                    continue;
+                }
+                if(transfertype.trim().startsWith("dynamicaddrowlogical")){
+                    if(rule.startsWith("reportpath")){
+                        tempdata.put("reportpath",rule.substring(rule.indexOf("=")+1));
+                    }else if(rule.startsWith("jsonpath")){
+                        tempdata.put("jsonpath",rule.substring(rule.indexOf("=")+1));
+                    }else if(rule.startsWith("rowreleation")){
+                        tempset.add(rule.substring(rule.indexOf("=")+1));
+                    }else{
+                        log.info("规则识别跳过，存在问题需检查:"+rule);
+                    }
+                }
+                continue;
+            }
+
             if (rule.indexOf("//") != -1) {
                 if (rule.substring(0, rule.indexOf("//")).replaceAll("\\s*", "").endsWith("--")) {
+                    listRules.add("predeal-"+rule);
                     continue;
                 }
             } else if (rule.replaceAll("\\s*", "").endsWith("--")) {
+                listRules.add("predeal-"+rule);
                 continue;
             }
             if (rule.startsWith("prefix=") && rule.indexOf("//") != -1) {
-                String ruleconfig = rule.substring(0, rule.indexOf("//"));
+                String ruleconfig = rule.substring(0, rule.lastIndexOf("//"));
                 prefix = ruleconfig.substring(ruleconfig.indexOf("=") + 1);
+                listRules = new ArrayList<String>();
+                rulemap = new HashMap<String,Object>();
+                continue;
             } else if (rule.startsWith("prefix=")) {
                 prefix = rule.substring(rule.indexOf("=") + 1);
-            }
-            if (!rule.startsWith("prefix=")) {
-                listRules.add(rule);
-            }
-            if (rule.startsWith("prefix=")) {
-                map.put(prefix, listRules);
+                rulemap = new HashMap<String,Object>();
+                listRules = new ArrayList<String>();
+                continue;
+            }else if(rule.startsWith("endprefix=")){
+                rulemap = new HashMap<String,Object>();
+                rulemap.put("type","prefixlogical");
+                rulemap.put("prefix",prefix);
+                rulemap.put("data",listRules);
+                queuerule.offer(rulemap);
+                prefix = "";
                 listRules = new ArrayList<String>();
             }
+
+            listRules.add(rule);//有前缀和没有前缀的都在这里添加
         }
-        if (map.isEmpty()) {
-            map.put(" ", listRules);
-        }
-        return map;
+        //填充普通json解析类型的逻辑
+        rulemap = new HashMap<String,Object>();
+        rulemap.put("type","prefixlogical");
+        rulemap.put("prefix",prefix);
+        rulemap.put("data",listRules);
+        queuerule.offer(rulemap);
+
+        result.put("data",queuerule);
+        result.put("error","");
+        return result;
     }
 
 
@@ -84,7 +144,7 @@ public class RuleDataFilterUtils {
         Map<String, List<String>> map = new HashMap<String, List<String>>();
         List<String> listRules = new ArrayList<String>();
         String prefix = "";
-        Collections.reverse(rules);
+//        Collections.reverse(rules);
         for (String rule : rules) {
             Matcher m = pattern.matcher(rule);
             rule = m.replaceAll("");
@@ -138,12 +198,7 @@ public class RuleDataFilterUtils {
             Map<String,Object> tempmap = new HashMap<String,Object>();
             List<Map<String,String>> listRuleMaps = new ArrayList<Map<String,String>>();
             List<String> listRules = new ArrayList<String>();
-            String prefix = "";
             StringBuilder errorgroup = new StringBuilder("");
-            String ruletag = "";
-            boolean innomalstate = true;
-            String transfertype = "";
-            CountDownLatch cdl= new CountDownLatch(6);
             for (String rule : rules) {
                 Matcher m = pattern.matcher(rule);
                 rule = m.replaceAll("");
@@ -154,86 +209,14 @@ public class RuleDataFilterUtils {
                     if (rule.substring(0, rule.indexOf("//")).replaceAll("\\s*", "").endsWith("--")) {
                         continue;
                     }
+                }else if(rule.replaceAll("\\s*", "").trim().endsWith("--")){
+
                 }
-                if (rule.replaceAll("\\s*", "").startsWith("starttransfertype")) {
-                    cdl= new CountDownLatch(6);
-                    rulemap = new HashMap<String,Object>();
-                    tempmap = new HashMap<String,Object>();
-                    listRules= new ArrayList<String>();
-                    transfertype=rule.substring(rule.indexOf("=")+1);
-                    if(transfertype.indexOf("//")!=-1){
-                        transfertype = transfertype.substring(0,transfertype.indexOf("//"));
-                    }
-                    ruletag= transfertype;
-                    continue;
-                }else if(rule.replaceAll("\\s*", "").startsWith("endtransfertype")){
-                    //结束一组规则生成组信息
-                    if(ruletag.startsWith("nomallogical")){
-                        rulemap.put("type","nomallogical");
-                        rulemap.put("data",listRules);
-                        queuerule.offer(rulemap);
-                    }else if(ruletag.startsWith("booleanlogical")){
-                        rulemap.put("type","booleanlogical");
-                        rulemap.put("data",listRules);
-                        queuerule.offer(rulemap);
-                    }else if(ruletag.startsWith("dynamicmatchrowlogical")){
-                        if(cdl.getCount()!=0){
-                            errorgroup.append(ruletag+"转换文件组信息有误!组信息不全;");
-                            break;
-                        }else{
-                            rulemap.put("type","dynamicmatchrowlogical");
-                            rulemap.put("data",tempmap);
-                            queuerule.offer(rulemap);
-                        }
-                        continue;
-                    }
-                    continue;
-                }
-                if(rule.indexOf("//")!=-1){
-                    rule=rule.substring(0,rule.indexOf("//"));
-                }
-                if(ruletag==null||StringUtils.isEmpty(ruletag)){
-                    errorgroup.append(ruletag+"转换文件组配置起始标识转换类型!以starttransfertype开头;");
-                }
-                if(ruletag.startsWith("nomallogical")){
-                    listRules.add(rule);
-                }else if(ruletag.startsWith("booleanlogical")){
-                    listRules.add(rule);
-                }else if(ruletag.startsWith("dynamicmatchrowlogical")){
-                    //每一组包含reportpath,documentpath,fixedtr,dynamictrstartpos,dynamictrreleations,dynamictrendpos,groupend1信息
-                    String[] entry = new String[2];
-                    if(rule.indexOf("=")!=-1){
-                        entry[0] = rule.split("=")[0];
-                        if(rule.split("=").length==1){
-                            entry[1] = "";
-                        }else{
-                            entry[1] = rule.split("=")[1];
-                        }
-                    }
-                    if(entry[0]!=null&&entry[0].equals("reportpath")){
-                        cdl.countDown();
-                        tempmap.put(entry[0],entry[1]);
-                    }else if(entry[0]!=null&&entry[0].equals("documentpath")){
-                        cdl.countDown();
-                        tempmap.put(entry[0],entry[1]);
-                    }else if(entry[0]!=null&&entry[0].equals("fixedtoptr")){
-                        cdl.countDown();
-                        tempmap.put(entry[0],entry[1]);
-                    }else if(entry[0]!=null&&entry[0].equals("fixedbottomtr")){
-                        cdl.countDown();
-                        tempmap.put(entry[0],entry[1]);
-                    }else if(entry[0]!=null&&entry[0].equals("dynamictrstartpos")){
-                        cdl.countDown();
-                        tempmap.put(entry[0],entry[1]);
-                    }else if(entry[0]!=null&&entry[0].equals("dynamictrreleations")){
-                        cdl.countDown();
-                        tempmap.put(entry[0],entry[1]);
-                    }else if(entry[0]!=null&&entry[0].equals("dynamictrendpos")){
-                        cdl.countDown();
-                        tempmap.put(entry[0],entry[1]);
-                    }
-                }
+                listRules.add(rule);
             }
+            rulemap.put("type","nomallogical");
+            rulemap.put("data",listRules);
+            queuerule.offer(rulemap);
             result.put("data",queuerule);
             result.put("error",errorgroup.toString());
             return result;
@@ -463,8 +446,10 @@ public class RuleDataFilterUtils {
         Map<String, List<String>> map = new HashMap<String, List<String>>();
         List<String> listRules = new ArrayList<String>();
         String prefix = "";
-//        Collections.reverse(rules);
+        Collections.reverse(rules);
         for (String rule : rules) {
+            Matcher m = pattern.matcher(rule);
+            rule = m.replaceAll("");
             if (StringUtils.isEmpty(rule) || rule.startsWith("//") || rule.replace(" ", "").startsWith("##version")|| (rule.startsWith("##") && rule.contains("version"))) {
                 continue;
             }

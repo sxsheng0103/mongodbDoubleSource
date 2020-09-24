@@ -217,6 +217,12 @@ public class TransferJsonDataServiceImpl implements ITransferJsonDataService{
 		Queue rulegroupQueue =  (Queue)ruleresult.get("data");
 		String temprule = "";
 		String dataprefix = "";
+		if(rulegroupQueue==null){
+			log.error(nsrdq+"-"+ruleszcode+"-"+formid+":json解析类型错误请检查解析类型");
+			tempresult.put("code", "error:" + formid);
+			tempresult.put("message", formid + "解析类型错误请检查解析类型!");
+			return tempresult;
+		}
 		while(!rulegroupQueue.isEmpty()){
 			Map<String,Object> rulegroup = 	(Map<String,Object>)rulegroupQueue.poll();
 			String type = rulegroup.get("type").toString();

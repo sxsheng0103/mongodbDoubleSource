@@ -193,6 +193,12 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 						result.put(form, tempresult);
 					}
 					error.setLength(0);
+					if(rulegroupQueue==null){
+						log.error(nsrdq+"-"+ruleszcode+"-"+formid+":html解析类型错误请检查解析类型");
+						tempresult.put("code", "error:" + formid);
+						tempresult.put("message", formid + "解析类型错误请检查解析类型!");
+						continue;
+					}
 					while(!rulegroupQueue.isEmpty()){
 						Map<String,Object> rulegroup = 	(Map<String,Object>)rulegroupQueue.poll();
 						String type = rulegroup.get("type").toString();
@@ -357,7 +363,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 	 * @param formcode
 	 * @param id
 	 * @return
-	 * @description 方案二：当附加税在增值税里边存储在一块时（例如上海增值税+附加税）转化原始数据类型为html格式的原始报文为标准报文，
+	 * @description 方案二：当附加税在增值税里边存储在一块时（例如上海增值税+附加税）和 如云南企业会计制度现金流量表  转化原始数据类型为html格式的原始报文为标准报文，
      * 将附加税当成一个整体数据块来处理
 	 */
 	public Map<String, Object> transferMixHtml(Map<String, String> dataMap, String nsrdq, String ruleszcode, String formcode, String id, List<AsyncBusinessTransferRuleEntity> transferRuleEntity,JSONObject resultData) {
