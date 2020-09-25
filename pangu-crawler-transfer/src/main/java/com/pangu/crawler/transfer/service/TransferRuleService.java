@@ -11,17 +11,17 @@ import com.pangu.crawler.business.dao.mongoDB.operation.auxiliaryutils.Paging;
 import com.pangu.crawler.framework.utils.Base64Util;
 import com.pangu.crawler.framework.utils.StringUtils;
 import com.pangu.crawler.framework.utils.UUIDUtils;
+import com.pangu.crawler.transfer.com.log.CacheInfo;
 import com.pangu.crawler.transfer.enums.SchedualEnum;
 import com.pangu.crawler.transfer.service.iservice.ITransferHtmlDataService;
 import com.pangu.crawler.transfer.service.iservice.ITransferJsonDataService;
+import com.pangu.crawler.transfer.com.log.TLog;
 import com.pangu.crawler.transfer.utils.TimeUtils;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Service;
 
-import java.rmi.server.UID;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,8 +29,9 @@ import java.util.concurrent.ScheduledFuture;
 import org.springframework.scheduling.support.CronTrigger;
 
 @Service
-@Slf4j
 public class TransferRuleService {
+
+    private static final TLog logger = new TLog(TransferRuleService.class);
 
     @Autowired
     TaskManagerService taskManagerService;
@@ -60,7 +61,7 @@ public class TransferRuleService {
         try{
             properties.load(TransferRuleService.class.getResourceAsStream("/config.properties"));
         }catch (Exception e){
-            log.error("加载初始化参数失败");
+            logger.error("加载初始化参数失败");
         }
     }
 
@@ -71,13 +72,13 @@ public class TransferRuleService {
         try{
             initOriginSzs("","");
         }catch (Exception e){
-            log.warn("查找税种关系对应关系失败!需尽快排查问题");
+            logger.warn("查找税种关系对应关系失败!需尽快排查问题");
             new RuntimeException("查找税种关系对应关系失败!");
         }
         if(!originSzCodes.isEmpty()&&noondealing == true){
             TransferService(null,id,"","");
         }else{
-            log.warn("没有查到符合的税种对应关系");
+            logger.warn("没有查到符合的税种对应关系");
             new RuntimeException("没有查到符合的税种对应关系!");
         }
     }
@@ -92,17 +93,18 @@ public class TransferRuleService {
      * @param expresslist
      */
     public void executeTransferService(String szs, String dqs,String isdelay, long delaytime, SchedualEnum exeType, Object expresslist){
-        log.info("地区:"+dqs+"税种:"+szs);
+        logger.info("地区:"+dqs+"税种:"+szs);
+
         try{
             initOriginSzs(dqs,szs);
         }catch (Exception e){
-            log.warn("查找税种关系对应关系失败!需尽快排查问题");
+            logger.warn("查找税种关系对应关系失败!需尽快排查问题");
             new RuntimeException("查找税种关系对应关系失败!");
         }
         if(!originSzCodes.isEmpty()&&noondealing == true){
             TransferServiceDispatch("1",null,szs,dqs);
         }else{
-            log.warn("没有查到符合的税种对应关系");
+            logger.warn("没有查到符合的税种对应关系");
             new RuntimeException("没有查到符合的税种对应关系!");
         }
     }
@@ -118,12 +120,12 @@ public class TransferRuleService {
         params1.put("rulesz",szs);
         taxCodeReleationEntity = taxCodeReleationService.queryHistoricalData(params1,null,null);
         if(taxCodeReleationEntity.getData().size()<=0){
-            log.warn(dqs+"-"+szs+"满足的税种关系配置没有找到,请先配置税种关系");
+            logger.warn(dqs+"-"+szs+"满足的税种关系配置没有找到,请先配置税种关系");
         }else{
             Set<String> codes = new HashSet<String>();
             for(AsyncAreaTaxCodeReleationEntity e:taxCodeReleationEntity.getData()){
                 if(StringUtils.isEmpty(e.dataszcode)){
-                    log.warn(dqs+"-"+szs+"税种关系配置不能为空：->"+e.dataszcode);
+                    logger.warn(dqs+"-"+szs+"税种关系配置不能为空：->"+e.dataszcode);
                 }else{
                     codes.add(e.dataszcode);
                 }
@@ -155,7 +157,7 @@ public class TransferRuleService {
                 List<AsyncQueryHistoricalDataInfoEntity> data = paging.getData();
                 if(data.size()>0){
                     noondealing = false;
-                    log.info("当前拉取了"+data.size()+"条数据,正在处理");
+                    logger.info("当前拉取了"+data.size()+"条数据,正在处理");
                     String ruleszcode = "";
                     for(AsyncQueryHistoricalDataInfoEntity historicalDataInfoEntity :data){
                         if(historicalDataInfoEntity.getZhState()!=null&&historicalDataInfoEntity.getZhState()==1){
@@ -178,7 +180,7 @@ public class TransferRuleService {
                                     result.put("fianlresult","转化出错");
                                     result.put("message","转化成JSON格式报文数据出错");
                                     result.put("data",new JSONObject());
-                                    log.error(TimeUtils.getCurrentDateTime(new Date(),TimeUtils.sdf1)+historicalDataInfoEntity.getId()+"转化成JSON格式报文数据出错");
+                                    logger.error(TimeUtils.getCurrentDateTime(new Date(),TimeUtils.sdf1)+historicalDataInfoEntity.getId()+"转化成JSON格式报文数据出错");
                                    new SkipException("");
                                 }
                                 for(Map.Entry<String,String> map :sbdata.entrySet()){
@@ -191,7 +193,7 @@ public class TransferRuleService {
                                 params1.put("datasz",historicalDataInfoEntity.getSzdm());
                                 taxCodeReleationEntity = taxCodeReleationService.queryHistoricalData(params1,null,null);
                                 if(taxCodeReleationEntity.getData().size()<=0){
-                                    log.warn(historicalDataInfoEntity.getNsrdq()+"-"+ruleszcode+"转化失败!税种关系配置没有找到,请先配置税种关系");
+                                    logger.warn(historicalDataInfoEntity.getNsrdq()+"-"+ruleszcode+"转化失败!税种关系配置没有找到,请先配置税种关系");
                                     result.put("code","fail");
                                     result.put("fianlresult","转化失败!");
                                     result.put("message","税种关系配置没有找到,请先配置税种关系");
@@ -209,7 +211,7 @@ public class TransferRuleService {
                                     params.put("status","1");
                                     List<AsyncBusinessTransferRuleEntity> transferRuleEntity = transferRuleDataService.queryHistoricalData(params,null,null).getData();
                                     if(transferRuleEntity.size()<=0){
-                                        log.warn(historicalDataInfoEntity.getNsrdq()+"-"+ruleszcode+"没有上传对应文件或者规则未启用");
+                                        logger.warn(historicalDataInfoEntity.getNsrdq()+"-"+ruleszcode+"没有上传对应文件或者规则未启用");
                                         result.put("code","fail");
                                         result.put("fianlresult","转化失败!");
                                         result.put("message","没有上传此税种对应规则文件或者规则未启用");
@@ -225,7 +227,7 @@ public class TransferRuleService {
                                     params.put("status","1");
                                     List<AsyncBusinessTransferRuleEntity> transferRuleEntity = transferRuleDataService.queryHistoricalData(params,null,null).getData();
                                     if(transferRuleEntity.size()<=0){
-                                        log.warn(historicalDataInfoEntity.getNsrdq()+"-"+ruleszcode+"没有上传对应文件或者规则未启用");
+                                        logger.warn(historicalDataInfoEntity.getNsrdq()+"-"+ruleszcode+"没有上传对应文件或者规则未启用");
                                         result.put("code","fail");
                                         result.put("fianlresult","转化失败!");
                                         result.put("message","没有上传此税种对应文件或者未启用符合的规则文件");
@@ -238,18 +240,18 @@ public class TransferRuleService {
                                     result.put("code","fail");
                                     result.put("fianlresult","转化失败!"+historicalDataInfoEntity.getId()+"数据源格式不是[json/html]:"+historicalDataInfoEntity.getDataType());
                                     result.put("data",new JSONObject());
-                                    log.warn("请检查处理:获取数据源的dataType不是[josn/html],而是:"+historicalDataInfoEntity.getDataType());
+                                    logger.warn("请检查处理:获取数据源的dataType不是[josn/html],而是:"+historicalDataInfoEntity.getDataType());
                                    new SkipException("");
                                 }
                                 try{
                                     historicalDataInfoEntity.setDataOut(Base64Util.encode(JSON.toJSONString(result.get("data")).replaceAll("(\\\\r\\\\n|\\\\r|\\\\n|\\\\n\\\\r| )", "")));
                                 }catch (Exception eee){
                                     eee.printStackTrace();
-                                    log.info("输出结果报文json转化异常"+historicalDataInfoEntity.getId()+"："+result.get("data"));
+                                    logger.info("输出结果报文json转化异常"+historicalDataInfoEntity.getId()+"："+result.get("data"));
                                     result.put("code","fail");
                                     result.put("fianlresult","报文结果保存失败!");
                                     result.put("data",new JSONObject());
-                                   new SkipException("");
+                                    new SkipException("");
                                 }
                                 result.remove("data");
                                 historicalDataInfoEntity.setResult(Base64Util.encode(JSON.toJSONString(result)));
@@ -271,12 +273,12 @@ public class TransferRuleService {
                             result.put("fianlresult","转化失败!");
                             result.put("message","转化异常数据ID:"+historicalDataInfoEntity.getId()+"message:"+JSON.toJSONString(result));
                             e.printStackTrace();
-                            log.error(TimeUtils.getCurrentDateTime(new Date(),TimeUtils.sdf4)+"转化异常"+historicalDataInfoEntity.getNsrdq()+"-"+ruleszcode+"\n"+e.getMessage());
+                            logger.error(TimeUtils.getCurrentDateTime(new Date(),TimeUtils.sdf4)+"转化异常"+historicalDataInfoEntity.getNsrdq()+"-"+ruleszcode+"\n"+e.getMessage());
                             return;
                         }finally {
                             if(result.get("code")==null){
                                 historicalDataInfoEntity.setZhState(109);
-                                log.warn("存在记录转化状态未捕获到"+historicalDataInfoEntity.getId());
+                                logger.warn("存在记录转化状态未捕获到"+historicalDataInfoEntity.getId());
                             }else if(result.get("code").equals("error")){
                                 historicalDataInfoEntity.setZhState(101);
                             }else if(result.get("code").equals("warn")){
@@ -286,7 +288,7 @@ public class TransferRuleService {
                             }else if(result.get("code").equals("succsess")){
                                 historicalDataInfoEntity.setZhState(3);
                             }else{
-                                log.warn("存在记录转化状态未知"+historicalDataInfoEntity.getId()+result.get("code"));
+                                logger.warn("存在记录转化状态未知"+historicalDataInfoEntity.getId()+result.get("code"));
                                 historicalDataInfoEntity.setZhState(109);
                             }
                             historicalDataInfoEntity.setResult(Base64Util.encode(JSON.toJSONString(result)));
@@ -294,7 +296,7 @@ public class TransferRuleService {
                         }
                     }
                 }else{
-                    log.info("地区:"+dqs+"->税种"+szs+"->数据数量为0");
+                    logger.info("地区:"+dqs+"->税种"+szs+"->数据数量为0");
                 }
             }
         } catch (Exception e) {
@@ -306,7 +308,7 @@ public class TransferRuleService {
                 instancedata.setResult(JSON.toJSONString(r));
             }
             e.printStackTrace();
-            log.error("定时批量操作发生未知异常:", e.getMessage());
+            logger.error("定时批量操作发生未知异常:"+e.getMessage());
         }finally {
             noondealing = true;
             if(instancedata!=null){
@@ -337,7 +339,7 @@ public class TransferRuleService {
             paging  = crawleredDataService.queryHistoricalData(null,params,1,Integer.parseInt(properties.getProperty("limit")));
             List<AsyncQueryHistoricalDataInfoEntity> data = paging.getData();
             if(data.size()>0){
-                log.info("对应id数据正在处理");
+                logger.info("对应id数据正在处理");
                 String ruleszcode = "";
                 for(AsyncQueryHistoricalDataInfoEntity historicalDataInfoEntity :data){
                     Map<String,Object> result = new HashMap<String,Object>();
@@ -356,7 +358,7 @@ public class TransferRuleService {
                                 result.put("fianlresult","转化出错");
                                 result.put("message","转化成JSON格式报文数据出错");
                                 result.put("data",new JSONObject());
-                                log.error(TimeUtils.getCurrentDateTime(new Date(),TimeUtils.sdf1)+historicalDataInfoEntity.getId()+"转化成JSON格式报文数据出错");
+                                logger.error(TimeUtils.getCurrentDateTime(new Date(),TimeUtils.sdf1)+historicalDataInfoEntity.getId()+"转化成JSON格式报文数据出错");
                                 new SkipException("");
                             }
                             for(Map.Entry<String,String> map :sbdata.entrySet()){
@@ -369,7 +371,7 @@ public class TransferRuleService {
                             params1.put("datasz",historicalDataInfoEntity.getSzdm());
                             taxCodeReleationEntity = taxCodeReleationService.queryHistoricalData(params1,null,null);
                             if(taxCodeReleationEntity.getData().size()<=0){
-                                log.warn(historicalDataInfoEntity.getNsrdq()+"-"+ruleszcode+"转化失败!税种关系配置没有找到,请先配置税种关系");
+                                logger.warn(historicalDataInfoEntity.getNsrdq()+"-"+ruleszcode+"转化失败!税种关系配置没有找到,请先配置税种关系");
                                 result.put("code","fail");
                                 result.put("fianlresult","转化失败!");
                                 result.put("message","税种关系配置没有找到,请先配置税种关系");
@@ -387,7 +389,7 @@ public class TransferRuleService {
                                 params.put("status","1");
                                 List<AsyncBusinessTransferRuleEntity> transferRuleEntity = transferRuleDataService.queryHistoricalData(params,null,null).getData();
                                 if(transferRuleEntity.size()<=0){
-                                    log.warn(historicalDataInfoEntity.getNsrdq()+"-"+ruleszcode+"没有上传对应文件或者规则未启用");
+                                    logger.warn(historicalDataInfoEntity.getNsrdq()+"-"+ruleszcode+"没有上传对应文件或者规则未启用");
                                     result.put("code","fail");
                                     result.put("fianlresult","转化失败!");
                                     result.put("message","没有上传此税种对应规则文件或者规则未启用");
@@ -403,7 +405,7 @@ public class TransferRuleService {
                                 params.put("status","1");
                                 List<AsyncBusinessTransferRuleEntity> transferRuleEntity = transferRuleDataService.queryHistoricalData(params,null,null).getData();
                                 if(transferRuleEntity.size()<=0){
-                                    log.warn(historicalDataInfoEntity.getNsrdq()+"-"+ruleszcode+"没有上传对应文件或者规则未启用");
+                                    logger.warn(historicalDataInfoEntity.getNsrdq()+"-"+ruleszcode+"没有上传对应文件或者规则未启用");
                                     result.put("code","fail");
                                     result.put("fianlresult","转化失败!");
                                     result.put("message","没有上传此税种对应文件或者未启用符合的规则文件");
@@ -416,14 +418,14 @@ public class TransferRuleService {
                                 result.put("code","fail");
                                 result.put("fianlresult","转化失败!"+historicalDataInfoEntity.getId()+"数据源格式不是[json/html]:"+historicalDataInfoEntity.getDataType());
                                 result.put("data",new JSONObject());
-                                log.warn("请检查处理:获取数据源的dataType不是[josn/html],而是:"+historicalDataInfoEntity.getDataType());
+                                logger.warn("请检查处理:获取数据源的dataType不是[josn/html],而是:"+historicalDataInfoEntity.getDataType());
                                 new SkipException("");
                             }
                             try{
                                 historicalDataInfoEntity.setDataOut(Base64Util.encode(JSON.toJSONString(result.get("data")).replaceAll("(\\\\r\\\\n|\\\\r|\\\\n|\\\\n\\\\r| )", "")));
                             }catch (Exception eee){
                                 eee.printStackTrace();
-                                log.info("输出结果报文json转化异常"+historicalDataInfoEntity.getId()+"："+result.get("data"));
+                                logger.info("输出结果报文json转化异常"+historicalDataInfoEntity.getId()+"："+result.get("data"));
                                 result.put("code","fail");
                                 result.put("fianlresult","报文结果保存失败!");
                                 result.put("data",new JSONObject());
@@ -449,12 +451,12 @@ public class TransferRuleService {
                         result.put("fianlresult","转化失败!");
                         result.put("message","转化异常数据ID:"+historicalDataInfoEntity.getId()+"message:"+JSON.toJSONString(result));
                         e.printStackTrace();
-                        log.error(TimeUtils.getCurrentDateTime(new Date(),TimeUtils.sdf4)+"转化异常"+historicalDataInfoEntity.getNsrdq()+"-"+ruleszcode+"\n"+e.getMessage());
+                        logger.error(TimeUtils.getCurrentDateTime(new Date(),TimeUtils.sdf4)+"转化异常"+historicalDataInfoEntity.getNsrdq()+"-"+ruleszcode+"\n"+e.getMessage());
                         return;
                     }finally {
                         if(result.get("code")==null){
                             historicalDataInfoEntity.setZhState(109);
-                            log.warn("存在记录转化状态未捕获到"+historicalDataInfoEntity.getId());
+                            logger.warn("存在记录转化状态未捕获到"+historicalDataInfoEntity.getId());
                         }else if(result.get("code").equals("error")){
                             historicalDataInfoEntity.setZhState(101);
                         }else if(result.get("code").equals("warn")){
@@ -464,7 +466,7 @@ public class TransferRuleService {
                         }else if(result.get("code").equals("succsess")){
                             historicalDataInfoEntity.setZhState(3);
                         }else{
-                            log.warn("存在记录转化状态未知"+historicalDataInfoEntity.getId()+result.get("code"));
+                            logger.warn("存在记录转化状态未知"+historicalDataInfoEntity.getId()+result.get("code"));
                             historicalDataInfoEntity.setZhState(109);
                         }
                         historicalDataInfoEntity.setResult(Base64Util.encode(JSON.toJSONString(result)));
@@ -472,7 +474,7 @@ public class TransferRuleService {
                     }
                 }
             }else{
-                log.info("对应id数据数量为0");
+                logger.info("对应id数据数量为0");
             }
         } catch (Exception e) {
             Map<String,String> r = new HashMap<String,String>();
@@ -483,7 +485,7 @@ public class TransferRuleService {
                 instancedata.setResult(JSON.toJSONString(r));
             }
             e.printStackTrace();
-            log.error("操作发生未知异常:", e.getMessage());
+            logger.error("操作发生未知异常:"+e.getMessage());
         }finally {
             if(instancedata!=null){
                 asyncQueryStockDataOperation.save(instancedata);
@@ -532,6 +534,7 @@ public class TransferRuleService {
         ScheduledFuture<?> future = threadPoolTaskScheduler.schedule(new Runnable() {
             @Override
             public void run() {
+                new CacheInfo(task.getName(),task.getTid(),null,null);
                 executeTransferService(task.getSzs(),task.getNsrdqs(),task.isdelay,task.getDelayTime(), SchedualEnum.fixrate,task.getExpressContent());
             }
         }, new CronTrigger("0/"+rate+" * * * * *"));
