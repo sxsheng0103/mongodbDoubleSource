@@ -27,7 +27,13 @@ import java.util.regex.Pattern;
 @Service
 public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 
-	private static final TLog logger = new TLog(TransferHtmlDataServiceImpl.class);
+	private static TLog registerLog1(){
+		return TLog.registerLog(TransferHtmlDataServiceImpl.class);
+	}
+
+	private TLog registerLog(){
+		return TLog.registerLog(this.getClass());
+	}
 	private Pattern pattern = Pattern.compile("\\s*|\t|\r|\n");
 	@Autowired
 	TransferRuleDataService transferRuleDataService;
@@ -46,7 +52,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 	 * @param id
 	 * @return
 	 * @description 转化原始类型为html格式的报文为标准报文
-     *              所有的html原始文件通过这个方法进行转换，通过转换规则‘/文件转换成标准报文文件
+	 *              所有的html原始文件通过这个方法进行转换，通过转换规则‘/文件转换成标准报文文件
 	 */
 	public Map<String, Object> majarTransferHtmlData(Map<String, String> dataMap, String nsrdq, String ruleszcode, String formcode, String id, List<AsyncBusinessTransferRuleEntity> transferRuleEntity) {
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -73,7 +79,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 					paramsfjs.put("rulesz", SzEnum.fjs.getCode());
 					List<AsyncBusinessTransferRuleEntity> transferRuleEntityfjs = transferRuleDataService.queryHistoricalData(paramsfjs, null, null).getData();
 					/* zzsfjsMap 这个HashMap里边放了一个原始报文节点，里边存附件税html，
-					* 调用 transferMixHtml 方法处理附加税转换成附加税的标准报文*/
+					 * 调用 transferMixHtml 方法处理附加税转换成附加税的标准报文*/
 					Map<String, Object> resultfjs = transferMixHtml(zzsfjsMap, nsrdq, SzEnum.fjs.getCode(), formcode, id, transferRuleEntityfjs,resultData);
 					tempresult = new HashMap<String, String>();
 					tempresult.put("code", resultfjs.get("code") + ":" +form );
@@ -91,7 +97,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 					tempresult.put("code", "fail:"+ form );
 					tempresult.put("message", form + ":数据源表单内容null");
 					result.put(form, tempresult);
-					logger.warn(TimeUtils.getCurrentDateTime(new Date(), TimeUtils.sdf4) + nsrdq + "-" + ruleszcode + "-" + formcode + "表单内容不存在!");
+					registerLog().warn(TimeUtils.getCurrentDateTime(new Date(), TimeUtils.sdf4) + nsrdq + "-" + ruleszcode + "-" + formcode + "表单内容不存在!");
 					continue;
 				}
 
@@ -100,7 +106,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 				try {
 					doc = Jsoup.parse(map.getValue());
 				} catch (Exception eq) {
-					logger.warn(nsrdq + "-" + ruleszcode + "转化document失败,需要检查原始数据格式问题:" + eq.getMessage());
+					registerLog().warn(nsrdq + "-" + ruleszcode + "转化document失败,需要检查原始数据格式问题:" + eq.getMessage());
 					tempresult = new HashMap<String, String>();
 					tempresult.put("code", "error:" + form);
 					tempresult.put("message", "转化document失败,需要检查原始数据格式问题:" + eq.getMessage() + "-" + form);
@@ -115,7 +121,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 					 * zb类型的原始报文结构包含整个税种的所有表单，下边为处理的方式*****************************/
 					if (breakoneflag == true) {
 						if (ruleEntity == null) {
-							logger.warn(nsrdq + "-" + ruleszcode + "没有找到对应的表单规则文件:" + form);
+							registerLog().warn(nsrdq + "-" + ruleszcode + "没有找到对应的表单规则文件:" + form);
 							tempresult = new HashMap<String, String>();
 							tempresult.put("code", "warn:" + form);
 							tempresult.put("message", "没有找到对应的表单规则文件:" + form);
@@ -175,7 +181,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 				}
 				/********************************************** 三、处zb、zzsybnsr&fjs类型的原始报文结构使用下边通用的格式下边为处理的方式**********/
 				if (ruleEntity == null) {
-					logger.warn(nsrdq + "-" + ruleszcode + "没有找到对应的表单规则文件:" + form);
+					registerLog().warn(nsrdq + "-" + ruleszcode + "没有找到对应的表单规则文件:" + form);
 					tempresult = new HashMap<String, String>();
 					tempresult.put("code", "warn:" + form);
 					tempresult.put("message", "没有找到对应的表单规则文件:" + form);
@@ -187,14 +193,14 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 					Queue rulegroupQueue =  (Queue)ruleresult.get("data");
 					String errorgroup = ruleresult.get("error").toString();
 					if(!errorgroup.equals("")){
-						logger.warn(nsrdq + "-" + ruleszcode + "规则配置文件不全请参照说明编写规则文件:" + form);//+formid+"<->"
+						registerLog().warn(nsrdq + "-" + ruleszcode + "规则配置文件不全请参照说明编写规则文件:" + form);//+formid+"<->"
 						tempresult.put("code", "error:" + form);
 						tempresult.put("message", form + ":"+errorgroup);
 						result.put(form, tempresult);
 					}
 					error.setLength(0);
 					if(rulegroupQueue==null){
-						logger.error(nsrdq+"-"+ruleszcode+"-"+formid+":html解析类型错误请检查解析类型");
+						registerLog().error(nsrdq+"-"+ruleszcode+"-"+formid+":html解析类型错误请检查解析类型");
 						tempresult.put("code", "error:" + formid);
 						tempresult.put("message", formid + "解析类型错误请检查解析类型!");
 						continue;
@@ -236,7 +242,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 									tempresult.put(e.getKey().toString(),e.getValue()==null?"":e.getValue().toString());
 								}
 							}else{
-								logger.error("解析类型错误，没有这种类型的处理功能");
+								registerLog().error("解析类型错误，没有这种类型的处理功能");
 							}
 						}catch (Exception e){
 							error.append("异常出错");
@@ -320,16 +326,16 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 				try{
 					if(rule.substring(rule.indexOf("=") + 1).trim().equals("")){
 						errorTemp.append(rule + ":html中没有指定html路径");
-						logger.warn(nsrdq + "-" + ruleszcode + rule + ":" + ":html中没有指定html路径");
+						registerLog().warn(nsrdq + "-" + ruleszcode + rule + ":" + ":html中没有指定html路径");
 						continue;
 					}
 					Elements links = doc.select(rule.substring(rule.indexOf("=") + 1)); //带有href属性的a元素
 					if (links.size() == 0) {
 						errorTemp.append(rule + ":html中没有找到节点;");
-						logger.warn(nsrdq + "-" + ruleszcode + rule + ":" + ":节点不存在");
+						registerLog().warn(nsrdq + "-" + ruleszcode + rule + ":" + ":节点不存在");
 					} else if (links.size() != 1) {
 						errorTemp.append(rule + ":html中有重复节点;");
-						logger.warn(nsrdq + "-" + ruleszcode + ":" + rule + ":html中有重复节点");
+						registerLog().warn(nsrdq + "-" + ruleszcode + ":" + rule + ":html中有重复节点");
 					} else {
 						if(links.get(0).wholeText().trim().contains("■ 是") ){
 							JSONPath.set(resultData, rule.substring(0, rule.indexOf("=")), "Y");
@@ -338,7 +344,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 						}
 					}
 				}catch (Exception e){
-					logger.error("规则：["+errorrule+"]转换失败");
+					registerLog().error("规则：["+errorrule+"]转换失败");
 					result.put("code","error");
 					errorTemp.append("规则：["+errorrule+"]转换失败");
 				}
@@ -350,7 +356,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 			result.put("message",errorTemp.toString());
 		}catch (Exception e){
 			e.printStackTrace();
-			logger.error("处理错误"+e.getMessage());
+			registerLog().error("处理错误"+e.getMessage());
 		}finally {
 			error.append(errorTemp);
 			return result;
@@ -364,7 +370,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 	 * @param id
 	 * @return
 	 * @description 方案二：当附加税在增值税里边存储在一块时（例如上海增值税+附加税）和 如云南企业会计制度现金流量表  转化原始数据类型为html格式的原始报文为标准报文，
-     * 将附加税当成一个整体数据块来处理
+	 * 将附加税当成一个整体数据块来处理
 	 */
 	public Map<String, Object> transferMixHtml(Map<String, String> dataMap, String nsrdq, String ruleszcode, String formcode, String id, List<AsyncBusinessTransferRuleEntity> transferRuleEntity,JSONObject resultData) {
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -379,7 +385,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 					tempresult.put("code","fail:"+ form  );
 					tempresult.put("message", form + ":数据源表单内容null");
 					result.put(form, tempresult);
-					logger.warn(TimeUtils.getCurrentDateTime(new Date(), TimeUtils.sdf4) + nsrdq + "-" + ruleszcode + "-" + formcode + "表单内容不存在!");
+					registerLog().warn(TimeUtils.getCurrentDateTime(new Date(), TimeUtils.sdf4) + nsrdq + "-" + ruleszcode + "-" + formcode + "表单内容不存在!");
 					continue;
 				}
 				String formid = "";
@@ -387,7 +393,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 				try {
 					doc = Jsoup.parse(map.getValue().toString());
 				} catch (Exception eq) {
-					logger.warn(nsrdq + "-" + ruleszcode + "转化document失败,需要检查原始数据格式问题:" + eq.getMessage());
+					registerLog().warn(nsrdq + "-" + ruleszcode + "转化document失败,需要检查原始数据格式问题:" + eq.getMessage());
 					tempresult = new HashMap<String, String>();
 					tempresult.put("code", "error:" + form);
 					tempresult.put("message", "转化document失败,需要检查原始数据格式问题:" + eq.getMessage() + "-" + form);
@@ -400,7 +406,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 					result.put(form, tempresult);
 				}
 			}
-            result.put("data", resultData);
+			result.put("data", resultData);
 		} catch (JSONException e) {
 			e.printStackTrace();
 			tempresult = new HashMap<String, String>();
@@ -475,10 +481,10 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 					Elements links = doc.select(rule.substring(rule.indexOf("=") + 1)); //带有href属性的a元素
 					if (links.size() == 0) {
 						errorTemp.append(rule + ":html中没有找到节点;");
-						logger.warn(nsrdq + "-" + ruleszcode + rule + ":" + ":节点不存在");
+						registerLog().warn(nsrdq + "-" + ruleszcode + rule + ":" + ":节点不存在");
 					} else if (links.size() != 1) {
 						errorTemp.append(rule + ":html中有重复节点;");
-						logger.warn(nsrdq + "-" + ruleszcode + ":" + rule + ":html中有重复节点");
+						registerLog().warn(nsrdq + "-" + ruleszcode + ":" + rule + ":html中有重复节点");
 					} else {
 						JSONPath.set(resultData, rule.substring(0, rule.indexOf("=")), links.get(0).wholeText().replaceAll("　","").replaceAll(" ",""));
 					}
@@ -494,7 +500,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 			result.put("message",errorTemp.toString());
 		}catch (Exception e){
 			e.printStackTrace();
-			logger.error("处理错误"+e.getMessage());
+			registerLog().error("处理错误"+e.getMessage());
 		}finally {
 			error.append(errorTemp);
 			return result;
@@ -519,7 +525,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 
 		Map<String, String> tempresult = new HashMap<String, String>();
 		if (ruleEntity == null) {
-			logger.warn(nsrdq + "-" + ruleszcode + "没有找到对应的表单规则文件:" + form);//+formid+"<->"
+			registerLog().warn(nsrdq + "-" + ruleszcode + "没有找到对应的表单规则文件:" + form);//+formid+"<->"
 			tempresult.put("code", "warn:" + form);
 			tempresult.put("message", form + ":没有找到对应的表单规则文件");
 			return tempresult;
@@ -546,30 +552,30 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 						try {
 							if (temprule.indexOf("=") == -1 || temprule.substring(rule.indexOf("=") + 1).replace("\\s*", "").equals("")) {
 								error.append(rule + ":节点CSS选择器为空");
-								logger.warn(nsrdq + "-" + ruleszcode + rule + ":" + ":节点CSS选择器为空");
+								registerLog().warn(nsrdq + "-" + ruleszcode + rule + ":" + ":节点CSS选择器为空");
 								continue;
 							}
 							if (rule.indexOf("=") == -1 || temprule.substring(rule.indexOf("=") + 1).equals("")) {
 								error.append(rule + ":html中没有找到节点;");
-								logger.warn(nsrdq + "-" + ruleszcode + rule + ":" + ":节点不存在");
+								registerLog().warn(nsrdq + "-" + ruleszcode + rule + ":" + ":节点不存在");
 							}
 							Elements links = doc.select(temprule.substring(rule.indexOf("=") + 1)); //带有href属性的a元素
 							if (links.size() == 0) {
 								error.append(rule + ":html中没有找到节点;");
-								logger.warn(nsrdq + "-" + ruleszcode + rule + ":" + ":节点不存在");
+								registerLog().warn(nsrdq + "-" + ruleszcode + rule + ":" + ":节点不存在");
 							} else if (links.size() != 1) {
 								error.append(rule + ":html中有重复节点;");
-								logger.warn(nsrdq + "-" + ruleszcode + ":" + rule + ":html中有重复节点");
+								registerLog().warn(nsrdq + "-" + ruleszcode + ":" + rule + ":html中有重复节点");
 							} else {
 								JSONPath.set(resultData, temprule.substring(0, rule.indexOf("=")), links.get(0).wholeText());
 							}
 						} catch (Exception e) {
 							error.append(rule + ":[error]查找数据异常,请检查数据规范填写");
-							logger.warn(nsrdq + "-" + ruleszcode + rule + ":[error]查找数据异常,请检查数据规范填写");
+							registerLog().warn(nsrdq + "-" + ruleszcode + rule + ":[error]查找数据异常,请检查数据规范填写");
 						}
 					} else {
 						error.append(" " + rule + "配置信息错误");
-						logger.warn(nsrdq + "-" + ruleszcode + rule + "配置信息错误dataprefix:" + dataprefix + ",temprule:" + temprule);
+						registerLog().warn(nsrdq + "-" + ruleszcode + rule + "配置信息错误dataprefix:" + dataprefix + ",temprule:" + temprule);
 					}
 				}
 			}
@@ -610,7 +616,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 		Pattern tdrule = Pattern.compile("\\$\\{td(\\d+)}");
 		Map<String, String> tempresult = new HashMap<String, String>();
 		if (ruleEntity == null) {
-			logger.warn(nsrdq + "-" + ruleszcode + "没有找到对应的表单规则文件:" + form);
+			registerLog().warn(nsrdq + "-" + ruleszcode + "没有找到对应的表单规则文件:" + form);
 			tempresult.put("code", "warn:" + form);
 			tempresult.put("message", form + ":没有找到对应的表单规则文件");
 			return tempresult;
@@ -624,20 +630,20 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 			try{
 				rulegroupJson.put(ruleplist.getKey(), (JSONObject) RuleDataFilterUtils.getValidJsonBefore(ruleplist.getValue()));
 			}catch (Exception e){
-				logger.warn(nsrdq + "-" + ruleszcode + "规则文件有错误"+e.getMessage());//+formid+"<->"
+				registerLog().warn(nsrdq + "-" + ruleszcode + "规则文件有错误"+e.getMessage());//+formid+"<->"
 				tempresult.put("code", "warn:" + form);
 				tempresult.put("message", form + ":规则文件有错误"+e.getMessage());
 				return tempresult;
 			}
 		}
 		if (rulegroupJson.entrySet().size() <= 0) {
-			logger.warn(nsrdq + "-" + ruleszcode + "规则文件中未找到规则:" + form);//+formid+"<->"
+			registerLog().warn(nsrdq + "-" + ruleszcode + "规则文件中未找到规则:" + form);//+formid+"<->"
 			tempresult.put("code", "warn:" + form);
 			tempresult.put("message", form + ":规则文件中未找到规则");
 			return tempresult;
 		}
 
-				//遍历html 的dom元素tr模糊查找document节点匹配行tr
+		//遍历html 的dom元素tr模糊查找document节点匹配行tr
 		Object docObj = new JSONObject();
 		for (Map.Entry<String, JSONObject> e : rulegroupJson.entrySet()) {
 			String docPath = (StringUtils.isNotEmpty(e.getKey())&&e.getKey().indexOf("@")!=-1)?e.getKey().substring(0, e.getKey().indexOf("@")):"";
@@ -658,7 +664,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 								|| (contentrule.matcher(e3.getValue() == null ? "" : e3.getValue().toString()).find())||(e3.getValue()!=null&&e3.getValue().toString().trim().equals("--"))) {
 						} else {
 							error.append(docPath + "[" + row + "]." + e3.getKey() + ":[error]格式配置错误,请检查数据规范填写");
-							logger.warn(nsrdq + "-" + ruleszcode + docPath + "[" + row + "]." + e3.getKey() + ":[error]格式配置错误,请检查数据规范填写");
+							registerLog().warn(nsrdq + "-" + ruleszcode + docPath + "[" + row + "]." + e3.getKey() + ":[error]格式配置错误,请检查数据规范填写");
 							continue;
 						}
 						if (e3.getKey().contains("markcol")) {
@@ -683,27 +689,27 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 									rowMarkInfo = "";
 									//存在符合行则行数据都存在
 									for (String e1 : primiry) {
-                                        String trtdindex = "";
-                                        String souceName = "";
-                                        String trtdstr = e1.substring(0, e1.indexOf("@"));
-                                        String trtdtext = e1.substring(e1.indexOf("@") + 1).replace("\\s*", "");
+										String trtdindex = "";
+										String souceName = "";
+										String trtdstr = e1.substring(0, e1.indexOf("@"));
+										String trtdtext = e1.substring(e1.indexOf("@") + 1).replace("\\s*", "");
 										rowMarkInfo+=trtdtext;
-                                        Matcher m = pstr.matcher(trtdtext);
-                                        if (m.find()) {
-                                            trtdtext = m.replaceAll("");
-                                        }
-                                        Matcher matcher = pattern.matcher(trtdstr);
-                                        if (matcher.find()) {
-                                            trtdindex = matcher.group();
-                                        }
-                                        m = pstr.matcher(tds.get(Integer.valueOf(trtdindex)).wholeText());
-                                        if (m.find()) {
-                                            souceName = m.replaceAll("").replaceAll("　","");
-                                         }
-                                        if (!souceName.equals(trtdtext)) {
-                                            return false;//本来返回false，在这里直接结束掉这一条判断
-                                        }
-                                    }
+										Matcher m = pstr.matcher(trtdtext);
+										if (m.find()) {
+											trtdtext = m.replaceAll("");
+										}
+										Matcher matcher = pattern.matcher(trtdstr);
+										if (matcher.find()) {
+											trtdindex = matcher.group();
+										}
+										m = pstr.matcher(tds.get(Integer.valueOf(trtdindex)).wholeText());
+										if (m.find()) {
+											souceName = m.replaceAll("").replaceAll("　","");
+										}
+										if (!souceName.equals(trtdtext)) {
+											return false;//本来返回false，在这里直接结束掉这一条判断
+										}
+									}
 
 									trelement = trlink;
 									return true;
@@ -727,23 +733,23 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 								}
 							} else if (count > 1) {
 								error.append(docPath + "[" + row + "].【"+rowMarkInfo+"】行找到重复行");
-								logger.warn(nsrdq + "-" + ruleszcode + docPath + "[" + row + "].【"+rowMarkInfo+"】行找到重复行");
+								registerLog().warn(nsrdq + "-" + ruleszcode + docPath + "[" + row + "].【"+rowMarkInfo+"】行找到重复行");
 							} else {
 								error.append(docPath + "[" + row + "].【"+rowMarkInfo+"】行未找到,请检查tr标识列是否填写正确【标识名称必须和税局相同】");
-								logger.warn(nsrdq + "-" + ruleszcode + docPath + "[" + row + "].【"+rowMarkInfo+"】行未找到,请检查tr标识列是否填写正确【标识名称必须和税局相同】");
+								registerLog().warn(nsrdq + "-" + ruleszcode + docPath + "[" + row + "].【"+rowMarkInfo+"】行未找到,请检查tr标识列是否填写正确【标识名称必须和税局相同】");
 							}
 						} catch (Exception e2) {
 							e2.printStackTrace();
 							error.append(docPath + "[" + row + "].【"+rowMarkInfo+"】行数据处理异常" + e2.getMessage());
-							logger.warn(nsrdq + "-" + ruleszcode + docPath + "[" + row + "].【"+rowMarkInfo+"】行数据处理异常" + e2.getMessage());
+							registerLog().warn(nsrdq + "-" + ruleszcode + docPath + "[" + row + "].【"+rowMarkInfo+"】行数据处理异常" + e2.getMessage());
 						}
 					} else {
 						error.append(docPath + "[" + row + "].html对应的document节点为空");
-						logger.warn(nsrdq + "-" + ruleszcode + docPath + "[" + row + "].html对应的document节点为空");
+						registerLog().warn(nsrdq + "-" + ruleszcode + docPath + "[" + row + "].html对应的document节点为空");
 					}
 				} catch (Exception e3) {
 					error.append(docPath + "[" + row + "].处理数据异常，请查看联系管理人员查看具体问题" + e3.getMessage());
-					logger.warn(nsrdq + "-" + ruleszcode + docPath + "[" + row + "].处理数据异常，请查看联系管理人员查看具体问题" + e3.getMessage());
+					registerLog().warn(nsrdq + "-" + ruleszcode + docPath + "[" + row + "].处理数据异常，请查看联系管理人员查看具体问题" + e3.getMessage());
 				}
 			});
 		}
@@ -805,7 +811,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 				}
 			} catch (Exception eo) {
 				error.append(docPath + "[" + row + "]." + document.getKey() + "生成报文数据异常" + eo.getMessage());
-				logger.warn(nsrdq + "-" + ruleszcode + docPath + "[" + row + "]." + document.getKey() + "生成报文数据异常" + eo.getMessage());
+				registerLog1().warn(nsrdq + "-" + ruleszcode + docPath + "[" + row + "]." + document.getKey() + "生成报文数据异常" + eo.getMessage());
 				eo.printStackTrace();
 			}
 		}
@@ -929,7 +935,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 
 				}
 			}catch (Exception e){
-				logger.error("动态行获取出错"+e.getMessage());
+				registerLog().error("动态行获取出错"+e.getMessage());
 				errorTemp.append("动态行获取出错"+e.getMessage());
 			}
 			//最终提示未找到的行
