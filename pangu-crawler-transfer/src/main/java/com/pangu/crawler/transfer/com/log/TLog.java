@@ -32,8 +32,9 @@ public class TLog {
             log.error("加载初始化参数失败");
         }
     }
-    public static TLog registerLog(Class clazz){
-        return new TLog(instancelog(true));
+    public static Logger registerLog(Logger logger,Class clazz){
+        logger =  instancelog(true,clazz);
+        return logger;
     }
 
     public TLog(Logger LOGGER){
@@ -41,10 +42,10 @@ public class TLog {
     }
 
     public  TLog(Class clazz){
-        LOGGER = instancelog(true);
+        LOGGER = instancelog(true,clazz);
     }
 
-    public static Logger instancelog(boolean datesplit){
+    public static Logger instancelog(boolean datesplit,Class clazz){
         Logger logger = null;
         try{
             String logname = "";
@@ -53,7 +54,7 @@ public class TLog {
             }else if(!currentDateS.equals(TimeUtils.getCurrentDateTime(null,TimeUtils.sdf6))){
                 currentDateS = TimeUtils.getCurrentDateTime(null,TimeUtils.sdf6);
             }
-            logname = "tranfser-"+currentDateS;
+            logname = currentDateS;
             if(CacheInfo.threadglobalName.get()==null){
                 return null;
             }
@@ -61,19 +62,21 @@ public class TLog {
             if(!logfile.isDirectory()){
                 logfile.mkdirs();
             }
-            logfile = new File(logpath+"\\Tlog\\"+CacheInfo.threadglobalName.get().getTaskname()+"\\"+logname+".log");
+          /*  logfile = new File(logpath+"\\Tlog\\"+CacheInfo.threadglobalName.get().getTaskname()+"\\"+logname+".log");
             if(!logfile.isFile()){
                 logfile.createNewFile();
-            }
+            }*/
 //            Logger logger1 = LogUtil.getLogger(CacheInfo.threadglobalName.get().getTaskid());
             if(loggerMaps.get(CacheInfo.threadglobalName.get().getTaskid())!=null){
                 logger = loggerMaps.get(CacheInfo.threadglobalName.get().getTaskid());
-                logger.removeAllAppenders();
-                logger = ThreadLogger.getLogger(logpath+"\\Tlog\\"+CacheInfo.threadglobalName.get().getTaskname()+"\\",logname);
+//                logger.removeAllAppenders();
+//                logger = ThreadLogger1.getLogger(logpath+"\\Tlog\\"+CacheInfo.threadglobalName.get().getTaskname()+"\\tranfser-",logname);
+//                logger = ThreadLogger1.getLogger(logpath+"\\Tlog\\"+CacheInfo.threadglobalName.get().getTaskname()+"\\",logname);
                 loggerMaps.put(CacheInfo.threadglobalName.get().getTaskid(),logger);
             }
             if(loggerMaps.get(CacheInfo.threadglobalName.get().getTaskid())==null){
-                logger = ThreadLogger.getLogger(logpath+"\\Tlog\\"+CacheInfo.threadglobalName.get().getTaskname()+"\\",logname);
+                logger = ThreadLogger1.getLogger(logpath+"\\Tlog\\"+CacheInfo.threadglobalName.get().getTaskname()+"\\tranfser-"+logname+".log","",clazz);
+//                logger = ThreadLogger1.getLogger(logpath+"\\Tlog\\"+CacheInfo.threadglobalName.get().getTaskname()+"\\",logname);
                 loggerMaps.put(CacheInfo.threadglobalName.get().getTaskid(),logger);
             }
 

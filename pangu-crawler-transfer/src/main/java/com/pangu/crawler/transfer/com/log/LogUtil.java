@@ -1,7 +1,9 @@
+/*
 package com.pangu.crawler.transfer.com.log;
 import java.io.File;
 import java.io.IOException;
 
+import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,14 +26,19 @@ import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 
+*/
 /**
  * 动态创建日志
  * @author：涂有
  * @date 2017年4月19日 下午6:03:41
- */
+ *//*
+
+@Log4j2
 public class LogUtil {
 
-    /**日志打印的目录*/
+    */
+/**日志打印的目录*//*
+
     private static final String datalogDir = "log";
 
     private static final LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
@@ -39,7 +46,9 @@ public class LogUtil {
 
     private LogUtil(){}
 
-    /**启动一个动态的logger*/
+    */
+/**启动一个动态的logger*//*
+
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private static void start(String loggerName) {
 
@@ -87,7 +96,9 @@ public class LogUtil {
         ctx.updateLoggers();
     }
 
-    /**使用完之后记得调用此方法关闭动态创建的logger，避免内存不够用或者文件打开太多*/
+    */
+/**使用完之后记得调用此方法关闭动态创建的logger，避免内存不够用或者文件打开太多*//*
+
     public static void stop(String loggerName) {
         synchronized (config){
             config.getAppender(loggerName).stop();
@@ -97,8 +108,11 @@ public class LogUtil {
         }
     }
 
-    /**获取Logger*/
+    */
+/**获取Logger*//*
+
     public static Logger getLogger(String loggerName) {
+        String a = "";
         synchronized (config) {
             if (!config.getLoggers().containsKey(loggerName)) {
                 start(loggerName);
@@ -108,11 +122,16 @@ public class LogUtil {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        for(int i = 0; i < 10000; i++){
-            String name = "s" + String.valueOf(i);
-            Logger logger = getLogger(name);
-            logger.info("asdfasdf");
-            stop(name);
+
+            new Thread(() -> {
+                log.info("info");
+                log.debug("debug");
+                log.error("error");
+            }).start();
+            new Thread(() -> {
+                log.info("info");
+                log.debug("debug");
+                log.error("error");
+            }).start();
         }
-    }
-}
+}*/

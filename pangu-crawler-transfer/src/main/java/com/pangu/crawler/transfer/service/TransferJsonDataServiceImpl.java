@@ -10,6 +10,7 @@ import com.pangu.crawler.transfer.com.log.TLog;
 import com.pangu.crawler.transfer.service.iservice.ITransferJsonDataService;
 import com.pangu.crawler.transfer.utils.RuleDataFilterUtils;
 import com.pangu.crawler.transfer.utils.TimeUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.*;
@@ -18,10 +19,7 @@ import java.util.regex.Pattern;
 
 @Service
 public class TransferJsonDataServiceImpl implements ITransferJsonDataService{
-
-	private TLog registerLog(){
-		return TLog.registerLog(this.getClass());
-	}
+	private Logger LOGGER = null;
 
 	private Pattern pattern = Pattern.compile("\\s*|\t|\r|\n");
 	@Autowired
@@ -55,7 +53,7 @@ public class TransferJsonDataServiceImpl implements ITransferJsonDataService{
 				}
 				String form = map.getKey();
 				if (map.getValue() == null) {
-					registerLog().warn(TimeUtils.getCurrentDateTime(new Date(), TimeUtils.sdf4) + nsrdq + "-" + ruleszcode + "-" + formcode + "表单内容不存在!");
+					TLog.registerLog(LOGGER,this.getClass()).warn(TimeUtils.getCurrentDateTime(new Date(), TimeUtils.sdf4) + nsrdq + "-" + ruleszcode + "-" + formcode + "表单内容不存在!");
 					tempresult = new HashMap<String, String>();
 					tempresult.put("code","fail:" + form );
 					tempresult.put("message", form + ":数据源表单内容null");
@@ -124,7 +122,7 @@ public class TransferJsonDataServiceImpl implements ITransferJsonDataService{
 				}
 				if(breakoneflag != true){
 					if (ruleEntity == null) {
-						registerLog().warn(nsrdq + "-" + ruleszcode + "没有找到对应的表单规则文件:" + form);
+						TLog.registerLog(LOGGER,this.getClass()).warn(nsrdq + "-" + ruleszcode + "没有找到对应的表单规则文件:" + form);
 						result.put("code", "warn");
 						result.put("message", "没有找到对应的表单规则文件:" + form);
 					} else {
@@ -206,7 +204,7 @@ public class TransferJsonDataServiceImpl implements ITransferJsonDataService{
 	public Map<String, String> combineJSONResultData(String nsrdq, String ruleszcode, String formid, String form, StringBuilder error, Map<String, Object> result, JSONObject resultData, AsyncBusinessTransferRuleEntity ruleEntity, JSONObject jsonsource) {
 		Map<String, String> tempresult = new HashMap<String, String>();
 		if (ruleEntity == null) {
-			registerLog().warn(nsrdq + "-" + ruleszcode + "没有找到对应的表单规则文件:" + formid);
+			TLog.registerLog(LOGGER,this.getClass()).warn(nsrdq + "-" + ruleszcode + "没有找到对应的表单规则文件:" + formid);
 			tempresult.put("code", "warn:" + formid);
 			tempresult.put("message", formid + ":没有找到对应的表单规则文件");
 			return tempresult;
@@ -220,7 +218,7 @@ public class TransferJsonDataServiceImpl implements ITransferJsonDataService{
 		String temprule = "";
 		String dataprefix = "";
 		if(rulegroupQueue==null){
-			registerLog().error(nsrdq+"-"+ruleszcode+"-"+formid+":json解析类型错误请检查解析类型");
+			TLog.registerLog(LOGGER,this.getClass()).error(nsrdq+"-"+ruleszcode+"-"+formid+":json解析类型错误请检查解析类型");
 			tempresult.put("code", "error:" + formid);
 			tempresult.put("message", formid + "解析类型错误请检查解析类型!");
 			return tempresult;
@@ -233,7 +231,7 @@ public class TransferJsonDataServiceImpl implements ITransferJsonDataService{
 				}else if(type.equals("dynamicaddrowlogical")){
 					transferdynamicaddrowJsonRule( ruleszcode, jsonsource, (Map)rulegroup.get("data"), nsrdq, error,resultData);
 				}else{
-					registerLog().error("解析类型错误，没有这种类型的处理功能");
+					TLog.registerLog(LOGGER,this.getClass()).error("解析类型错误，没有这种类型的处理功能");
 				}
 		}
 
@@ -269,14 +267,14 @@ public class TransferJsonDataServiceImpl implements ITransferJsonDataService{
 					if (jsonsource != null && StringUtils.isNotEmpty(temprule)) {
 						try {
 							if ((dataprefix + "." + temprule.substring(rule.indexOf("=") + 1)).replace("\\s*", "").equals("")) {
-								registerLog().warn(nsrdq + "-" + ruleszcode + rule + ":节点JSON选择器为空");
+								TLog.registerLog(LOGGER,this.getClass()).warn(nsrdq + "-" + ruleszcode + rule + ":节点JSON选择器为空");
 								error.append(dataprefix + "-> " + rule + ":节点JSON选择器为空");
 								continue;
 							}
 
 							String jvpath = (StringUtils.isNotEmpty(dataprefix) ? "" : (dataprefix + ".")) + temprule.substring(rule.indexOf("=") + 1).replace("\\s*", "");
 							if (jvpath == null || jvpath.equals("")) {
-								registerLog().warn(nsrdq + "-" + ruleszcode + rule + ":[error]查找数据为空,请检查数据是否可以忽略");
+								TLog.registerLog(LOGGER,this.getClass()).warn(nsrdq + "-" + ruleszcode + rule + ":[error]查找数据为空,请检查数据是否可以忽略");
 								error.append(rule + ":[error]查找数据为空,请检查数据是否可以忽略;");
 								continue;
 							}
@@ -304,22 +302,22 @@ public class TransferJsonDataServiceImpl implements ITransferJsonDataService{
 											if (((Collection) o).size() == 1) {
 												o = ((JSONArray) o).get(0);
 											} else if (((Collection) o).size() > 1) {
-												registerLog().warn(nsrdq + "-" + ruleszcode + ":" + rule + ":节点重复");
+												TLog.registerLog(LOGGER,this.getClass()).warn(nsrdq + "-" + ruleszcode + ":" + rule + ":节点重复");
 												error.append(dataprefix + "-> " + ":" + rule + ":节点重复");
 												continue;
 											} else {
-												registerLog().warn(nsrdq + "-" + ruleszcode + ":" + rule + ":节点不存在");
+												TLog.registerLog(LOGGER,this.getClass()).warn(nsrdq + "-" + ruleszcode + ":" + rule + ":节点不存在");
 												error.append(dataprefix + "-> " + ":" + rule + ":节点不存在");
 												continue;
 											}
 										}
 									} else {
-										registerLog().warn(nsrdq + "-" + ruleszcode + ":" + rule + ":节点重复");
+										TLog.registerLog(LOGGER,this.getClass()).warn(nsrdq + "-" + ruleszcode + ":" + rule + ":节点重复");
 										error.append(dataprefix + "-> " + ":" + rule + ":节点重复");
 										continue;
 									}
 								} else {
-									registerLog().warn(nsrdq + "-" + ruleszcode + ":" + rule + ":节点不存在");
+									TLog.registerLog(LOGGER,this.getClass()).warn(nsrdq + "-" + ruleszcode + ":" + rule + ":节点不存在");
 									error.append(dataprefix + "-> " + ":" + rule + ":节点不存在");
 									continue;
 								}
@@ -335,19 +333,19 @@ public class TransferJsonDataServiceImpl implements ITransferJsonDataService{
 								existsMultirow = false;
 							}
 							if (!existsMultirow && o == null) {
-								registerLog().warn(nsrdq + "-" + ruleszcode + ":" + rule + ":节点不存在");
+								TLog.registerLog(LOGGER,this.getClass()).warn(nsrdq + "-" + ruleszcode + ":" + rule + ":节点不存在");
 								error.append(dataprefix + "-> " + ":" + rule + ":节点不存在\n");
 							} else {
 								JSONPath.set(resultData, temprule.substring(0, rule.indexOf("=")), o == null ? "" : o);
 							}
 						} catch (Exception e) {
 //							e.printStackTrace();
-							registerLog().warn(nsrdq + "-" + ruleszcode + rule + ":[error]查找数据异常,请检查数据规范填写");
+							TLog.registerLog(LOGGER,this.getClass()).warn(nsrdq + "-" + ruleszcode + rule + ":[error]查找数据异常,请检查数据规范填写");
 							error.append(rule + ":[error]查找数据异常,请检查数据规范填写\n");
 
 						}
 					} else {
-						registerLog().warn(nsrdq + "-" + ruleszcode + rule + ":配置信息错误dataprefix:" + dataprefix + ",temprule:" + temprule);
+						TLog.registerLog(LOGGER,this.getClass()).warn(nsrdq + "-" + ruleszcode + rule + ":配置信息错误dataprefix:" + dataprefix + ",temprule:" + temprule);
 						error.append(rule + ":配置信息错误\n");
 					}
 				}
@@ -366,7 +364,7 @@ public class TransferJsonDataServiceImpl implements ITransferJsonDataService{
 		try{
 			o = JSONPath.eval(jsonsource, jsonpath);
 		}catch (Exception e){
-			registerLog().info("动态添加行没有找到数据");
+			TLog.registerLog(LOGGER,this.getClass()).info("动态添加行没有找到数据");
 		}
 		if(o==null){
 			JSONPath.set(resultData, reportpath,new JSONArray());
@@ -378,13 +376,13 @@ public class TransferJsonDataServiceImpl implements ITransferJsonDataService{
 
 				for(String property : propertyreleations){
 					if(property==null){
-						registerLog().warn(nsrdq + "-" + ruleszcode  + "-属性["+property+"]:[error]属性关系内容为空");
+						TLog.registerLog(LOGGER,this.getClass()).warn(nsrdq + "-" + ruleszcode  + "-属性["+property+"]:[error]属性关系内容为空");
 						error.append("-属性["+property+"]:[error]属性["+property+"]:[error]属性关系内容为空\n");
 						continue;
 					}
 
 					if(property.split("@@@").length!=2){
-						registerLog().warn(nsrdq + "-" + ruleszcode  + "-属性["+property+"]:[error]属性格式错误,原始报文和标准报文字段名称中间用三个@隔开");
+						TLog.registerLog(LOGGER,this.getClass()).warn(nsrdq + "-" + ruleszcode  + "-属性["+property+"]:[error]属性格式错误,原始报文和标准报文字段名称中间用三个@隔开");
 						error.append("-属性["+property+"]:[error]属性格式错误,原始报文和标准报文字段名称中间用三个@隔开\n");
 						continue;
 					}
@@ -395,13 +393,13 @@ public class TransferJsonDataServiceImpl implements ITransferJsonDataService{
 					try{
 						val = JSONPath.eval(element, property.split("@@@")[0]);
 					}catch(Exception e1){
-						registerLog().warn(nsrdq + "-" + ruleszcode  + "-属性["+property+"]:[error]不存在或查找数据异常");
+						TLog.registerLog(LOGGER,this.getClass()).warn(nsrdq + "-" + ruleszcode  + "-属性["+property+"]:[error]不存在或查找数据异常");
 						error.append("-属性["+property+"]:[error]不存在或查找数据异常\n");
 					}
 					try{
 						JSONPath.set(resultData, reportpath+"["+i+"]."+property.split("@@@")[1], val);
 					}catch(Exception e1){
-						registerLog().warn(nsrdq + "-" + ruleszcode  + "-属性["+property+"]:[error]数据生成失败,请检查数据格式");
+						TLog.registerLog(LOGGER,this.getClass()).warn(nsrdq + "-" + ruleszcode  + "-属性["+property+"]:[error]数据生成失败,请检查数据格式");
 						error.append("-属性["+property+"]:[error]数据生成失败,请检查数据格式");
 					}
 				}
