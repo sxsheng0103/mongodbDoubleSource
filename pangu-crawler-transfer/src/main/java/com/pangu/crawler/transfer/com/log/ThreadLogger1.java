@@ -2,10 +2,7 @@ package com.pangu.crawler.transfer.com.log;
 
 import java.io.IOException;
 
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
+import org.apache.log4j.*;
 
 public class ThreadLogger1
 {
@@ -15,9 +12,10 @@ public class ThreadLogger1
     {
         Logger logger = null;
         // 创建一个Logger实例, 就以线程名命名
-        logger = Logger.getLogger(clazz.getName());
+        logger = Logger.getLogger(logname);
 //        PatternLayout layout = new PatternLayout("%-4r %-5p [%d{yyyy-MM-dd HH:mm:ss,SSS}] %l%t: %m%n");
-        PatternLayout layout = new PatternLayout("%-5p[%d{yyyy-MM-dd HH:mm:ss,SSS}] %l%t: %m%n");
+        PatternLayout layout = new PatternLayout("%-1p[%d{yyyy-MM-dd HH:mm:ss.SSS}] %l%t: %m%n");
+//        layout.setConversionPattern("[%p]%d{yyyy-MM-dd HH:mm:ss,SSS} [%c]-[%M line:%L]%n %m%n");
 
         // 控制台输出
         ConsoleAppender concoleAppender = new ConsoleAppender(layout, "System.out");
@@ -26,7 +24,7 @@ public class ThreadLogger1
         ThreadSeperateDailyRollingFileAppender R = null;
         try
         {
-            R = new ThreadSeperateDailyRollingFileAppender(layout,logpath+logname ,"'.'yyyy-MM-dd'.log'");
+            R = new ThreadSeperateDailyRollingFileAppender(layout,logpath ,"'.'yyyy-MM-dd'.log'");
         }
         catch (IOException e)
         {
@@ -36,12 +34,16 @@ public class ThreadLogger1
         R.setAppend(true);
         R.setImmediateFlush(true);
         R.setThreshold(Level.ALL);
-
+        logger.removeAllAppenders();
         // 绑定到Logger
         logger.setLevel(Level.ALL);
         logger.addAppender(concoleAppender);
         logger.addAppender(R);
 
+        logger.setAdditivity(false);//设置继承输出root
+        Appender appender = null;
+//        appender =new DailyRollingFileAppender(layout,"../logs/"+str1[0]+".log","yyyy-MM-dd");
+        logger.addAppender(appender);
         return logger;
     }
 
