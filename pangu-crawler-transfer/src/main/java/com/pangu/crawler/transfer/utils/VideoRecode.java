@@ -1,3 +1,4 @@
+/*
 package com.pangu.crawler.transfer.utils;
 
 import org.bytedeco.javacpp.avcodec;
@@ -17,9 +18,11 @@ import java.util.Scanner;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+*/
 /**
  * 使用javacv进行录屏
- */
+ *//*
+
 public class VideoRecode {
     //线程池 screenTimer
     private ScheduledThreadPoolExecutor screenTimer;
@@ -58,7 +61,8 @@ public class VideoRecode {
         recorder.setVideoOption("crf", "23");
         // 2000 kb/s, 720P视频的合理比特率范围
         recorder.setVideoBitrate(1000000);
-        /**
+        */
+/**
          * 权衡quality(视频质量)和encode speed(编码速度) values(值)： ultrafast(终极快),superfast(超级快),
          * veryfast(非常快), faster(很快), fast(快), medium(中等), slow(慢), slower(很慢),
          * veryslow(非常慢)
@@ -67,7 +71,8 @@ public class VideoRecode {
          * name implies provides for the fastest possible encoding. If some tradeoff
          * between quality and encode speed, go for the speed. This might be needed if
          * you are going to be transcoding multiple streams on one machine.
-         */
+         *//*
+
         recorder.setVideoOption("preset", "slow");
         recorder.setPixelFormat(0); // yuv420p = 0
         recorder.setAudioChannels(2);
@@ -90,9 +95,11 @@ public class VideoRecode {
         this.isHaveDevice = isHaveDevice;
     }
 
-    /**
+    */
+/**
      * 开始录制
-     */
+     *//*
+
     public void start() {
 
         if (startTime == 0) {
@@ -175,9 +182,11 @@ public class VideoRecode {
 
     }
 
-    /**
+    */
+/**
      * 抓取声音
-     */
+     *//*
+
     public void caputre() {
         audioFormat = new AudioFormat(44100.0F, 16, 2, true, false);
         dataLineInfo = new DataLine.Info(TargetDataLine.class, audioFormat);
@@ -226,9 +235,11 @@ public class VideoRecode {
         }, (int) (1000 / frameRate), (int) (1000 / frameRate), TimeUnit.MILLISECONDS);
     }
 
-    /**
+    */
+/**
      * 停止
-     */
+     *//*
+
     public void stop(){
         if (null != screenTimer) {
             screenTimer.shutdownNow();
@@ -260,11 +271,13 @@ public class VideoRecode {
 
     }
 
-    /**
+    */
+/**
      * 暂停
      *
      * @throws Exception
-     */
+     *//*
+
     public void pause() throws Exception {
         screenTimer.shutdownNow();
         screenTimer = null;
@@ -281,4 +294,4 @@ public class VideoRecode {
     }
 
 
-}
+}*/

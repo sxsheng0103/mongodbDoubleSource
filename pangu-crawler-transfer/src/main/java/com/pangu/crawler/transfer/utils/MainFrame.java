@@ -1,3 +1,4 @@
+/*
 package com.pangu.crawler.transfer.utils;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -162,9 +163,11 @@ public class MainFrame extends Application {
         });
     }
 
-    /**
+    */
+/**
      * 绘制带边框的矩形
-     */
+     *//*
+
     public void drag(final AnchorPane an){
         an.setOnMousePressed(new EventHandler<MouseEvent>() {
 
@@ -262,4 +265,4 @@ public class MainFrame extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-}
+}*/
