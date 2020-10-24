@@ -292,7 +292,7 @@
 
 		<!--javacv录屏工具-->
 
-		<!--<dependency>
+		<dependency>
 			<groupId>org.bytedeco</groupId>
 			<artifactId>javacv</artifactId>
 			<version>1.5.3</version>
@@ -315,8 +315,10 @@
 			<groupId>org.bytedeco.javacpp-presets</groupId>
 			<artifactId>ffmpeg-platform</artifactId>
 			<version>4.0.2-1.4.3</version>
-		</dependency>-->
-		<!--娇娇-->
+		</dependency>
+
+		<!--录屏-->
+
 
 		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
 		<!--<dependency>
@@ -357,6 +359,7 @@
 			<artifactId>xmlbeans</artifactId>
 			<version>3.1.0</version>
 		</dependency>-->
+		<!--娇娇-->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-excelant</artifactId>
@@ -382,11 +385,11 @@
 			<artifactId>freemarker</artifactId>
 			<version>2.3.3</version>
 		</dependency>-->
-		<dependency>
+		<!--<dependency>
 			<groupId>com.jacob</groupId>
 			<artifactId>jacob</artifactId>
 			<version>1.10</version>
-		</dependency>
+		</dependency>-->
 
 		<!--使用 lucence自带工具检查对象占用内存大小-->
 		<dependency>
@@ -394,7 +397,13 @@
 			<artifactId>lucene-core</artifactId>
 			<version>4.0.0</version>
 		</dependency>
-
+		<dependency>
+			<groupId>com.jacob</groupId>
+			<artifactId>jacob</artifactId>
+			<version>1.1</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/jacob.jar</systemPath>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>pangu-crawler-transfer</finalName>
@@ -408,10 +417,70 @@
 		</resources>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.6.1</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<compilerArguments>
+						<!--<verbose />--><!--这一句是引用全的，会降低打包效率-->
+						<bootclasspath>${java.home}/lib/rt.jar;${java.home}/lib/jce.jar</bootclasspath>
+					</compilerArguments>
+				</configuration>
+			</plugin>
+			<!--<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.2.1</version>
+				<configuration>
+					<filters>
+						<filter>
+							<artifact>*:*</artifact>
+							<excludes>
+								<exclude>tybw/**</exclude>
+								<exclude>exes/**</exclude>
+								<exclude>META-INF/*.SF</exclude>
+							</excludes>
+						</filter>
+					</filters>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<minimizeJar>true</minimizeJar>
+							<transformers>
+								<transformer
+										implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<mainClass>com.pangu.selenium.Application</mainClass>
+								</transformer>
+							</transformers>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>-->
+			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
+				<!--<version>2.3</version>-->
 				<configuration>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<!--<warName>${project.artifactId}</warName>
+					<webResources>
+						<resource>
+							<directory>lib/</directory>
+							<targetPath>WEB-INF/lib</targetPath>
+							<includes>
+								<include>**/*.jar</include>
+							</includes>
+						</resource>
+					</webResources>-->
 				</configuration>
+
 			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

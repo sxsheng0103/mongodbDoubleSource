@@ -6,7 +6,7 @@ import anocation.test.cn.testInterface;
 /**
  * 
  * @author zhangshaojie
- * @deprecated  <p>²âÊÔ@Documented×¢½â</p>
+ * @deprecated  /p>
  *
  */
 public class testIpms  implements testInterface{

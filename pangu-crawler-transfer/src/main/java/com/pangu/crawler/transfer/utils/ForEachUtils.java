@@ -10,7 +10,7 @@ import java.util.function.BiConsumer;
 
 /**
  *
- * @author yangzhilong
+ * @author dingsheng
  * @date 7/15/2019
  */
 public class ForEachUtils {

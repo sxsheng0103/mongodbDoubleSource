@@ -8,7 +8,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 
 /**
- * @author lnj
+ * @author dingsheng
  * createTime 2018-11-07 22:37
  **/
 @Component

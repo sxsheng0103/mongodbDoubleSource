@@ -1,8 +1,4 @@
-/*
 package com.pangu.crawler.transfer.com.log;
-import java.io.File;
-import java.io.IOException;
-
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -10,34 +6,26 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.appender.RollingFileAppender;
-import org.apache.logging.log4j.core.appender.rolling.CompositeTriggeringPolicy;
-import org.apache.logging.log4j.core.appender.rolling.DefaultRolloverStrategy;
-import org.apache.logging.log4j.core.appender.rolling.SizeBasedTriggeringPolicy;
-import org.apache.logging.log4j.core.appender.rolling.TimeBasedTriggeringPolicy;
-import org.apache.logging.log4j.core.appender.rolling.TriggeringPolicy;
-import org.apache.logging.log4j.core.appender.rolling.action.Action;
-import org.apache.logging.log4j.core.appender.rolling.action.DeleteAction;
-import org.apache.logging.log4j.core.appender.rolling.action.Duration;
-import org.apache.logging.log4j.core.appender.rolling.action.IfFileName;
-import org.apache.logging.log4j.core.appender.rolling.action.IfLastModified;
-import org.apache.logging.log4j.core.appender.rolling.action.PathCondition;
+import org.apache.logging.log4j.core.appender.rolling.*;
+import org.apache.logging.log4j.core.appender.rolling.action.*;
 import org.apache.logging.log4j.core.config.AppenderRef;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.core.layout.PatternLayout;
+import java.io.File;
+import java.io.IOException;
 
-*/
+
 /**
  * 动态创建日志
- * @author：涂有
+ * @author：dingsheng
  * @date 2017年4月19日 下午6:03:41
- *//*
+ */
 
 @Log4j2
 public class LogUtil {
 
-    */
-/**日志打印的目录*//*
+/**日志打印的目录*/
 
     private static final String datalogDir = "log";
 
@@ -46,8 +34,8 @@ public class LogUtil {
 
     private LogUtil(){}
 
-    */
-/**启动一个动态的logger*//*
+
+/**启动一个动态的logger*/
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private static void start(String loggerName) {
@@ -96,8 +84,7 @@ public class LogUtil {
         ctx.updateLoggers();
     }
 
-    */
-/**使用完之后记得调用此方法关闭动态创建的logger，避免内存不够用或者文件打开太多*//*
+/**使用完之后记得调用此方法关闭动态创建的logger，避免内存不够用或者文件打开太多*/
 
     public static void stop(String loggerName) {
         synchronized (config){
@@ -108,8 +95,8 @@ public class LogUtil {
         }
     }
 
-    */
-/**获取Logger*//*
+
+/**获取Logger*/
 
     public static Logger getLogger(String loggerName) {
         String a = "";
@@ -134,4 +121,4 @@ public class LogUtil {
                 log.error("error");
             }).start();
         }
-}*/
+}
