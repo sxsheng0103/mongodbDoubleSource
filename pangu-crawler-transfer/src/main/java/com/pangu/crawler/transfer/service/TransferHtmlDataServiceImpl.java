@@ -40,6 +40,11 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 	@Autowired
 	TaxCodeReleationService taxCodeReleationService;
 
+	Pattern pstr = Pattern.compile("\\s*|\t|\r|\n");
+	Pattern trrule = Pattern.compile("\\$tr\\{\\$td(\\d+)}@\\s*");
+	Pattern contentrule = Pattern.compile("\\$\\{@([\\s\\S]*)@}");
+	Pattern tdrule = Pattern.compile("\\$\\{td(\\d+)}");
+
 	/**
 	 * @param dataMap
 	 * @param nsrdq
@@ -132,7 +137,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 						if (!formid.equals(form)) {
 							continue;
 						} else {
-							ruleEntity = ruleEntity1;
+							ruleEntity = ruleEntity1; break;
 						}
 					}
 
@@ -482,7 +487,12 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 						errorTemp.append(rule + ":html中有重复节点;");
 						TLog.registerLog(LOGGER,this.getClass()).warn(nsrdq + "-" + ruleszcode + ":" + rule + ":html中有重复节点");
 					} else {
-						JSONPath.set(resultData, rule.substring(0, rule.indexOf("=")), links.get(0).wholeText().replaceAll("　","").replaceAll(" ",""));
+						Matcher m = pstr.matcher(links.get(0).wholeText());
+						String trtdtext = "";
+						if (m.find()) {
+							trtdtext = m.replaceAll("");
+						}
+						JSONPath.set(resultData, rule.substring(0, rule.indexOf("=")),trtdtext);
 					}
 				}catch (Exception e){
 //					e.printStackTrace();
@@ -563,7 +573,12 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 								error.append(rule + ":html中有重复节点;");
 								TLog.registerLog(LOGGER,this.getClass()).warn(nsrdq + "-" + ruleszcode + ":" + rule + ":html中有重复节点");
 							} else {
-								JSONPath.set(resultData, temprule.substring(0, rule.indexOf("=")), links.get(0).wholeText());
+								m = pstr.matcher(links.get(0).wholeText());
+								String trtdtext = "";
+								if (m.find()) {
+									trtdtext = m.replaceAll("");
+								}
+								JSONPath.set(resultData, temprule.substring(0, rule.indexOf("=")), trtdtext);
 							}
 						} catch (Exception e) {
 							error.append(rule + ":[error]查找数据异常,请检查数据规范填写");
@@ -606,10 +621,7 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 	 */
 	public Map<String, String> combineMatchColsHtmlResultData(String nsrdq, String ruleszcode, String formid, String form, StringBuilder errorresult, Map<String, Object> result, JSONObject resultData, AsyncBusinessTransferRuleEntity ruleEntity, Document doc) {
 		Pattern pattern = Pattern.compile("(\\d+)");
-		Pattern pstr = Pattern.compile("\\s*|\t|\r|\n");
-		Pattern trrule = Pattern.compile("\\$tr\\{\\$td(\\d+)}@\\s*");
-		Pattern contentrule = Pattern.compile("\\$\\{@([\\s\\S]*)@}");
-		Pattern tdrule = Pattern.compile("\\$\\{td(\\d+)}");
+
 		Map<String, String> tempresult = new HashMap<String, String>();
 		if (ruleEntity == null) {
 			TLog.registerLog(LOGGER,this.getClass()).warn(nsrdq + "-" + ruleszcode + "没有找到对应的表单规则文件:" + form);
@@ -803,7 +815,12 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 						}
 					}
 					Element td = trelement.getElementsByTag("td").get(Integer.parseInt(index)-1);
-					JSONPath.set(resultData, docPath + "[" + row + "]." + document.getKey(), td.wholeText());
+					m = pstr.matcher(td.wholeText());
+					String trtdtext = "";
+					if (m.find()) {
+						trtdtext = m.replaceAll("");
+					}
+					JSONPath.set(resultData, docPath + "[" + row + "]." + document.getKey(), trtdtext);
 				}
 			} catch (Exception eo) {
 				error.append(docPath + "[" + row + "]." + document.getKey() + "生成报文数据异常" + eo.getMessage());
@@ -898,7 +915,12 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 									skipTr = true;
 									row = row+1;
 									for(String tdproperty:fixtoppropertyTrs.split(",")){
-										JSONPath.set(resultData, reportpath + "[" + row + "]." + tdproperty.split("-")[0], tds.get(Integer.valueOf(tdproperty.split("-")[1])-1).wholeText().replaceAll(" ",""));
+										Matcher m = pstr.matcher(tds.get(Integer.valueOf(tdproperty.split("-")[1])-1).wholeText());
+										String trtdtext = "";
+										if (m.find()) {
+											trtdtext = m.replaceAll("");
+										}
+										JSONPath.set(resultData, reportpath + "[" + row + "]." + tdproperty.split("-")[0], trtdtext.replaceAll(" ",""));
 									}
 								}
 							}
@@ -911,7 +933,12 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 									row = row+1;
 									skipTr = true;
 									for(String tdproperty:fixbtmpropertyTrs.split(",")){
-										JSONPath.set(resultData, reportpath + "[" + row + "]." + tdproperty.split("-")[0], tds.get(Integer.valueOf(tdproperty.split("-")[1])-1).wholeText().replaceAll(" ",""));
+										Matcher m = pstr.matcher( tds.get(Integer.valueOf(tdproperty.split("-")[1])-1).wholeText());
+										String trtdtext = "";
+										if (m.find()) {
+											trtdtext = m.replaceAll("");
+										}
+										JSONPath.set(resultData, reportpath + "[" + row + "]." + tdproperty.split("-")[0],trtdtext.replaceAll(" ",""));
 									}
 								}
 							}
@@ -922,7 +949,12 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 									dynamicarr.remove(tr);
 									row = row+1;
 									for(String tdproperty:dynamicpropertyTrs.split(",")){
-										JSONPath.set(resultData, reportpath + "[" + row + "]." + tdproperty.split("-")[0], tds.get(Integer.valueOf(tdproperty.split("-")[1])-1).wholeText().replaceAll(" ",""));
+										Matcher m = pstr.matcher(tds.get(Integer.valueOf(tdproperty.split("-")[1])-1).wholeText());
+										String trtdtext = "";
+										if (m.find()) {
+											trtdtext = m.replaceAll("");
+										}
+										JSONPath.set(resultData, reportpath + "[" + row + "]." + tdproperty.split("-")[0], trtdtext.replaceAll(" ",""));
 									}
 								}
 							}

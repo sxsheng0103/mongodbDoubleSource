@@ -45,7 +45,17 @@ public class TLog {
             }
             logname = currentDateS;
             if(CacheInfo.threadglobalName.get()==null){
-                return null;
+                File logfile = new File(logpath+"\\Tlog\\handler\\");
+                if(!logfile.isDirectory()){
+                    logfile.mkdirs();
+                }
+                if(loggerMaps.get("handler"+TimeUtils.getCurrentDateTime(null,TimeUtils.sdf6))==null){
+                    logger = ThreadLogger1.getLogger(logpath+"\\Tlog\\handler\\tranfser-"+logname+".log","handler",clazz);
+                    loggerMaps.put("handler"+TimeUtils.getCurrentDateTime(null,TimeUtils.sdf6),logger);
+                }else{
+                    logger = loggerMaps.get("handler"+TimeUtils.getCurrentDateTime(null,TimeUtils.sdf6));
+                }
+                return logger;
             }
             File logfile = new File(logpath+"\\Tlog\\"+CacheInfo.threadglobalName.get().getTaskname());
             if(!logfile.isDirectory()){
