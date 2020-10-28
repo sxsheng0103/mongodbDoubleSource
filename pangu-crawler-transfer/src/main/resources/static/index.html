@@ -4,37 +4,41 @@
   <meta charset="UTF-8">
 
   <title>登录页</title>
-  <link rel="stylesheet" href="../layui/css/layui.css">
-  <link rel="stylesheet" href="../css/index.css">
-
+  <!--<link rel="stylesheet" href="../layui/css/layui.css">
+  <link rel="stylesheet" href="../css/index.css">-->
+  <link rel="stylesheet" href="../index/style.css">
+  <!-- For-Mobile-Apps-and-Meta-Tags -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-
-<div class="login-main">
-  <header class="layui-elip">登录</header>
+<h1>数据服务平台,转化是真实摸底的开始</h1>
+<div class="container w3">
+  <h2>欢迎使用</h2>
   <form class="layui-form">
-    <div class="layui-input-inline">
+    <div class="username">
+      <span class="username">Username:</span>
       <input type="text" name="account" required lay-verify="required" placeholder="用户名" autocomplete="off"
-             class="layui-input">
+             class="name">
+      <div class="clear"></div>
     </div>
-    <div class="layui-input-inline">
+
+    <div class="password-agileits">
+      <span class="username">Password:</span>
       <input type="password" name="password" required lay-verify="required" placeholder="密码" autocomplete="off"
-             class="layui-input">
+             class="password">
+      <div class="clear"></div>
     </div>
-    <div class="layui-input-inline login-btn">
-      <button lay-submit lay-filter="login" class="layui-btn">登录</button>
+
+    <div class="login-w3">
+      <input  lay-submit lay-filter="login" type="submit" class="login" value="Login">
     </div>
-    <hr/>
-    <!--<div class="layui-input-inline">
-        <button type="button" class="layui-btn layui-btn-primary">QQ登录</button>
-    </div>
-    <div class="layui-input-inline">
-        <button type="button" class="layui-btn layui-btn-normal">微信登录</button>
-    </div>-->
-   <!-- <p><a href="register.html" class="fl">立即注册</a><a href="javascript:;" class="fr">忘记密码？</a></p>-->
+    <div class="clear"></div>
+
   </form>
 </div>
-
+<div class="footer-w3l">
+  <p> ©holytax`lanying  二〇二〇年 十月二十八日</p>
+</div>
 
 <script src="../layui/layui.js"></script>
 <script type="text/javascript">

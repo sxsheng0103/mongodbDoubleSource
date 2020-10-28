@@ -83,6 +83,10 @@ public class TransferTest {
 
     /**
      * 备份数据
+     *     mongoexport -d foobar -c persons -o D:/persons.json
+     *    如果要导入其他主机的数据库文档则这样写
+     *    mongoexport --host 192.168.0.16 --port 37017
+     *    mongoimport --db foobar --collection persons --file d:/persons.json
      */
     @Test
     public void TransferServiceDispatch(String path) throws Exception{
