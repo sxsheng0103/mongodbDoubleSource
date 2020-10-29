@@ -19,10 +19,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.InetAddress;
+import java.net.URL;
+import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -153,5 +155,99 @@ public class TransferTest {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+
+
+    public static void main(String[] args) {
+        Map<String,String> s= new HashMap<>();
+        s.put("jglx","1");
+        s.put("name","110423NDj");
+        s.put("lsh","111");
+        s.put("releationid","121231");
+        s.put("id","5f992e8a6279bd61a8a8f847");
+        httpPost("http://127.0.0.1:8086/report/queryreportcation",s);
+        s= new HashMap<>();
+        s.put("jglx","1");
+        s.put("name","110423");
+        String ip = "";
+        String  computername = "";
+        try{
+            InetAddress addr = InetAddress.getLocalHost();
+            ip = addr.getHostAddress();
+            computername = addr.getHostName();
+        }catch (UnknownHostException e){
+        }
+        s.put("ip",ip);
+        s.put("computername",computername);
+        s.put("lsh","111");
+        s.put("releationid","121231");
+        s.put("screenbase64","weqrwqrqwrqwer");
+        httpPost("http://127.0.0.1:8086/report/savereportcation",s);
+    }
+
+    private static String httpPost(String urlString, Map<String,String> data) {
+
+        String dataStr = "";
+        for(Map.Entry<String,String> property:data.entrySet()){
+            dataStr+=property.getKey()+"="+property.getValue()+"&";
+        }
+        String response = "";
+        HttpURLConnection connection = null;
+        try {
+            URL url = new URL(urlString);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setDoOutput(true);
+            connection.setReadTimeout(30 * 1000);
+            connection.setConnectTimeout(10 * 1000);
+            connection.setRequestProperty("Content-Encoding", "utf-8");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("sbptmiyao", "RTdvVkJHWW0mQ3hYT1pVcXBaJSYhRk9YZiN3TGtoeXFYWSMjKjQjcllnb1kjTmFmWndeT2dNdF4kNWpvWlZmaQ==");
+            byte[] request = dataStr.getBytes(StandardCharsets.UTF_8);
+            String contentLength = String.valueOf(request.length);
+            connection.setRequestProperty("Content-Length", contentLength);
+            try (OutputStream outputStream = connection.getOutputStream()) {
+                outputStream.write(request);
+                outputStream.flush();
+                int responseCode = connection.getResponseCode();
+                if (responseCode == 200) {
+                    response = readResponse(connection.getInputStream());
+                } else {
+                    response = readResponse(connection.getErrorStream());
+                }
+            }
+        } catch (Exception e) {
+            response = "{code:\"error\",\"info\":\""+e.getClass().getSimpleName()+"\"}";
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+        return response;
+    }
+
+
+    private static String readResponse(InputStream inputStream) throws Exception {
+        byte[] responseBytes = new byte[0];
+        while (true) {
+            byte[] readedBytes = new byte[1024];
+            int readedCount = inputStream.read(readedBytes);
+            if (readedCount <= 0) {
+                break;
+            }
+            byte[] newBytes = new byte[responseBytes.length + readedCount];
+            System.arraycopy(responseBytes, 0, newBytes, 0, responseBytes.length);
+            System.arraycopy(readedBytes, 0, newBytes, responseBytes.length, readedCount);
+            responseBytes = newBytes;
+        }
+        StringBuilder readResponse = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(
+                new ByteArrayInputStream(responseBytes), StandardCharsets.UTF_8))) {
+            String line;
+            for (line = br.readLine(); line != null; line = br.readLine()) {
+                readResponse.append(line).append("\r\n");
+            }
+        }
+        return readResponse.toString();
     }
 }

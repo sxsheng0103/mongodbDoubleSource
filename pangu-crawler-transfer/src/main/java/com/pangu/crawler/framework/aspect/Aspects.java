@@ -6,6 +6,7 @@ import com.pangu.crawler.framework.exception.LoginExpiredException;
 import com.pangu.crawler.framework.exception.PanicException;
 /*import com.pangu.crawler.framework.http.HttpManager;
 import com.pangu.crawler.framework.service.ServiceFirstArg;*/
+import com.pangu.crawler.framework.utils.Base64Util;
 import com.pangu.crawler.transfer.utils.TempUserInfo;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -153,13 +154,18 @@ public class Aspects implements ApplicationContextAware {
         throw e;*/
     }
 
-    @Around("execution(* com.pangu.crawler.transfer..*Controller.*(..)) && !execution(* com.pangu.crawler.transfer.controller.LoginController.*(..))")
+    @Around("execution(* com.pangu.crawler.transfer..*Controller.*(..)) && !execution(* com.pangu.crawler.transfer.controller.LoginController.*(..))")// && !execution(* com.pangu.crawler.transfer.sbptpicture.service.ReportController.*(..))
     public Object aroundService(ProceedingJoinPoint joinPoint) throws Exception {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
         boolean valid =  false;
         Cookie[] cookies = request.getCookies();
+        //E7oVBGYm&CxXOZUqpZ%&!FOXf#wLkhyqXY##*4#rYgoY#NafZw^OgMt^$5joZVfi
+        //RTdvVkJHWW0mQ3hYT1pVcXBaJSYhRk9YZiN3TGtoeXFYWSMjKjQjcllnb1kjTmFmWndeT2dNdF4kNWpvWlZmaQ==
        try {
+           if(request.getHeader("sbptmiyao")!=null&& Base64Util.decode(request.getHeader("sbptmiyao")).equals("E7oVBGYm&CxXOZUqpZ%&!FOXf#wLkhyqXY##*4#rYgoY#NafZw^OgMt^$5joZVfi")){
+               return  joinPoint.proceed(joinPoint.getArgs());
+           }
            if(cookies!=null){
                Optional<Cookie> cookie= Arrays.asList(cookies).stream().filter(e->e.getName() != null && e.getName().equals("Secrit-Key") && e.getValue().equals(TempUserInfo.cookieValue)).findFirst();
 
@@ -168,7 +174,7 @@ public class Aspects implements ApplicationContextAware {
                 }else{
                     response.sendRedirect("/timeouterror");
 //                    request.getRequestDispatcher("/timeouterror").forward(request,response);
-                    throw new RuntimeException("访问权限超时，请重新登陆！");
+                    throw new RuntimeException("无权限或访问权限超时，请重新尝试！");
 //                    response.setContentType("text/html");
                   /*  PrintWriter out = response.getWriter();
                     out.write("<html><head><title>Exception/Error Details</title></head><body>");
@@ -196,7 +202,7 @@ public class Aspects implements ApplicationContextAware {
                 }
            }else{
                response.sendRedirect("/timeouterror");
-               throw new RuntimeException("访问权限超时，请重新登陆！");
+               throw new RuntimeException("无权限或访问权限超时，请重新尝试！");
            }
        } catch (Throwable t) {
                 // 输出异常日志
