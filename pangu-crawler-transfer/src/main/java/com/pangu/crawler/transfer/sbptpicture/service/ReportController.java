@@ -8,15 +8,14 @@ import com.pangu.crawler.framework.utils.Base64Util;
 import com.pangu.crawler.framework.utils.StringUtils;
 import com.pangu.crawler.transfer.sbptpicture.mongo.AsyncQueryBusinessPictureEntity;
 import com.pangu.crawler.transfer.service.TransferRuleDataService;
+import com.pangu.crawler.transfer.utils.Base64ToFile;
 import com.pangu.crawler.transfer.utils.TimeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartResolver;
@@ -54,12 +53,11 @@ public class ReportController {
         Map<String,Object> result = new HashMap<String,Object>(3);
         try{
             Map<String,String> map = new HashMap<String,String>(7);
+
             if(StringUtils.isNotEmpty(request.getParameter("jglx"))){
                 map.put("jglx",request.getParameter("jglx"));
             }
-            if(StringUtils.isNotEmpty(request.getParameter("name"))){
-                map.put("name",request.getParameter("name"));
-            }
+
             if(StringUtils.isNotEmpty(request.getParameter("lsh"))){
                 map.put("lsh",request.getParameter("lsh"));
             }
@@ -89,6 +87,75 @@ public class ReportController {
 //127.0.0.1:8086/report/savereportcation?jglx=1&name=110423NDj&lsh=111&releationid=121231&screenbase64=weqrwqrqwrqwer
     @ResponseBody
     @PostMapping("/savereportcation")
+    public Map<String,Object> savereportcation(@RequestParam(value = "file",required=false)  MultipartFile file,HttpServletRequest request) throws Exception {
+        Map<String,Object> result = new HashMap<String,Object>(2);
+        try{
+            MultipartResolver resolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+            MultipartHttpServletRequest multipartRequest = resolver.resolveMultipart(request);
+            MultipartFile file1  = multipartRequest.getFile("file");
+            String name = "";
+            String screenbase64 = "";
+            if(file1!=null){
+                name = file1.getOriginalFilename();
+                try{
+                    screenbase64 = Base64ToFile.get(file1.getInputStream());
+                }catch (Exception e){
+                    screenbase64 = "   ";
+                }
+            }
+            String ip = request.getParameter("ip");
+            String sz = request.getParameter("sz");
+            String jglx = request.getParameter("jglx");
+            String lsh = request.getParameter("lsh");
+            String nsrsbh = request.getParameter("nsrsbh");
+            String business = request.getParameter("business");
+            String releationid = request.getParameter("releationid");
+            String computername = request.getParameter("computername");
+            Map<String,String> map = new HashMap<String,String>(7);
+            if(StringUtils.isNotEmpty(ip)){
+                map.put("ip",ip);
+            }
+            if(StringUtils.isNotEmpty(sz)){
+                map.put("sz",sz);
+            }
+            if(StringUtils.isNotEmpty(lsh)){
+                map.put("lsh",lsh);
+            }
+            if(StringUtils.isNotEmpty(jglx)){
+                map.put("jglx",jglx);
+            }
+            if(StringUtils.isNotEmpty(name)){
+                map.put("name",name);
+            }
+            if(StringUtils.isNotEmpty(nsrsbh)){
+                map.put("nsrsbh",nsrsbh);
+            }
+            if(StringUtils.isNotEmpty(business)){
+                map.put("business",business);
+            }
+            if(StringUtils.isNotEmpty(releationid)){
+                map.put("releationid",releationid);
+            }
+            if(StringUtils.isNotEmpty(computername)){
+                map.put("computername",computername);
+            }
+            if(StringUtils.isNotEmpty(screenbase64)){
+                map.put("screenbase64", screenbase64);
+            }
+            result =  reportService.savereportcation(map);
+        }catch (Exception e){
+            e.printStackTrace();
+            result.put("code","fail");
+            result.put("message",e.getMessage());
+            log.error("保存申报图片失败!"+ TimeUtils.getCurrentDateTime(new Date(),TimeUtils.sdf2) +e.getMessage() );
+        }finally {
+            return result;
+        }
+    }
+
+
+    @ResponseBody
+    @PostMapping("/savereportcationnofile")
     public Map<String,Object> savereportcation(HttpServletRequest request) throws Exception {
         Map<String,Object> result = new HashMap<String,Object>(2);
         try{
@@ -112,7 +179,7 @@ public class ReportController {
                 map.put("releationid",request.getParameter("releationid"));
             }
             if(StringUtils.isNotEmpty(request.getParameter("screenbase64"))){
-                map.put("screenbase64", Base64Util.encode(request.getParameter("screenbase64")));
+                map.put("screenbase64", request.getParameter("screenbase64"));
             }
             result =  reportService.savereportcation(map);
         }catch (Exception e){

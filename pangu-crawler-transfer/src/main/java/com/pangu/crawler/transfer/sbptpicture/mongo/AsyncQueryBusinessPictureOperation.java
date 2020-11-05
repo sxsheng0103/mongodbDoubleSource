@@ -28,16 +28,20 @@ public class AsyncQueryBusinessPictureOperation {
 		Map<String,Object> result = new HashMap<String,Object>(2);
 		AsyncQueryBusinessPictureEntity businessPictureEntity = new AsyncQueryBusinessPictureEntity();
 		businessPictureEntity.setCreateTime(TimeUtils.getCurrentDateTime(new Date(),TimeUtils.sdf1));
+		businessPictureEntity.setIp(params.get("ip"));
+		businessPictureEntity.setSz(params.get("sz"));
+		businessPictureEntity.setLsh(params.get("lsh"));
 		businessPictureEntity.setJglx(params.get("jglx"));
 		businessPictureEntity.setName(params.get("name"));
-		businessPictureEntity.setLsh(params.get("lsh"));
+		businessPictureEntity.setNsrsbh(params.get("nsrsbh"));
+		businessPictureEntity.setBusiness(params.get("business"));
 		businessPictureEntity.setReleationid(params.get("releationid"));
 		businessPictureEntity.setScreenbase64(params.get("screenbase64"));
-		businessPictureEntity.setIp(params.get("ip"));
 		businessPictureEntity.setComputername(params.get("computername"));
 		mongoTemplate.save(businessPictureEntity);
 		result.put("code","success");
 		result.put("message","保存成功!");
+		businessPictureEntity.setScreenbase64("length:"+(params.get("screenbase64")==null?"0":params.get("screenbase64").length()));
 		result.put("data",businessPictureEntity);
 		return result;
 	}

@@ -23,6 +23,19 @@ public class AsyncQueryBusinessPictureEntity {
 	@ApiModelProperty(value = "流水号", hidden = true)
 	public String lsh;
 
+	@Field("nsrsbh")
+	@ApiModelProperty(value = "纳税人编号", hidden = true)
+
+	public String nsrsbh;
+
+	@Field("sz")
+	@ApiModelProperty(value = "税种", hidden = true)
+	public String sz;
+
+	@Field("business")
+	@ApiModelProperty(value = "业务类型", hidden = true)
+	public String business;
+
 	@Field("jglx")
 	@ApiModelProperty(value = "结果类型", hidden = true)
 	public String jglx;

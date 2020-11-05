@@ -36,7 +36,18 @@ spring:
     template-loader-path: classpath:/help/
     settings:
       classic_compatible: true
-
+  servlet:
+   multipart:
+    enabled:true
+    max-file-size:30MB
+    max-request-size:100MB
 browser:
   driver:
     chrome-path: C:/crawler/drivers/chromedriver.exe
+#file:
+#  staticAccessPath:/upload/**
+#  uploadFolder:upload/
+servlet:
+  multipart:
+    max-file-size: 10MB
+    enabled: true
