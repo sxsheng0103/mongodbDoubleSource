@@ -3,33 +3,23 @@ package com.pangu.crawler;
 /*import com.pangu.crawler.framework.cookie.CookieExpiredChecker;
 import com.pangu.crawler.framework.host.HostBean;
 import com.pangu.crawler.framework.service.ServiceFirstArg;*/
-import com.pangu.crawler.framework.utils.CryptoJSUtil;
-
-import java.util.HashMap;
-
+import com.pangu.crawler.transfer.com.mongo.configuration.EnableMongoMultiDataSource;
+import org.apache.catalina.Context;
+import org.apache.catalina.connector.Connector;
+import org.apache.tomcat.util.descriptor.web.SecurityCollection;
+import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.data.mongodb.config.EnableMongoAuditing;
-import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.annotation.EnableScheduling;
-
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
-import com.pangu.crawler.transfer.com.mongo.configuration.EnableMongoMultiDataSource;
 import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
+import org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 //
 //@EnableAspectJAutoProxy
@@ -100,4 +90,37 @@ public class PanguCrawlerBootStrap {
                 .build();
     }
 */
+
+    /**
+     * http重定向到https
+     * @return
+     */
+    @Bean
+    public TomcatServletWebServerFactory servletContainer() {
+        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory() {
+            @Override
+            protected void postProcessContext(Context context) {
+                SecurityConstraint constraint = new SecurityConstraint();
+                constraint.setUserConstraint("CONFIDENTIAL");
+                SecurityCollection collection = new SecurityCollection();
+                collection.addPattern("/*");
+                constraint.addCollection(collection);
+                context.addConstraint(constraint);
+            }
+        };
+        tomcat.addAdditionalTomcatConnectors(httpConnector());
+        return tomcat;
+    }
+
+    @Bean
+    public Connector httpConnector() {
+        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+        connector.setScheme("http");
+        //Connector监听的http的端口号
+        connector.setPort(8088);
+        connector.setSecure(false);
+        //监听到http的端口号后转向到的https的端口号
+        connector.setRedirectPort(8087);
+        return connector;
+    }
 }
