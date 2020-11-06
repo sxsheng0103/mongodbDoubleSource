@@ -71,12 +71,17 @@ public class ReportController {
             List<AsyncQueryBusinessPictureEntity> data = reportService.queryHistoricalData(map);
             String message = "成功";
             if(data.size()==1){
+                result.put("code","success");
                 result.put("data",data.get(0));
-            }else{
+            }else if(data.size()>1) {
+                result.put("code","fail");
+                result.put("data",data.get(0));
+                message = "对应条件查询到"+data.size()+"条数据!";
+            }else if(data.size()>1) {
+                result.put("code","fail");
                 result.put("data",null);
-                 message = "对应条件查询到"+data.size()+"条数据!";
+                message = "对应条件查询到"+data.size()+"条数据!";
             }
-            result.put("code","success");
             result.put("message",message);
         }catch (Exception e){
             log.error("查询错误!");

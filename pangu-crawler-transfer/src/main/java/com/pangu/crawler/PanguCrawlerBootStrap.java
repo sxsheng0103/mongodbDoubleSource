@@ -10,6 +10,7 @@ import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
@@ -111,16 +112,19 @@ public class PanguCrawlerBootStrap {
         tomcat.addAdditionalTomcatConnectors(httpConnector());
         return tomcat;
     }
-
+    @Value("${http.port}")
+    private Integer httprt;
+    @Value("${server.port}")
+    private Integer htsport;
     @Bean
     public Connector httpConnector() {
         Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
         connector.setScheme("http");
         //Connector监听的http的端口号
-        connector.setPort(8088);
+        connector.setPort(httprt);
         connector.setSecure(false);
         //监听到http的端口号后转向到的https的端口号
-        connector.setRedirectPort(8087);
+        connector.setRedirectPort(htsport);
         return connector;
     }
 }

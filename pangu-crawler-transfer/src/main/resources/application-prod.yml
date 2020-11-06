@@ -1,6 +1,14 @@
 server:
   port: 8086
-
+  ssl.key-store: classpath:lanying.keystore
+  ssl.key-store-password: lanying
+  ssl.keyStoreType: JKS
+  ssl.keyAlias: lanying
+  ssl.enabled: true
+condition:
+  http2https: true
+http:
+  port: 9909
 #加载日志配置文件
 logging:
   level:
@@ -33,13 +41,20 @@ spring:
     port: 16379
     password: Redis@2018!
   freemarker:
-      template-loader-path: classpath:/help/
-      settings:
-        classic_compatible: true
-
+    template-loader-path: classpath:/help/
+    settings:
+      classic_compatible: true
+  servlet:
+    multipart:
+      enabled:true
+      max-file-size:30MB
+      max-request-size:100MB
 browser:
   driver:
     chrome-path: C:/crawler/drivers/chromedriver.exe
+#file:
+#  staticAccessPath:/upload/**
+#  uploadFolder:upload/
 servlet:
   multipart:
     max-file-size: 10MB
