@@ -1,5 +1,9 @@
 package ScreenShot;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang.StringUtils;
+import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -8,15 +12,14 @@ import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.InetAddress;
-import java.net.URL;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
@@ -50,7 +53,7 @@ public class ScreenCapture1 {
         String recognizeZone = DateTimeFormatter.ofPattern("yyyyMMddHHmmss").format(LocalDateTime.ofInstant(Instant.ofEpochMilli(System.currentTimeMillis()), ZoneId.systemDefault()));
 
         String md5 = "";
-        String screenbase64 = Base64ToFile.get(file);
+        String screenbase64 = "";//Base64ToFile.get(file);
         if (screenbase64 != null) {
             md5 = recognizeZone+"-"+MD5Util.getMd5(screenbase64);
             params.put("releationid",md5);
@@ -236,8 +239,15 @@ public class ScreenCapture1 {
         for(Map.Entry<String,String> property:data.entrySet()){
             dataStr+=property.getKey()+"="+property.getValue()+"&";
         }
-
-        HttpPost post = new HttpPost(uploadpicurl+dataStr);
+        String strUrl = uploadpicurl+dataStr;
+        URI uri = null;
+        try {
+            URL url = new URL(strUrl);
+            uri = new URI(url.getProtocol(), url.getHost()+":"+url.getPort(), url.getPath(), url.getQuery(), null);
+        } catch (MalformedURLException e) {
+        } catch (URISyntaxException e) {
+        }
+        HttpPost post = new HttpPost(uri);
         try {
 
             // 将上传文件复制到临时文件
@@ -336,5 +346,112 @@ public class ScreenCapture1 {
             }
         }
         return readResponse.toString();
+    }
+
+
+
+
+
+
+
+
+
+
+    public static JSONObject httpPostAttach(String uploadpicurl, Map<String,String> data, Map<String,String> headers, File file) {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        String dataStr = "";
+        CloseableHttpResponse response = null;
+        try {
+            for (Map.Entry<String, String> property : data.entrySet()) {
+                if (property.getKey() != null && property.getValue() != null) {
+                    dataStr += property.getKey() + "=" + property.getValue() + "&";
+                }
+            }
+            HttpPost post = new HttpPost(uploadpicurl + dataStr);
+            // 将上传文件复制到临时文件
+            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+            ContentType strContent = ContentType.create("text/plain", Charset.forName("UTF-8"));
+            builder.addTextBody("attachmentType", "certificate", strContent);
+            FileBody bin = new FileBody(file);
+            builder.addPart("file", bin);
+            //传文字参数
+            builder.addPart("attachmentType",
+                    new StringBody("certificate", ContentType.create("text/plain", Consts.UTF_8)));
+            HttpEntity parameterEntity = builder.build();
+            //这里不要自己制定header，它会自己模拟，你自己指定了就会报错
+//            post.setHeader("Content-type", "multipart/form-data");
+            post.setEntity(parameterEntity);
+            post.setHeader("sbptmiyao", "RTdvVkJHWW0mQ3hYT1pVcXBaJSYhRk9YZiN3TGtoeXFYWSMjKjQjcllnb1kjTmFmWndeT2dNdF4kNWpvWlZmaQ==");
+            response = httpClient.execute(post, HttpClientContext.create());
+            String content = EntityUtils.toString(response.getEntity());
+            if (StringUtils.isEmpty(content)) {
+                return JSON.parseObject("{\"code\":\"fail\",\"message\":\"没有返回结果\"}");
+            } else {
+                return JSON.parseObject(content);
+            }
+        } catch (HttpHostConnectException e1) {
+//            Log.out("保存图片服务连接异常，请检查!");
+            return JSON.parseObject("{\"code\":\"fail\",\"message\":\"保存图片服务停止，请检查!\"}");
+        } catch (Exception e) {
+//            Log.out("保存图片异常，请检查!" + e.getMessage());
+            return JSON.parseObject("{\"code\":\"fail\",\"message\":\"" + e.getMessage() + "\"}");
+        } finally {
+            if (httpClient != null) {
+                try {
+                    response.getEntity().consumeContent();
+                    httpClient.close();
+                } catch (Exception e) {
+                }
+            }
+            return null;
+        }
+    }
+
+    public static JSONObject httpPost(String uploadpicurl, Map<String,String> headers, Map<String,String> params) {
+        CloseableHttpClient httpClient = HttpClientBuilder.create().setMaxConnTotal(5).
+                setMaxConnPerRoute(10000).build();//HttpClients.createDefault();
+        String dataStr = "";
+        for(Map.Entry<String,String> property:params.entrySet()){
+            dataStr+=property.getKey()+"="+property.getValue()+"&";
+        }
+        URI uri = null;
+        try{
+            URL url = new URL(uploadpicurl+dataStr);
+            uri = new URI(url.getProtocol(),url.getHost(),url.getPath(),url.getQuery(),null);
+        }catch (MalformedURLException e) {
+//            Log.out(e.getMessage());
+        } catch (URISyntaxException e) {
+//            Log.out(e.getMessage());
+        }
+        CloseableHttpResponse response = null;
+        HttpPost post = new HttpPost(uri);
+        try {
+            for(Map.Entry<String,String> head: headers.entrySet()){
+                if(head.getKey()!=null&&head.getValue()!=null){
+                    post.setHeader(head.getKey(),head.getValue());
+                }
+            }
+            response = httpClient.execute(post, HttpClientContext.create());
+            String content = EntityUtils.toString(response.getEntity());
+            if(StringUtils.isEmpty(content)){
+                return JSON.parseObject("{\"code\":\"fail\",\"message\":\"没有返回结果\"}");
+            }else{
+                return JSON.parseObject(content);
+            }
+        }catch (HttpHostConnectException e1){
+//            Log.out("保存图片服务连接异常，请检查!");
+            return JSON.parseObject("{\"code\":\"fail\",\"message\":\"保存图片服务停止，请检查!\"}");
+        }catch (Exception e) {
+//            Log.out("保存图片异常，请检查!"+e.getMessage());
+            return JSON.parseObject("{\"code\":\"fail\",\"message\":\""+e.getMessage()+"\"}");
+        }finally {
+            if(httpClient!=null){
+                try {
+                    response.getEntity().consumeContent();
+                    httpClient.close();
+                }catch (Exception e){
+                }
+            }
+        }
     }
 }

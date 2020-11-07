@@ -10,9 +10,6 @@ import java.io.IOException;
 public class Test4j2 extends  Thread{
     protected static Logger logger = Logger.getLogger(Test4j2.class);
     public static void main(String[] args) throws IOException, InterruptedException {
-        logger.info("info");
-        logger.debug("debug");
-        logger.error("error");
         /*new Thread(() -> {
             logger.info("info");
             logger.debug("debug");

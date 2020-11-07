@@ -1,22 +1,12 @@
-package com.pangu.crawler.transfer.sbptpicture.service;
+package com.pangu.crawler.sbptpicture.service;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-
-import com.pangu.crawler.business.dao.mongoDB.entity.AsyncQueryHistoricalDataInfoEntity;
-import com.pangu.crawler.business.dao.mongoDB.operation.auxiliaryutils.HelpDocListQuery;
-import com.pangu.crawler.business.dao.mongoDB.operation.auxiliaryutils.Paging;
-import com.pangu.crawler.framework.utils.Base64Util;
 import com.pangu.crawler.framework.utils.StringUtils;
-import com.pangu.crawler.transfer.sbptpicture.mongo.AsyncQueryBusinessPictureEntity;
-import com.pangu.crawler.transfer.sbptpicture.mongo.AsyncQueryBusinessPictureOperation;
+import com.pangu.crawler.sbptpicture.mongo.AsyncQueryBusinessPictureEntity;
+import com.pangu.crawler.sbptpicture.mongo.AsyncQueryBusinessPictureOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +15,7 @@ import java.util.Map;
 public class ReportService {
 
 	@Autowired
-	AsyncQueryBusinessPictureOperation asyncQueryBusinessPictureOperation;
+    AsyncQueryBusinessPictureOperation asyncQueryBusinessPictureOperation;
 
 	/**
 	 * @param params

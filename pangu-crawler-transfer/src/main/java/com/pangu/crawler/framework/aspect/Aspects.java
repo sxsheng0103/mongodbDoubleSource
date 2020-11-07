@@ -1,35 +1,27 @@
 package com.pangu.crawler.framework.aspect;
 
-import com.alibaba.fastjson.JSONObject;
-import com.pangu.crawler.framework.cookie.*;
-import com.pangu.crawler.framework.exception.LoginExpiredException;
-import com.pangu.crawler.framework.exception.PanicException;
-/*import com.pangu.crawler.framework.http.HttpManager;
-import com.pangu.crawler.framework.service.ServiceFirstArg;*/
 import com.pangu.crawler.framework.utils.Base64Util;
 import com.pangu.crawler.transfer.utils.TempUserInfo;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.InternalResourceView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
-import java.util.*;
-import java.util.stream.Stream;
+import java.util.Arrays;
+import java.util.Optional;
+
+/*import com.pangu.crawler.framework.http.HttpManager;
+import com.pangu.crawler.framework.service.ServiceFirstArg;*/
 
 @Aspect
 @Component
@@ -154,7 +146,7 @@ public class Aspects implements ApplicationContextAware {
         throw e;*/
     }
 
-    @Around("execution(* com.pangu.crawler.transfer..*Controller.*(..)) && !execution(* com.pangu.crawler.transfer.controller.LoginController.*(..))")// && !execution(* com.pangu.crawler.transfer.sbptpicture.service.ReportController.*(..))
+    @Around("execution(* com.pangu.crawler.transfer..*Controller.*(..)) && !execution(* com.pangu.crawler.transfer.controller.LoginController.*(..))")// && !execution(* ReportController.*(..))
     public Object aroundService(ProceedingJoinPoint joinPoint) throws Exception {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();

@@ -4,20 +4,13 @@ package com.pangu.crawler;
 import com.pangu.crawler.framework.host.HostBean;
 import com.pangu.crawler.framework.service.ServiceFirstArg;*/
 import com.pangu.crawler.transfer.com.mongo.configuration.EnableMongoMultiDataSource;
-import org.apache.catalina.Context;
-import org.apache.catalina.connector.Connector;
-import org.apache.tomcat.util.descriptor.web.SecurityCollection;
-import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -96,7 +89,7 @@ public class PanguCrawlerBootStrap {
      * http重定向到https
      * @return
      */
-    @Bean
+    /*@Bean
     public TomcatServletWebServerFactory servletContainer() {
         TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory() {
             @Override
@@ -126,5 +119,5 @@ public class PanguCrawlerBootStrap {
         //监听到http的端口号后转向到的https的端口号
         connector.setRedirectPort(htsport);
         return connector;
-    }
+    }*/
 }

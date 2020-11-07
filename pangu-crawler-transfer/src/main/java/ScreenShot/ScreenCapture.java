@@ -6,6 +6,7 @@ import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGEncodeParam;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import lombok.extern.slf4j.Slf4j;
+
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
@@ -91,7 +92,7 @@ public class ScreenCapture {
         }catch (Exception e){
             throw new RuntimeException("截屏发生了异常信息"+e.getClass().getName());
         }
-        return Base64ToFile.get(file);
+        return "";
     }
 
 

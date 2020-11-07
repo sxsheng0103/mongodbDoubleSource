@@ -1,32 +1,23 @@
-package com.pangu.crawler.transfer.sbptpicture.service;
+package com.pangu.crawler.sbptpicture.service;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.pangu.crawler.business.dao.mongoDB.entity.AsyncBusinessTransferRuleEntity;
-import com.pangu.crawler.business.dao.mongoDB.operation.auxiliaryutils.Paging;
-import com.pangu.crawler.framework.utils.Base64Util;
 import com.pangu.crawler.framework.utils.StringUtils;
-import com.pangu.crawler.transfer.sbptpicture.mongo.AsyncQueryBusinessPictureEntity;
-import com.pangu.crawler.transfer.service.TransferRuleDataService;
-import com.pangu.crawler.transfer.utils.Base64ToFile;
+import com.pangu.crawler.sbptpicture.mongo.AsyncQueryBusinessPictureEntity;
+import com.pangu.crawler.sbptpicture.utils.Base64ToFile;
+import com.pangu.crawler.sbptpicture.utils.SymmetricEncoder;
 import com.pangu.crawler.transfer.utils.TimeUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.Charsets;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
-import javax.net.ssl.*;
 import javax.servlet.http.HttpServletRequest;
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -67,7 +58,6 @@ public class ReportController {
             if(StringUtils.isNotEmpty(request.getParameter("id"))){
                 map.put("id",request.getParameter("id"));
             }
-//127.0.0.1:8086/report/queryreportcation?jglx=1&name=110423NDj&lsh=111&releationid=121231&id=5f992e8a6279bd61a8a8f847
             List<AsyncQueryBusinessPictureEntity> data = reportService.queryHistoricalData(map);
             String message = "成功";
             if(data.size()==1){
@@ -89,21 +79,93 @@ public class ReportController {
             return  result;
         }
     }
-//127.0.0.1:8086/report/savereportcation?jglx=1&name=110423NDj&lsh=111&releationid=121231&screenbase64=weqrwqrqwrqwer
+
+    /***
+     * 保存申报结果图片
+     */
+    @PostMapping
+    @ResponseBody
+    @RequestMapping("/viewqueryreportcation")
+    public Map<String,Object> viewqueryreportcation(HttpServletRequest request) throws Exception {
+        Map<String,Object> result = new HashMap<String,Object>(3);
+        try{
+            Map<String,String> map = new HashMap<String,String>(7);
+
+            if(StringUtils.isNotEmpty(request.getParameter("jglx"))){
+                map.put("jglx",request.getParameter("jglx"));
+            }
+
+            if(StringUtils.isNotEmpty(request.getParameter("lsh"))){
+                map.put("lsh",request.getParameter("lsh"));
+            }
+            if(StringUtils.isNotEmpty(request.getParameter("releationid"))){
+                map.put("releationid",request.getParameter("releationid"));
+            }
+            if(StringUtils.isNotEmpty(request.getParameter("id"))){
+                map.put("id",request.getParameter("id"));
+            }
+            AsyncQueryBusinessPictureEntity entity = null;
+            List<AsyncQueryBusinessPictureEntity> data = reportService.queryHistoricalData(map);
+            String message = "成功";
+            if(data.size()==1){
+                entity = data.get(0);
+                result.put("code","success");
+                result.put("data",data.get(0));
+            }else if(data.size()>1) {
+                entity = data.get(0);
+                result.put("code","success");
+                result.put("data",data.get(0));
+                message = "对应条件查询到"+data.size()+"条数据!";
+            }else{
+                result.put("code","fail");
+                result.put("data",null);
+                message = "对应条件查询到"+data.size()+"条数据!";
+            }
+            JSONObject obj = new JSONObject();
+            JSONObject doc = new JSONObject();
+            JSONObject resultObj = new JSONObject();
+            if(entity!=null){
+                entity = data.get(0);
+                resultObj.put("ip",entity.getIp());
+                resultObj.put("sz",entity.getSz());
+                resultObj.put("name",entity.getName());
+                resultObj.put("nsrsbh",entity.getNsrsbh());
+                resultObj.put("business",entity.getBusiness());
+                resultObj.put("computername",entity.getComputername());
+                resultObj.put("screen",entity.getScreenbase64());
+//                resultObj.put("message",message);
+                result.put("data",resultObj);
+            }
+            doc.put("result",result);
+            obj.put("doc",doc);
+            return obj.toJavaObject(Map.class);
+        }catch (Exception e){
+            result = new HashMap<String,Object>(3);
+            result.put("code","fail");
+            result.put("message","查询错误!");
+
+
+            log.error("查询错误!");
+        }finally {
+
+            return  result;
+        }
+    }
+
     @ResponseBody
     @PostMapping("/savereportcation")
-    public Map<String,Object> savereportcation(@RequestParam(value = "file",required=false)  MultipartFile file,HttpServletRequest request) throws Exception {
+    public Map<String,Object> savereportcation(HttpServletRequest request) throws Exception {//@RequestParam(value = "file",required=false)  MultipartFile file,
         Map<String,Object> result = new HashMap<String,Object>(2);
         try{
             MultipartResolver resolver = new CommonsMultipartResolver(request.getSession().getServletContext());
             MultipartHttpServletRequest multipartRequest = resolver.resolveMultipart(request);
-            MultipartFile file1  = multipartRequest.getFile("file");
+            MultipartFile file  = multipartRequest.getFile("file");
             String name = "";
-            String screenbase64 = "";
-            if(file1!=null){
-                name = file1.getOriginalFilename();
+            String  screenbase64 = request.getParameter("screenbase64");
+           if(file!=null){
+                name = file.getOriginalFilename();
                 try{
-                    screenbase64 = Base64ToFile.get(file1.getInputStream());
+                    screenbase64 = Base64ToFile.get(file.getInputStream()).replace("\r\n","");
                 }catch (Exception e){
                     screenbase64 = "   ";
                 }
@@ -113,6 +175,8 @@ public class ReportController {
             String jglx = request.getParameter("jglx");
             String lsh = request.getParameter("lsh");
             String nsrsbh = request.getParameter("nsrsbh");
+            String picname = request.getParameter("picname");
+
             String business = request.getParameter("business");
             String releationid = request.getParameter("releationid");
             String computername = request.getParameter("computername");
@@ -145,50 +209,13 @@ public class ReportController {
                 map.put("computername",computername);
             }
             if(StringUtils.isNotEmpty(screenbase64)){
-                map.put("screenbase64", screenbase64);
+                map.put("screenbase64", SymmetricEncoder.AESEncode(releationid,screenbase64));
             }
             result =  reportService.savereportcation(map);
         }catch (Exception e){
             e.printStackTrace();
             result.put("code","fail");
             result.put("message",e.getMessage());
-            log.error("保存申报图片失败!"+ TimeUtils.getCurrentDateTime(new Date(),TimeUtils.sdf2) +e.getMessage() );
-        }finally {
-            return result;
-        }
-    }
-
-
-    @ResponseBody
-    @PostMapping("/savereportcationnofile")
-    public Map<String,Object> savereportcation(HttpServletRequest request) throws Exception {
-        Map<String,Object> result = new HashMap<String,Object>(2);
-        try{
-            Map<String,String> map = new HashMap<String,String>(7);
-            if(StringUtils.isNotEmpty(request.getParameter("jglx"))){
-                map.put("jglx",request.getParameter("jglx"));
-            }
-            if(StringUtils.isNotEmpty(request.getParameter("ip"))){
-                map.put("ip",request.getParameter("ip"));
-            }
-            if(StringUtils.isNotEmpty(request.getParameter("computername"))){
-                map.put("computername",request.getParameter("computername"));
-            }
-            if(StringUtils.isNotEmpty(request.getParameter("name"))){
-                map.put("name",request.getParameter("name"));
-            }
-            if(StringUtils.isNotEmpty(request.getParameter("lsh"))){
-                map.put("lsh",request.getParameter("lsh"));
-            }
-            if(StringUtils.isNotEmpty(request.getParameter("releationid"))){
-                map.put("releationid",request.getParameter("releationid"));
-            }
-            if(StringUtils.isNotEmpty(request.getParameter("screenbase64"))){
-                map.put("screenbase64", request.getParameter("screenbase64"));
-            }
-            result =  reportService.savereportcation(map);
-        }catch (Exception e){
-            e.printStackTrace();
             log.error("保存申报图片失败!"+ TimeUtils.getCurrentDateTime(new Date(),TimeUtils.sdf2) +e.getMessage() );
         }finally {
             return result;

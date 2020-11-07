@@ -1,4 +1,4 @@
-package com.pangu.crawler.transfer.sbptpicture.mongo;
+package com.pangu.crawler.sbptpicture.mongo;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
