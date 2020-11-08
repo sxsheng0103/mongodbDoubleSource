@@ -1,8 +1,7 @@
-package com.pangu.crawler.transfer.com.log;
+package utils;
 
 
 
-import lombok.extern.log4j.Log4j2;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;

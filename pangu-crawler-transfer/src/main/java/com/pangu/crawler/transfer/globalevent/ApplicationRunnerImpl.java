@@ -1,4 +1,4 @@
-package com.pangu.crawler.transfer.utils;
+package com.pangu.crawler.transfer.globalevent;
 
 import com.pangu.crawler.transfer.service.TransferRuleService;
 import org.springframework.beans.factory.annotation.Autowired;

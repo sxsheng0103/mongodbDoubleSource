@@ -86,8 +86,9 @@ public class ReportController {
     @PostMapping
     @ResponseBody
     @RequestMapping("/viewqueryreportcation")
-    public Map<String,Object> viewqueryreportcation(HttpServletRequest request) throws Exception {
+    public JSONObject viewqueryreportcation(HttpServletRequest request) throws Exception {
         Map<String,Object> result = new HashMap<String,Object>(3);
+        JSONObject obj = new JSONObject();
         try{
             Map<String,String> map = new HashMap<String,String>(7);
 
@@ -109,19 +110,19 @@ public class ReportController {
             String message = "成功";
             if(data.size()==1){
                 entity = data.get(0);
-                result.put("code","success");
+                obj.put("code","success");
                 result.put("data",data.get(0));
             }else if(data.size()>1) {
                 entity = data.get(0);
-                result.put("code","success");
+                obj.put("code","success");
                 result.put("data",data.get(0));
                 message = "对应条件查询到"+data.size()+"条数据!";
             }else{
-                result.put("code","fail");
+                obj.put("code","fail");
                 result.put("data",null);
                 message = "对应条件查询到"+data.size()+"条数据!";
             }
-            JSONObject obj = new JSONObject();
+
             JSONObject doc = new JSONObject();
             JSONObject resultObj = new JSONObject();
             if(entity!=null){
@@ -133,22 +134,19 @@ public class ReportController {
                 resultObj.put("business",entity.getBusiness());
                 resultObj.put("computername",entity.getComputername());
                 resultObj.put("screen",entity.getScreenbase64());
-//                resultObj.put("message",message);
+                obj.put("message",message);
                 result.put("data",resultObj);
             }
-            doc.put("result",result);
+            doc.put("result",result.get("data"));
             obj.put("doc",doc);
-            return obj.toJavaObject(Map.class);
+            return obj;
         }catch (Exception e){
             result = new HashMap<String,Object>(3);
-            result.put("code","fail");
-            result.put("message","查询错误!");
-
-
+            obj.put("code","fail");
+            obj.put("message","查询错误!");
             log.error("查询错误!");
+            return  obj;
         }finally {
-
-            return  result;
         }
     }
 

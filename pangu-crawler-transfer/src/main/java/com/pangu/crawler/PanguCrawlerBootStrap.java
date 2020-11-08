@@ -3,6 +3,7 @@ package com.pangu.crawler;
 /*import com.pangu.crawler.framework.cookie.CookieExpiredChecker;
 import com.pangu.crawler.framework.host.HostBean;
 import com.pangu.crawler.framework.service.ServiceFirstArg;*/
+
 import com.pangu.crawler.transfer.com.mongo.configuration.EnableMongoMultiDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,6 +86,31 @@ public class PanguCrawlerBootStrap {
     }
 */
 
+
+
+      /*@Bean
+      public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurerAdapter() {
+          @Override
+          public void addCorsMappings(CorsRegistry registry) {
+            registry
+                .addMapping("/**")
+                .allowedOrigins("*")
+                .allowedMethods("PUT", "DELETE", "GET", "POST")
+                .allowedHeaders("*")
+                .exposedHeaders(
+                    "access-control-allow-headers",
+                    "access-control-allow-methods",
+                    "access-control-allow-origin",
+                    "access-control-max-age",
+                    "X-Frame-Options")
+                .allowCredentials(false)
+                .maxAge(3600);
+          }
+        };
+    }*/
+
+
     /**
      * http重定向到https
      * @return
@@ -105,7 +131,8 @@ public class PanguCrawlerBootStrap {
         tomcat.addAdditionalTomcatConnectors(httpConnector());
         return tomcat;
     }
-    @Value("${http.port}")
+
+   @Value("${http.port}")
     private Integer httprt;
     @Value("${server.port}")
     private Integer htsport;

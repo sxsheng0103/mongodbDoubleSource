@@ -13,7 +13,7 @@ import java.util.Properties;
 @Slf4j
 public class TLog {
     private static final Properties properties = new Properties();
-    private static  String currentDateS = TimeUtils.getCurrentDateTime(null,TimeUtils.sdf6);
+
     private static String logpath = "";
 
     private static Map<String,Logger> loggerMaps = new HashMap<String,Logger>();
@@ -35,6 +35,7 @@ public class TLog {
     }
 
     public static Logger instancelog(boolean datesplit,Class clazz){
+        String currentDateS = "";
         Logger logger = null;
         try{
             String logname = "";
