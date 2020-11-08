@@ -35,15 +35,15 @@ public class TLog {
     }
 
     public static Logger instancelog(boolean datesplit,Class clazz){
-        String currentDateS = "";
+        String currentDateS = "current";
         Logger logger = null;
         try{
             String logname = "";
-            if(datesplit!=true){
+           /* if(datesplit!=true){
                 currentDateS = "";
             }else if(!currentDateS.equals(TimeUtils.getCurrentDateTime(null,TimeUtils.sdf6))){
                 currentDateS = TimeUtils.getCurrentDateTime(null,TimeUtils.sdf6);
-            }
+            }*/
             logname = currentDateS;
             if(CacheInfo.threadglobalName.get()==null){
                 File logfile = new File(logpath+"\\Tlog\\handler\\");

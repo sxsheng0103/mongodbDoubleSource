@@ -1,8 +1,8 @@
 package com.pangu.crawler.transfer.com.log;
 
-import java.io.IOException;
-
 import org.apache.log4j.*;
+
+import java.io.IOException;
 
 public class ThreadLogger1
 {
