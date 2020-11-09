@@ -3,6 +3,7 @@ package com.pangu.crawler.sbptpicture.service;
 import com.alibaba.fastjson.JSONObject;
 import com.pangu.crawler.framework.utils.StringUtils;
 import com.pangu.crawler.sbptpicture.mongo.AsyncQueryBusinessPictureEntity;
+import com.pangu.crawler.sbptpicture.utils.AesEncryptUtil;
 import com.pangu.crawler.sbptpicture.utils.Base64ToFile;
 import com.pangu.crawler.sbptpicture.utils.SymmetricEncoder;
 import com.pangu.crawler.transfer.utils.TimeUtils;
@@ -207,7 +208,7 @@ public class ReportController {
                 map.put("computername",computername);
             }
             if(StringUtils.isNotEmpty(screenbase64)){
-                map.put("screenbase64", SymmetricEncoder.AESEncode(releationid,screenbase64));
+                map.put("screenbase64", AesEncryptUtil.encrypt(screenbase64));
             }
             result =  reportService.savereportcation(map);
         }catch (Exception e){
