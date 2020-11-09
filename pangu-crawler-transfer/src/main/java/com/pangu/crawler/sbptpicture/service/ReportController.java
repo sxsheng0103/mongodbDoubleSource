@@ -175,7 +175,7 @@ public class ReportController {
             String lsh = request.getParameter("lsh");
             String nsrsbh = request.getParameter("nsrsbh");
             String nsrmc = request.getParameter("nsrmc");
-            String nsrsdq = request.getParameter("nsrsdq");
+            String nsrdq = request.getParameter("nsrdq");
             String picname = request.getParameter("picname");
             String business = request.getParameter("business");
             String releationid = request.getParameter("releationid");
@@ -202,8 +202,8 @@ public class ReportController {
             if(StringUtils.isNotEmpty(nsrmc)){
                 map.put("nsrmc",nsrmc);
             }
-            if(StringUtils.isNotEmpty(nsrsdq)){
-                map.put("nsrsdq",nsrsdq);
+            if(StringUtils.isNotEmpty(nsrdq)){
+                map.put("nsrdq",nsrdq);
             }
             if(StringUtils.isNotEmpty(business)){
                 map.put("business",business);
