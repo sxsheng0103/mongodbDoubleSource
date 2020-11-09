@@ -35,6 +35,8 @@ public class AsyncQueryBusinessPictureOperation {
 			businessPictureEntity.setJglx(params.get("jglx"));
 			businessPictureEntity.setName(params.get("name"));
 			businessPictureEntity.setNsrsbh(params.get("nsrsbh"));
+			businessPictureEntity.setNsrsbh(params.get("nsrsdq"));
+			businessPictureEntity.setNsrmc(params.get("nsrmc"));
 			businessPictureEntity.setBusiness(params.get("business"));
 			businessPictureEntity.setReleationid(params.get("releationid"));
 			businessPictureEntity.setScreenbase64(params.get("screenbase64"));

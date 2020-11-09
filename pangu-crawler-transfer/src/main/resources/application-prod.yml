@@ -1,14 +1,8 @@
 server:
   port: 8086
-  ssl.key-store: classpath:lanying.keystore
-  ssl.key-store-password: lanying
-  ssl.keyStoreType: JKS
-  ssl.keyAlias: lanying
-  ssl.enabled: true
-condition:
-  http2https: true
-http:
-  port: 9909
+
+
+
 #加载日志配置文件
 logging:
   level:
