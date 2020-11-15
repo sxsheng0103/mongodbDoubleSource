@@ -25,8 +25,15 @@ public class AsyncQueryBusinessPictureEntity {
 
 	@Field("nsrsbh")
 	@ApiModelProperty(value = "纳税人编号", hidden = true)
-
 	public String nsrsbh;
+
+	@Field("nsrmc")
+	@ApiModelProperty(value = "纳税人名称", hidden = true)
+	public String nsrmc;
+
+	@Field("nsrdq")
+	@ApiModelProperty(value = "纳税人地区", hidden = true)
+	public String nsrdq;
 
 	@Field("sz")
 	@ApiModelProperty(value = "税种", hidden = true)

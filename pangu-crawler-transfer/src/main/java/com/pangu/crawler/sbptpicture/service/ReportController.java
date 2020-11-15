@@ -3,6 +3,7 @@ package com.pangu.crawler.sbptpicture.service;
 import com.alibaba.fastjson.JSONObject;
 import com.pangu.crawler.framework.utils.StringUtils;
 import com.pangu.crawler.sbptpicture.mongo.AsyncQueryBusinessPictureEntity;
+import com.pangu.crawler.sbptpicture.utils.AesEncryptUtil;
 import com.pangu.crawler.sbptpicture.utils.Base64ToFile;
 import com.pangu.crawler.sbptpicture.utils.SymmetricEncoder;
 import com.pangu.crawler.transfer.utils.TimeUtils;
@@ -173,8 +174,9 @@ public class ReportController {
             String jglx = request.getParameter("jglx");
             String lsh = request.getParameter("lsh");
             String nsrsbh = request.getParameter("nsrsbh");
+            String nsrmc = request.getParameter("nsrmc");
+            String nsrdq = request.getParameter("nsrdq");
             String picname = request.getParameter("picname");
-
             String business = request.getParameter("business");
             String releationid = request.getParameter("releationid");
             String computername = request.getParameter("computername");
@@ -197,6 +199,12 @@ public class ReportController {
             if(StringUtils.isNotEmpty(nsrsbh)){
                 map.put("nsrsbh",nsrsbh);
             }
+            if(StringUtils.isNotEmpty(nsrmc)){
+                map.put("nsrmc",nsrmc);
+            }
+            if(StringUtils.isNotEmpty(nsrdq)){
+                map.put("nsrdq",nsrdq);
+            }
             if(StringUtils.isNotEmpty(business)){
                 map.put("business",business);
             }
@@ -207,7 +215,7 @@ public class ReportController {
                 map.put("computername",computername);
             }
             if(StringUtils.isNotEmpty(screenbase64)){
-                map.put("screenbase64", SymmetricEncoder.AESEncode(releationid,screenbase64));
+                map.put("screenbase64", AesEncryptUtil.encrypt(screenbase64));
             }
             result =  reportService.savereportcation(map);
         }catch (Exception e){
