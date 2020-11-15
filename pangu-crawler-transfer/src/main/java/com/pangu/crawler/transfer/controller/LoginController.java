@@ -1,16 +1,21 @@
 package com.pangu.crawler.transfer.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.pangu.crawler.framework.utils.StringUtils;
 import com.pangu.crawler.transfer.utils.TempUserInfo;
+import com.wf.captcha.ArithmeticCaptcha;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @Author sheng.ding
@@ -49,6 +54,36 @@ public class LoginController {
             return result;
         }
     }
+
+    @ResponseBody
+    @PostMapping("/getVCode")
+    public JSONObject getVCode(HttpServletRequest request, HttpServletResponse response){
+        Map<String,Object> result = new HashMap<String,Object>(2);
+        ArithmeticCaptcha captcha = new ArithmeticCaptcha(111, 36);
+        captcha.setLen(2);
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+    //        ValueOperations<String, String> ops = redisTemplate.opsForValue();
+    //        ops.set(IMG_CODE_PREFIX + uuid, captcha.text(), IMG_CODE_EXPIRE, TimeUnit.SECONDS);
+            System.out.println(captcha.text());
+        result.put("uuid", uuid);
+        result.put("img", captcha.toBase64());
+//        return JSON.parseObject(JSON.toJSONString(result));
+        return JSON.parseObject(JSON.toJSONString(result));
+      /*  response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/plain");
+        PrintWriter out = null;
+        try {
+            out = response.getWriter();
+            out.print(captcha.toBase64());
+            out.flush();
+        } catch (IOException e) {
+        } finally {
+            if (null != out) {
+                    out.close();
+            }
+        }*/
+    }
+
 
     @GetMapping("/timeouterror")
     public ModelAndView timeouterror(HttpServletRequest request, HttpServletResponse response){

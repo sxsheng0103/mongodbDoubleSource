@@ -4,11 +4,12 @@ layui.config({
     ajaxExtention:'ajaxExtention', //加载自定义扩展
     $tool:'tool',
     $api:'api',
-    $sha1:'./sha/sha'
-}).use(['form', 'layer','ajaxExtention','$tool','$sha','$api'], function () {
+    $sha1:'sha1'
+}).use(['form', 'layer','ajaxExtention','$tool','$sha1','$api','jquery'], function () {
     var form = layui.form,
         layer = parent.layer === undefined ? layui.layer : parent.layer,
         $ = layui.jquery,
+        // 操作对象
         $sha1 = layui.$sha1,
         $tool=layui.$tool,
         $api = layui.$api;
@@ -31,34 +32,65 @@ layui.config({
     }).resize();*/
 
     //登录按钮事件
-    form.on("submit(login)", function (data) {
+    form.on('submit(login)',function (data) {
         debugger
-        console.log(data.field);
-        var req = {
-            name: data.field.username,
-            pwd: $sha1.hex_sha1(data.field.password),
-            code: data.field.code
-        };
-
-       $api.Login(req,function (data) {
-           //保存用户信息到session中
-           window.sessionStorage.setItem("sysUser",data.data.loginName);
-           window.sessionStorage.setItem("userId",data.data.userId);
-           //登录成功跳转到首页,code !== '0000'的已经在ajaxExtention中统一处理了
-           window.location.href = $tool.getResUrl()+"layuicms/index.html";
-       });
-
+        $.ajax({
+            url:'loginCheckDefaultUser/',
+            data:data.field,
+            dataType:'json',
+            type:'post',
+            success:function (data) {
+                if (data.code!=null &&  data.code== 'fail'){
+                    layer.msg(data.message);
+                }else if(data.code!=null &&  data.code== 'success'){
+                    var date = new Date();
+                    date.setTime(date.getTime()+data.age);
+                    document.cookie=data.cookie+'='+data.Svalue+';expires='+date;
+                    location.href = "/main";
+                }
+            }
+        })
         return false;
     });
-
+    debugger
+    $.ajax({
+        url:"/getVCode",
+        data:{},
+        type:"Post",
+        dataType:"json",
+        async: false,
+        success:function(data){
+            $('.code').find('img').prop('src',data.img);
+        },
+        error:function(data){
+        }
+    });
+    $('#imgcode').click(function () {
+        var suffix = Date.now();
+        debugger
+        $.ajax({
+            url:"/getVCode",
+            data:{},
+            type:"Post",
+            dataType:"json",
+            async: false,
+            success:function(data){
+                $('.code').find('img').prop('src',data.img);
+            },
+            error:function(data){
+            }
+        });
+        // $api.image({version:suffix},setimage,null);
+        // $('.code').find('img').prop('src',$tool.getContext() + 'getVCode?version=' + suffix);
+    });
     /**
      * 更换验证码
      * */
-    $('.code').click(function () {
+    /*$('.code').click(function () {
         debugger
         var suffix = Date.now();
         $('.code').find('img').prop('src',$tool.getContext() + 'getVCode?version=' + suffix);
-    });
+    });*/
 
     function init() {
         if(isLogin()){ // 已经登录过直接跳转到首页
@@ -78,3 +110,11 @@ layui.config({
     }
 
 });
+
+
+/*
+$(document).ready(function f() {
+    //$('.code').find('img').prop('src',$tool.getContext() + 'getVCode');
+
+
+});*/
