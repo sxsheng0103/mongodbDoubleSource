@@ -132,6 +132,8 @@ public class ReportController {
                 resultObj.put("sz",entity.getSz());
                 resultObj.put("name",entity.getName());
                 resultObj.put("nsrsbh",entity.getNsrsbh());
+                resultObj.put("nsrdq",entity.getNsrdq());
+                resultObj.put("nsrmc",entity.getNsrmc());
                 resultObj.put("business",entity.getBusiness());
                 resultObj.put("computername",entity.getComputername());
                 resultObj.put("screen",entity.getScreenbase64());
