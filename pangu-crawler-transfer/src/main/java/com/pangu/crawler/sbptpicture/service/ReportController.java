@@ -220,6 +220,7 @@ public class ReportController {
                 map.put("screenbase64", AesEncryptUtil.encrypt(screenbase64));
             }
             result =  reportService.savereportcation(map);
+            reportService.detailReportContent(map,screenbase64);
         }catch (Exception e){
             e.printStackTrace();
             result.put("code","fail");
@@ -230,4 +231,61 @@ public class ReportController {
         }
     }
 
+
+    /**
+     * 请求报文保存
+     * requestReportContent
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("/requestReportContent")
+    public Map<String,Object>  requestReportContent(HttpServletRequest request) throws Exception {
+        Map<String,Object> result = new HashMap<String,Object>(2);
+        String computername = request.getParameter("computername");
+        Map<String,String> map = new HashMap<String,String>(7);
+        if(StringUtils.isNotEmpty(computername)){
+            map.put("ip",computername);
+        }
+        result =  reportService.requestReportContent(map,null);
+        return null;
+    }
+
+    /**
+     * 结果报文保存
+     * requestReportContent
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("/responseReportContent")
+    public Map<String,Object>  responseReportContent(HttpServletRequest request) throws Exception {
+        Map<String,Object> result = new HashMap<String,Object>(2);
+        String computername = request.getParameter("computername");
+        Map<String,String> map = new HashMap<String,String>(7);
+        if(StringUtils.isNotEmpty(computername)){
+            map.put("ip",computername);
+        }
+        result =  reportService.responseReportContent(map,null);
+        return null;
+    }
+
+    /**
+     * 详情信息保存
+     * requestReportContent
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("/detailReportContent")
+    public Map<String,Object>  detailReportContent(HttpServletRequest request) throws Exception {
+        Map<String,Object> result = new HashMap<String,Object>(2);
+        String computername = request.getParameter("computername");
+        Map<String,String> map = new HashMap<String,String>(7);
+        if(StringUtils.isNotEmpty(computername)){
+            map.put("ip",computername);
+        }
+        result =  reportService.detailReportContent(map,null);
+        return null;
+    }
 }

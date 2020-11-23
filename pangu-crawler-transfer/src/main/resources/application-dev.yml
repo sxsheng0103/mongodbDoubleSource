@@ -49,6 +49,7 @@ spring:
 browser:
   driver:
     chrome-path: C:/crawler/drivers/chromedriver.exe
+serversaveaddr: C:/file
 #file:
 #  staticAccessPath:/upload/**
 #  uploadFolder:upload/
