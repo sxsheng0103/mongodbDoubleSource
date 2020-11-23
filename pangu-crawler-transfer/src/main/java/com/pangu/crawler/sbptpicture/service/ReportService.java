@@ -106,7 +106,7 @@ public class ReportService {
 
 	private Map<String, Object> saveDataToStoreMedia(StorageEnum storageEnum,Map<String, String> params,String contents) throws Exception {
 		if(storageEnum == null){
-			return saveDataToStoreLocalDist(params,AesEncryptUtil.encrypt(contents));
+			return saveDataToStoreLocalDist(params,contents);
 		}else{
 
 		}
@@ -115,7 +115,7 @@ public class ReportService {
 
 	@Value("${serversaveaddr}")
 	String serversaveaddr;
-	//2020-12-914100007286653122-cwbbqykjzzyzx-sbtj-token
+	//202012-914100007286653122-cwbbqykjzzyzx-sbtj-lsh-token
 	private  Map<String, Object> saveDataToStoreLocalDist(Map<String, String> params,String contents) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try{
@@ -126,18 +126,20 @@ public class ReportService {
 				serversaveaddr = "C://serversaveaddr";
 			}
 			String yearArchive = TimeUtils.getCurrentDateTime(new Date(),TimeUtils.sdfy);
-			String monthArchive = TimeUtils.getCurrentDateTime(new Date(),TimeUtils.sdfy);
+			String monthArchive = TimeUtils.getCurrentDateTime(new Date(),TimeUtils.sdfm);
 			String nsrsbh = StringUtils.isEmpty(params.get("nsrsbh"))?"default":params.get("nsrsbh");
 			String sz = StringUtils.isEmpty(params.get("sz"))?"default":params.get("sz");
+			String content = AesEncryptUtil.encrypt(contents);
 			String business = StringUtils.isEmpty(params.get("business"))?"default":params.get("business");
+			String lsh = StringUtils.isEmpty(params.get("lsh"))?"default":params.get("lsh");
 			String token = Token.createJWToten();
-			String diretory = serversaveaddr+ File.separator+yearArchive+ File.separator+monthArchive
-					+File.separator+nsrsbh+ File.separator+sz+File.separator+business;
+			String diretory = serversaveaddr+ File.separator+yearArchive+monthArchive + File.separator+nsrsbh
+					+ File.separator+sz+File.separator+business+File.separator+lsh+File.separator;
 			if(new File(diretory).isDirectory()){
 			}else{
 				new File(diretory).mkdirs();
 			}
-			FileUtils.write(new File(diretory+File.separator+nsrsbh+sz+business+token),contents,"UTF-8");
+			FileUtils.write(new File(diretory+yearArchive+monthArchive+"-"+nsrsbh+"-"+sz+"-"+business+"-"+lsh+"-"+token),content,"UTF-8");
 			result.put("code","fail");
 			result.put("message","fail");
 		}catch (Exception e){
@@ -147,6 +149,20 @@ public class ReportService {
 		}finally {
 			return result;
 		}
+	}
+
+
+	public static void main(String[] args) {
+		Map<String, String> result = new HashMap<String, String>();
+		ReportService re = new ReportService();
+			result.put("sz","sz");
+			result.put("lsh","lsh");
+			result.put("jglx","jglx");
+			result.put("name","name");
+			result.put("nsrsbh","nsrsbh");
+			result.put("nsrmc","nsrmc");
+			result.put("nsrdq","nsrdq");
+		re.saveDataToStoreLocalDist(result,"asdasd");
 	}
 }
 
