@@ -1,10 +1,10 @@
 package utils;
 
-import org.apache.batik.transcoder.Transcoder;
-import org.apache.batik.transcoder.TranscoderException;
-import org.apache.batik.transcoder.TranscoderInput;
-import org.apache.batik.transcoder.TranscoderOutput;
-import org.apache.batik.transcoder.image.PNGTranscoder;
+//import org.apache.batik.transcoder.Transcoder;
+//import org.apache.batik.transcoder.TranscoderException;
+//import org.apache.batik.transcoder.TranscoderInput;
+//import org.apache.batik.transcoder.TranscoderOutput;
+//import org.apache.batik.transcoder.image.PNGTranscoder;
 
 import java.io.*;
 
@@ -16,7 +16,7 @@ import java.io.*;
 public class SvgToPngUtil {
 
     //svg转为png
-    public static void convertSvg2Png(File svg, File png) throws IOException, TranscoderException
+    /*public static void convertSvg2Png(File svg, File png) throws IOException, TranscoderException
     {
 
         InputStream in = new FileInputStream(svg);
@@ -50,9 +50,12 @@ public class SvgToPngUtil {
 
                 }
 
-    }
+    }*/
 
-    public static void transferSVGTOPNG(String path,String svg)throws UnsupportedEncodingException,TranscoderException,IOException{
+    public static void transferSVGTOPNG(String path,String svg)throws UnsupportedEncodingException,Exception{
+        /*byte[] bytes = svg.getBytes("utf-8");
+        TranscoderInput input = new TranscoderInput(new ByteArrayInputStream(bytes));
+        convertSvg2Png1(input, new File(path));*/
 
        /* File f=new File("E:/Pinterest_pinterest30.svg");
         File destFile=new File("E:/Pinterest_pinterest30.png");
@@ -66,9 +69,6 @@ public class SvgToPngUtil {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }*/
-        byte[] bytes = svg.getBytes("utf-8");
-        TranscoderInput input = new TranscoderInput(new ByteArrayInputStream(bytes));
-        convertSvg2Png1(input, new File(path));
 
     }
 }

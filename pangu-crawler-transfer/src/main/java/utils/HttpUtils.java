@@ -1,6 +1,5 @@
 package utils;
 
-import org.apache.batik.transcoder.TranscoderException;
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -32,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 public class HttpUtils {
 
 
-    public static void main(String[] args) throws IOException, TranscoderException {
+    public static void main(String[] args) throws IOException, Exception {
         String input = "钢琴";
         // 需要爬取商品信息的网站地址
         String url = "https://list.tmall.com/search_product.htm?q=" + input;
@@ -44,7 +43,7 @@ public class HttpUtils {
             geticond(n);
         }
     }
-    public static  void geticond(String num) throws IOException, TranscoderException {
+    public static  void geticond(String num) throws IOException,Exception {
         System.setProperty("webdriver.chrome.driver", "C://chromedriver.exe");
         ChromeOptions options = new ChromeOptions();
 
