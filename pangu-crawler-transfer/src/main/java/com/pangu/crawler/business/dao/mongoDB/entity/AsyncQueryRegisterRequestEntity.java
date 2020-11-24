@@ -1,19 +1,14 @@
 package com.pangu.crawler.business.dao.mongoDB.entity;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
-
-import org.springframework.data.annotation.CreatedBy;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import java.util.HashMap;
 @Data
 @Document(collection = "async_query_register_request")
 public class AsyncQueryRegisterRequestEntity {
@@ -35,9 +30,6 @@ public class AsyncQueryRegisterRequestEntity {
 	@ApiModelProperty(value = "服务器名称", hidden = true)
 	public String servername;
 	
-	@Field("password")
-	@ApiModelProperty(value = "密码", hidden = true)
-	public String password;
 	
 	@Field("lsh")
 	@ApiModelProperty(value = "查询用流水号", hidden = true)
@@ -62,13 +54,17 @@ public class AsyncQueryRegisterRequestEntity {
 	@Field("nsrdq")
 	@ApiModelProperty(value = "地区", hidden = true)
 	public String nsrdq;
+	
+	@Field("liantongpingtai_lsh")
+	@ApiModelProperty(value = "联通平台lsh", hidden = true)
+	public String liantongpingtai_lsh;
 
 	@Field("request_param")
 	@ApiModelProperty(value = "请求参数", hidden = true)
 	public HashMap<String, String> requestParam;
 
 	@Field("state")
-	@ApiModelProperty(value = "处理状态1等待检查cookie2等待登陆3处理登陆4登陆完成5开始处理任务6处理完成   10为失败", hidden = true)
+	@ApiModelProperty(value = "处理状态1等待检查cookie2等待登陆3调用其他接口进行登录4等待其他接口登录完毕或者本地登录5登陆完成6开始处理任务7处理完成   10为失败", hidden = true)
 	public int state;
 	
 	@Field("errorInfo")

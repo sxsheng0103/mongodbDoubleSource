@@ -37,7 +37,6 @@ public class AsyncQueryUserInfoEntity {
 	@ApiModelProperty(value = "nsrsbh", hidden = true)
 	public String nsrsbh;
 	
-
 	@Field("djxx")
 	@ApiModelProperty(value = "登记信息", hidden = true)
 	public String djxx;
@@ -45,5 +44,17 @@ public class AsyncQueryUserInfoEntity {
 	@Field("sfzrdxx")
 	@ApiModelProperty(value = "税费认定信息", hidden = true)
 	public String sfzrdxx;
+	
+	@Field("fphd")
+	@ApiModelProperty(value = "发票核定", hidden = true)
+	public String fphd;
+	
+	@Field("zgxx")
+	@ApiModelProperty(value = "资格信息", hidden = true)
+	public String zgxx;
+	
+	@Field("hdzs")
+	@ApiModelProperty(value = "核定征收", hidden = true)
+	public String hdzs;
 	
 }

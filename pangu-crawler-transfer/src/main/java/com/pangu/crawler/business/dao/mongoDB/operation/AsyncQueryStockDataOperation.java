@@ -131,7 +131,7 @@ public class AsyncQueryStockDataOperation {
 			}else if(cols.equals("")){
 				queryparams.fields().include("id").include("createTime").include("updateTime").include("nsrsbh").include("nsrdq").
 						include("szdm").include("bbmc").include("bbbh").include("skssqq").include("skssqz")
-						.include("sbrq").include("xgrq").include("ytbse").include("sbfs")
+						.include("sbrq").include("xgrq").include("ybtse").include("sbfs")
 						.include("state").include("zfbj").include("dataType").include("sbList")
 						.include("zhState").include("zhTime");
 			}

@@ -40,10 +40,18 @@ public class AsyncQueryJiaoKuanXinXiEntity {
 	@Field("yzpz")
 	@ApiModelProperty(value = "应征凭证", hidden = true)
 	public String yzpz;
-	
+
 	@Field("zsxm")
 	@ApiModelProperty(value = "征收项目", hidden = true)
 	public String zsxm;
+
+	@Field("zspmdm")
+	@ApiModelProperty(value = "征收品目代码", hidden = true)
+	public String zspmdm;
+	
+	@Field("zsxmdm")
+	@ApiModelProperty(value = "征收项目代码", hidden = true)
+	public String zsxmdm;
 	
 	@Field("zspm")
 	@ApiModelProperty(value = "征收品目", hidden = true)
@@ -68,11 +76,12 @@ public class AsyncQueryJiaoKuanXinXiEntity {
 	@Field("se")
 	@ApiModelProperty(value = "税额", hidden = true)
 	public String se;
+
+	@Field("sjje")
+	@ApiModelProperty(value = "实缴金额", hidden = true)
+	public String sjje;
 	
 	@Field("sl")
-
-
-
 	@ApiModelProperty(value = "税率", hidden = true)
 	public String sl;
 	
@@ -87,5 +96,13 @@ public class AsyncQueryJiaoKuanXinXiEntity {
 	@Field("kkzt")
 	@ApiModelProperty(value = "扣款状态", hidden = true)
 	public String kkzt;
+
+	@Field("sksxmc")
+	@ApiModelProperty(value = "税款属性名称", hidden = true)
+	public String sksxmc;
+
+	@Field("skzlmc")
+	@ApiModelProperty(value = "税款种类名称", hidden = true)
+	public String skzlmc;
 
 }

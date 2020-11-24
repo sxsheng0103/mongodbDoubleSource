@@ -1,19 +1,15 @@
 package com.pangu.crawler.business.dao.mongoDB.entity;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import org.springframework.data.annotation.CreatedBy;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 @Data
 @Document(collection = "async_query_historical_data_info")
@@ -33,7 +29,7 @@ public class AsyncQueryHistoricalDataInfoEntity {
 	public Long updateTime;
 
 	@Field("nsrsbh")
-	@ApiModelProperty(value = "纳税人编号", hidden = true)
+	@ApiModelProperty(value = "nsrsbh", hidden = true)
 	public String nsrsbh;
 
 	@Field("nsrdq")
@@ -47,7 +43,7 @@ public class AsyncQueryHistoricalDataInfoEntity {
 	@Field("bbmc")
 	@ApiModelProperty(value = "报表名称", hidden = true)
 	public String bbmc;
-
+	
 	@Field("bbbh")
 	@ApiModelProperty(value = "报表编号", hidden = true)
 	public String bbbh;
@@ -68,10 +64,10 @@ public class AsyncQueryHistoricalDataInfoEntity {
 	@Field("xgrq")//不可以包含时分秒2020-03-14
 	@ApiModelProperty(value = "修改日期", hidden = true)
 	public Long xgrq;
-
-	@Field("ytbse")
+	
+	@Field("ybtse")
 	@ApiModelProperty(value = "应补退税额", hidden = true)
-	public String ytbse;
+	public String ybtse;
 
 	@Field("sbfs")
 	@ApiModelProperty(value = "申报方式", hidden = true)
@@ -102,7 +98,7 @@ public class AsyncQueryHistoricalDataInfoEntity {
 	public String dataOut;
 
 	@Field("zhState")
-	@ApiModelProperty(value = "转换报文的状态,0不需要转换1未转换2正在转换3转换完成100以上为错误.101转化错误,102转化完成但出现警告,103转化失败,109转化完成，状态未知", hidden = true)
+	@ApiModelProperty(value = "转换报文的状态,0不需要转换1未转换2正在转换3转换完成100以上为错误", hidden = true)
 	public Integer zhState;
 
 	@Field("result")
