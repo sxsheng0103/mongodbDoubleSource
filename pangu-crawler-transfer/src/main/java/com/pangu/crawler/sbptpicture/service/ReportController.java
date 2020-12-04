@@ -5,7 +5,6 @@ import com.pangu.crawler.framework.utils.StringUtils;
 import com.pangu.crawler.sbptpicture.mongo.AsyncQueryBusinessPictureEntity;
 import com.pangu.crawler.sbptpicture.utils.AesEncryptUtil;
 import com.pangu.crawler.sbptpicture.utils.Base64ToFile;
-import com.pangu.crawler.sbptpicture.utils.SymmetricEncoder;
 import com.pangu.crawler.transfer.utils.TimeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
