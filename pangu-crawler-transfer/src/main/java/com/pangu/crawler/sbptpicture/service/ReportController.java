@@ -43,6 +43,11 @@ public class ReportController {
     public Map<String,Object> queryHistoricalData(HttpServletRequest request) throws Exception {
         Map<String,Object> result = new HashMap<String,Object>(3);
         try{
+            if(StringUtils.isEmpty(request.getParameter("releationid"))){
+                result.put("message","没有对应数据:"+request.getParameter("releationid"));
+                result.put("code","fail");
+                return result;
+            }
             Map<String,String> map = new HashMap<String,String>(7);
 
             if(StringUtils.isNotEmpty(request.getParameter("jglx"))){
