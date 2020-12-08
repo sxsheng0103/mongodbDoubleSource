@@ -125,6 +125,7 @@ public class ReportController {
             }
 
             JSONObject doc = new JSONObject();
+            obj.put("message",message);
             JSONObject resultObj = new JSONObject();
             if(entity!=null){
                 entity = data.get(0);
