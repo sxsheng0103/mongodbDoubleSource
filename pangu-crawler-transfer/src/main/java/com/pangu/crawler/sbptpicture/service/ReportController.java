@@ -5,7 +5,6 @@ import com.pangu.crawler.framework.utils.StringUtils;
 import com.pangu.crawler.sbptpicture.mongo.AsyncQueryBusinessPictureEntity;
 import com.pangu.crawler.sbptpicture.utils.AesEncryptUtil;
 import com.pangu.crawler.sbptpicture.utils.Base64ToFile;
-import com.pangu.crawler.sbptpicture.utils.SymmetricEncoder;
 import com.pangu.crawler.transfer.utils.TimeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +43,11 @@ public class ReportController {
     public Map<String,Object> queryHistoricalData(HttpServletRequest request) throws Exception {
         Map<String,Object> result = new HashMap<String,Object>(3);
         try{
+            if(StringUtils.isEmpty(request.getParameter("releationid"))){
+                result.put("message","没有对应数据:"+request.getParameter("releationid"));
+                result.put("code","fail");
+                return result;
+            }
             Map<String,String> map = new HashMap<String,String>(7);
 
             if(StringUtils.isNotEmpty(request.getParameter("jglx"))){

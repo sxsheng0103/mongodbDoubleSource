@@ -1,5 +1,6 @@
+/*
 
-package com.pangu.crawler.business.service.async.timingjob;
+package utils;
 
 import com.pangu.crawler.transfer.controller.TransferTest;
 import com.pangu.crawler.transfer.utils.TempUserInfo;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class backRuleFiles{
+public class backRuleFiles {
 	@Autowired
 	TransferTest transfertest;
 	String path = new ApplicationHome(this.getClass()).getSource().getAbsolutePath();
@@ -30,3 +31,4 @@ public class backRuleFiles{
 
 }
 
+*/

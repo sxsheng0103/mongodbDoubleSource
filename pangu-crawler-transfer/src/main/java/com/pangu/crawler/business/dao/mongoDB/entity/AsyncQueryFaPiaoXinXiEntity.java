@@ -40,6 +40,10 @@ public class AsyncQueryFaPiaoXinXiEntity {
 	@ApiModelProperty(value = "发票代码", hidden = true)
 	public String fpdm;
 	
+	@Field("wlfph")
+	@ApiModelProperty(value = "网络发票号(电子发票号)", hidden = true)
+	public String wlfph;
+	
 	@Field("fphm")
 	@ApiModelProperty(value = "发票号码", hidden = true)
 	public String fphm;
@@ -53,7 +57,7 @@ public class AsyncQueryFaPiaoXinXiEntity {
 	public String sl;
 	
 	@Field("se")
-	@ApiModelProperty(value = "税额", hidden = true)
+	@ApiModelProperty(value = "发票税额", hidden = true)
 	public String se;
 	
 	@Field("gfmc")
@@ -71,4 +75,8 @@ public class AsyncQueryFaPiaoXinXiEntity {
 	@Field("xfmc")
 	@ApiModelProperty(value = "销方名称", hidden = true)
 	public String xfmc;
+
+	@Field("fpzt")
+	@ApiModelProperty(value = "发票状态", hidden = true)
+	public String fpzt;
 }

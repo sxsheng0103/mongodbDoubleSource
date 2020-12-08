@@ -1,10 +1,4 @@
-package com.pangu.crawler.business.service.async;
-
-import org.quartz.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.Date;
+package utils;
 
 /**
  * @Author sheng.ding
@@ -15,7 +9,7 @@ import java.util.Date;
  * @PersistJobDataAfterExecution 和 @DisallowConcurrentExecution
  * 表示不让某个定时任务并发执行保证上一个任务执行完后，再去执行下一个任务
  */
-@PersistJobDataAfterExecution
+/*@PersistJobDataAfterExecution
 @DisallowConcurrentExecution
 @Component
 public class ShedualManager  implements Job {
@@ -29,4 +23,4 @@ public class ShedualManager  implements Job {
     }
 
 
-}
+}*/
