@@ -475,6 +475,14 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 					if(rule.substring(rule.indexOf("=") + 1)!=null&&rule.substring(rule.indexOf("=") + 1).trim().equals("--")){
 						JSONPath.set(resultData, rule.substring(0, rule.indexOf("=")), "--");
 						continue;
+					}else if(rule.substring(rule.indexOf("=") + 1)!=null&&rule.substring(rule.indexOf("=") + 1).trim().startsWith("@@")){
+						String rulevalue = rule.substring(rule.indexOf("=")+1);
+						if(rule.lastIndexOf("//")!=-1){
+							JSONPath.set(resultData,  rule.substring(0, rule.indexOf("=")), rulevalue.substring(0,rulevalue.lastIndexOf("//")).replace("@@",""));
+						}else{
+							JSONPath.set(resultData, rule.substring(0, rule.indexOf("=")),rulevalue.replace("@@",""));
+						}
+						continue;
 					}
 					if(rule.lastIndexOf("//")!=-1){
 						rule = rule.substring(0,rule.lastIndexOf("//"));
@@ -910,10 +918,15 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 						//遍历bottom固定行
 						if(fixtopmarkTrs!=null){
 							for(String tr:fixtopmarkTrs.split("#")) {
-								if(RuleDataFilterUtils.checkValidTrElement(e,tr)){//固定行校验
+ 								String[] marks = tr.split("-");
+								String marktd = marks[0]+"-" +marks[1];
+								String markname = marks[2];
+								if(RuleDataFilterUtils.checkValidTrElement(e,marktd)){//固定行校验
+
 									fixtoparr.remove(tr);
 									skipTr = true;
 									row = row+1;
+									JSONPath.set(resultData, reportpath + "[" + row + "]." + markname, marks[1]);
 									for(String tdproperty:fixtoppropertyTrs.split(",")){
 										Matcher m = pstr.matcher(tds.get(Integer.valueOf(tdproperty.split("-")[1])-1).wholeText());
 										String trtdtext = "";
@@ -928,7 +941,11 @@ public class TransferHtmlDataServiceImpl implements ITransferHtmlDataService {
 
 						if(!skipTr&&fixbtmmarkTrs!=null){
 							for(String tr:fixbtmmarkTrs.split("#")) {
-								if(RuleDataFilterUtils.checkValidTrElement(e,tr)){//动态行校验
+								String[] marks = tr.split("-");
+								String marktd = marks[0]+"-" +marks[1];
+								String markname = marks[2];
+								if(RuleDataFilterUtils.checkValidTrElement(e,marktd)){//动态行校验
+									JSONPath.set(resultData, reportpath + "[" + row + "]." + markname, marks[1]);
 									fixbtmarr.remove(tr);
 									row = row+1;
 									skipTr = true;
