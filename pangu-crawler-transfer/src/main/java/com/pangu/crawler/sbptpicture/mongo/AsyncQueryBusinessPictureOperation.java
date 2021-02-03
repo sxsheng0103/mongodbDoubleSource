@@ -56,6 +56,23 @@ public class AsyncQueryBusinessPictureOperation {
 		return result;
 	}
 
+
+	public Map<String,Object> updateImage(AsyncQueryBusinessPictureEntity businessPictureEntity,String screenbase64) {
+		Map<String,Object> result = new HashMap<String,Object>(2);
+		try{
+			businessPictureEntity.setScreenbase64(screenbase64);
+			mongoTemplate.save(businessPictureEntity);
+			result.put("code","success");
+			result.put("message","修改成功!");
+		}catch (DataAccessResourceFailureException e){
+			result.put("code","fail");
+			result.put("message","修改失败,服务调用数据库超时!"+e.getMessage());
+		}catch (Exception e){
+			result.put("code","fail");
+			result.put("message","修改失败!"+e.getMessage());
+		}
+		return result;
+	}
 	
 	public List<AsyncQueryBusinessPictureEntity> findByParam(Criteria cxyj) {
 	    try{

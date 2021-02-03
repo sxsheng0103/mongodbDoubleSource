@@ -65,7 +65,22 @@ public class ReportService {
 		return asyncQueryBusinessPictureOperation.save(params);
 	}
 
-
+	public Map<String, Object> updatesbimage(String releationid,String screenbase64) throws Exception {
+		Map<String,String> map = new HashMap<String,String>(1);
+		map.put("releationid",releationid);
+		List<AsyncQueryBusinessPictureEntity> data = queryHistoricalData(map);
+		Map<String,Object> result = new HashMap<String,Object>(2);
+		if(data.size()==0){
+			result.put("code","fail");
+			result.put("message","未找到对应数!");
+		}else if(data.size()==1){
+			result = asyncQueryBusinessPictureOperation.updateImage(data.get(0),screenbase64);
+		}else{
+			result.put("code","fail");
+			result.put("message","找到多条数据!"+data.size());
+		}
+		return result;
+	}
 	/**
 	 * @param params
 	 * @return

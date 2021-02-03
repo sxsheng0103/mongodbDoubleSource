@@ -8,6 +8,7 @@ import com.pangu.crawler.sbptpicture.utils.Base64ToFile;
 import com.pangu.crawler.transfer.utils.TimeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.UncategorizedMongoDbException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -79,6 +80,7 @@ public class ReportController {
             }
             result.put("message",message);
         }catch (Exception e){
+            e.printStackTrace();
             log.error("查询错误!");
         }finally {
             return  result;
@@ -225,7 +227,7 @@ public class ReportController {
                 map.put("screenbase64", AesEncryptUtil.encrypt(screenbase64));
             }
             result =  reportService.savereportcation(map);
-            reportService.detailReportContent(map,screenbase64);
+//            reportService.detailReportContent(map,screenbase64);
         }catch (Exception e){
             e.printStackTrace();
             result.put("code","fail");
@@ -236,7 +238,43 @@ public class ReportController {
         }
     }
 
-
+    @ResponseBody
+    @PostMapping("/updatesbimage")
+    public Map<String,Object> updatesbimage(HttpServletRequest request) throws Exception {
+        Map<String,Object> result = new HashMap<String,Object>(2);
+        try{
+            MultipartResolver resolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+            MultipartHttpServletRequest multipartRequest = resolver.resolveMultipart(request);
+            MultipartFile file  = multipartRequest.getFile("file");
+            String name = "";
+            String  screenbase64 = "";
+            String releationid = request.getParameter("releationid");
+            if(file!=null&&releationid!=null){
+                name = file.getOriginalFilename();
+                try{
+                    screenbase64 = Base64ToFile.get(file.getInputStream()).replace("\r\n","");
+                }catch (Exception e){
+                    screenbase64 = "   ";
+                }
+                if(StringUtils.isNotEmpty(screenbase64)){
+                    result =  reportService.updatesbimage(releationid,AesEncryptUtil.encrypt(screenbase64));
+                }else{
+                    result.put("code","fail");
+                    result.put("message","get a null base64 string");
+                }
+            }else{
+                result.put("code","fail");
+                result.put("message","未获取到上传的文件:releationid参数："+releationid);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            result.put("code","fail");
+            result.put("message",e.getMessage());
+            log.error("更新图片失败!"+ TimeUtils.getCurrentDateTime(new Date(),TimeUtils.sdf2) +e.getMessage() );
+        }finally {
+            return result;
+        }
+    }
     /**
      * 请求报文保存
      * requestReportContent

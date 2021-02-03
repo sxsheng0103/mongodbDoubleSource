@@ -28,10 +28,11 @@ spring:
   data: #mongdb数据库配置
     mongodb:
       primary:
-        uri: mongodb://aictech:aictech#2020@10.10.53.20:27017,10.10.53.21:27017,10.10.53.22:27017/db_aictech
+        #uri: mongodb://db_aictech:Zky1#20200302@60.205.201.117:27017/db_aictech
+        uri: mongodb://db_aictech:Zky1#20200302@60.205.201.117:27017/db_aictech
         enabled: true
       secondary:
-        uri: mongodb://db_transfer:Tran#2020@10.10.53.20:27017,10.10.53.21:27017,10.10.53.22:27017/db_transfer?replicaSet=scnebula
+        uri: mongodb://db_aictech:Zky1#20200302@60.205.201.117:27017/db_aictech
         enabled: true
   redis:
     host: 10.10.53.13
