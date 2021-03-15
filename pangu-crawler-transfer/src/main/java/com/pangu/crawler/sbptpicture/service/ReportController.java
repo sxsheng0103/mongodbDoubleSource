@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -170,12 +171,17 @@ public class ReportController {
             MultipartFile file  = multipartRequest.getFile("file");
             String name = "";
             String  screenbase64 = request.getParameter("screenbase64");
+            InputStream fileInputStream = file.getInputStream();
            if(file!=null){
                 name = file.getOriginalFilename();
                 try{
-                    screenbase64 = Base64ToFile.get(file.getInputStream()).replace("\r\n","");
+                    screenbase64 = Base64ToFile.get(fileInputStream).replace("\r\n","");
                 }catch (Exception e){
                     screenbase64 = "   ";
+                }finally{
+                    if(fileInputStream!=null){
+                        fileInputStream.close();
+                    }
                 }
             }
             String ip = request.getParameter("ip");

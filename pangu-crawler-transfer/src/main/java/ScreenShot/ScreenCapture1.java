@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.HttpClientContext;
@@ -249,7 +250,10 @@ public class ScreenCapture1 {
         }
         HttpPost post = new HttpPost(uri);
         try {
-
+            RequestConfig requestConfig =  RequestConfig.custom().setSocketTimeout(10000).setConnectTimeout(10000).build();
+            post.setConfig(requestConfig);
+//            httpClient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 10000);
+//            httpClient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT,10000);
             // 将上传文件复制到临时文件
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
             ContentType strContent = ContentType.create("text/plain", Charset.forName("UTF-8"));
