@@ -6,6 +6,8 @@ server:
   tomcat.max-connections: 3000
   tomcat.max-http-post-size: 1048576
   tomcat.max-threads: 1000
+global:
+  storageType: mongodb
 #加载日志配置文件
 logging:
   level:

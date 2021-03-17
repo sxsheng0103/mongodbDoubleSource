@@ -22,7 +22,7 @@ import java.util.Map;
 
 @Service
 @Slf4j
-public class ReportService {
+public class MongoReportService implements IReportService{
 
 	@Autowired
     AsyncQueryBusinessPictureOperation asyncQueryBusinessPictureOperation;
@@ -115,11 +115,11 @@ public class ReportService {
 	/**
 	 *
 	 */
-	private Map<String, Object> saveDataToStoreMedia(Map<String, String> params,String contents) throws Exception {
+	public Map<String, Object> saveDataToStoreMedia(Map<String, String> params,String contents) throws Exception {
 		return saveDataToStoreMedia(null,params,contents);
 	}
 
-	private Map<String, Object> saveDataToStoreMedia(StorageEnum storageEnum,Map<String, String> params,String contents) throws Exception {
+	public Map<String, Object> saveDataToStoreMedia(StorageEnum storageEnum,Map<String, String> params,String contents) throws Exception {
 		if(storageEnum == null){
 			return saveDataToStoreLocalDist(params,contents);
 		}else{
@@ -131,7 +131,7 @@ public class ReportService {
 	@Value("${serversaveaddr}")
 	String serversaveaddr;
 	//202012-914100007286653122-cwbbqykjzzyzx-sbtj-lsh-token
-	private  Map<String, Object> saveDataToStoreLocalDist(Map<String, String> params,String contents) {
+	public  Map<String, Object> saveDataToStoreLocalDist(Map<String, String> params,String contents) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try{
 			String serversaveaddr = null;
@@ -169,7 +169,7 @@ public class ReportService {
 
 	public static void main(String[] args) {
 		Map<String, String> result = new HashMap<String, String>();
-		ReportService re = new ReportService();
+		MongoReportService re = new MongoReportService();
 			result.put("sz","sz");
 			result.put("lsh","lsh");
 			result.put("jglx","jglx");

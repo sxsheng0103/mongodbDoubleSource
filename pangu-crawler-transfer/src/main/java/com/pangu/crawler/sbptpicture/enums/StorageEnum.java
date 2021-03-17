@@ -1,9 +1,12 @@
 package com.pangu.crawler.sbptpicture.enums;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import javax.validation.constraints.NotNull;
 public enum StorageEnum{
 
-    serverdisk("1","服务器磁盘",1);
+    serverdisk("serverdisk","服务器磁盘",1),
+    mongodb("mongodb","mongodb数据库存储",2);
     private String type;
     private String info;
     private int value;
