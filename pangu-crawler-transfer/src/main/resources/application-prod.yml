@@ -1,5 +1,5 @@
 server:
-  port: 8086
+  port: 8001
 global:
   storageType: mongodb
 #加载日志配置文件

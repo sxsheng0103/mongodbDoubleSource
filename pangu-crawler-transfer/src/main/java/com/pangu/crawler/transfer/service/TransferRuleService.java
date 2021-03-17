@@ -578,7 +578,7 @@ public class TransferRuleService {
         if(tasks.getData()!=null&&tasks.getData().size()>0){
             for(AsyncTaskTimerEntity task:tasks.getData()){
                 if(task.getStatus()!=null&&task.getStatus().equals("1")){
-                    String taskid = startSchedule(task);
+                    String taskid = null;//startSchedule(task);
                     params.put("status","1");
                     params.put("id",task.getId());
                     params.put("update","update");

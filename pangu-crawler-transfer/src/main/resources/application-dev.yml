@@ -1,7 +1,7 @@
 server:
 #  servlet:
 #    context-path: /transfer/
-  port: 8086
+  port: 8001
   max-http-header-size: 1048576
   tomcat.max-connections: 3000
   tomcat.max-http-post-size: 1048576
