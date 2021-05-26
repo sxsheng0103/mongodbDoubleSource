@@ -1,0 +1,121 @@
+public static  Result httpsRequest(String requestUrl, String requestheader, String requestparams,Boolean retry) {
+//    logger.info("req---->:" + requestMethod + requestStr);
+     Boolean ret = retry;
+    HttpsURLConnection httpsConnection = null;
+     Result result = new Result();
+    try {
+        // 创建SSLContext
+        SSLContext sslContext = SSLContext.getInstance("SSL");
+        TrustManager1[] tm = { new TrustManager1() };
+        // 初始化
+        sslContext.init(null, tm, new java.security.SecureRandom());
+        // 获取SSLSocketFactory对象
+        SSLSocketFactory ssf = sslContext.getSocketFactory();
+        HostnameVerifier HostnameVerifier = new HostnameVerifier() {
+            @Override
+            public boolean verify(String var1, SSLSession var2) {
+                    return true;
+            }
+        };
+        JSONObject jsonparam = JSON.parseObject(requestparams);
+        Iterator<Map.Entry<String, Object>> para = jsonparam.entrySet().iterator();
+        StringBuffer urlparams = new StringBuffer(350);
+        while(para.hasNext()){
+            Map.Entry<String, Object> entry = para.next();
+            urlparams.append(entry.getKey()+"="+entry.getValue()+"&");
+        }
+        URL url = new URL(requestUrl+"?"+urlparams);
+        httpsConnection = (HttpsURLConnection) url.openConnection();
+        httpsConnection.setDoOutput(false);
+        httpsConnection.setDoInput(true);
+        httpsConnection.setConnectTimeout(60000);
+        httpsConnection.setReadTimeout(60000);
+        httpsConnection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+        httpsConnection.setRequestProperty("Charset", "UTF-8");
+        JSONObject jsonheader = JSON.parseObject(requestheader);
+        Iterator<Map.Entry<String, Object>> headers = jsonheader.entrySet().iterator();
+        while(headers.hasNext()){
+            Map.Entry<String, Object> entry = headers.next();
+            httpsConnection.setRequestProperty(entry.getKey(), entry.getValue().toString());
+        }
+        httpsConnection.setRequestProperty("User-Agent", "Client identifier");
+        httpsConnection.setRequestMethod("GET");
+        /*
+         * httpsConnection.setUseCaches(false);
+         * httpsConnection.setRequestMethod(requestMethod);
+         */
+        // 设置当前实例使用的SSLSoctetFactory
+        httpsConnection.setSSLSocketFactory(ssf);
+        httpsConnection.setHostnameVerifier(HostnameVerifier);
+        httpsConnection.connect();
+        // 往服务器端写内容
+        // 读取服务器端返回的内容
+        InputStream inputStream = httpsConnection.getInputStream();
+        try{
+            inputStream = httpsConnection.getInputStream();
+        }catch (IOException e){
+            if(e.getMessage()!=null&&e.getMessage().contains("Server returned HTTP response code: 500 for URL")){
+                log.error("response from remote server error code 500!"+e.getMessage());
+            }else{
+                log.error("response from remote server error:"+e.getMessage());
+            }
+        }
+        if (httpsConnection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+//             logger.error("connect ezcs service failed: " + httpsConnection.getResponseCode());
+             JSONObject responseJson = new JSONObject();
+             responseJson.put("result","error:code-"+httpsConnection.getResponseCode());
+            result.setCode(-1);
+            result.setData("error:code-"+httpsConnection.getResponseCode());
+            result.setMsg("失败");
+            return result;
+        }
+        String response = IOUtils.toString(inputStream, "utf-8");
+//        Utils.convertStreamToString(inputStream, "utf-8");
+//        log.debug("response from service: " + response);
+        result.setCode(0);
+        result.setData(response);
+        result.setMsg("成功");
+        return result;
+    } catch (Exception e) {
+        e.printStackTrace();
+        log.debug("connect local ezcs service exception: " + e.getMessage());
+        if (e instanceof SocketTimeoutException || e instanceof SocketException) {
+            log.warn("连接超时");
+            return new Result().error("连接超时!");
+        } else if(e instanceof UnknownHostException){
+            log.warn("未知的目标主机:"+e.getMessage());
+            return new Result().error("未知的目标主机:"+e.getMessage());
+        }else if(e!=null&&e.getMessage()!=null&&e.getMessage().replace(" ","").contains("responsecode:401")){
+            singleSecret(true);
+            if(ret){
+                log.warn("获取api鉴权码失败,已重试一次,请排查人力资源系统接口查询权限是否正常!");
+                return new Result().error("获取api鉴权码失败,已重试一次,请排查人力资源系统接口查询权限是否正常!");
+            }
+            return httpsRequest(requestUrl,"{\"Authorization\": \"Bearer "+singleSecret()+"\"}",requestparams,true);
+        }else{
+            log.warn("请求失败:"+e.getMessage());
+            return new Result().error("请求失败:"+e.getMessage());
+        }
+        } finally {
+            if (httpsConnection != null) {
+                httpsConnection.disconnect();
+            }
+        }
+    }
+    
+    static class TrustManager1 implements X509TrustManager {
+        @Override
+        public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+
+        }
+        @Override
+        public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+
+        }
+
+        @Override
+        public X509Certificate[] getAcceptedIssuers() {
+            return new X509Certificate[] {};
+        }
+
+    }
